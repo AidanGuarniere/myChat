@@ -17,10 +17,10 @@ function ChatGPTSEO() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://api.openai.com/v1/engines/davinci/completions",
+        "https://api.openai.com/v1/engines/text-babbage-001/completions",
         {
           prompt: userText,
-          temperature: 0.5,
+          temperature: 0.7,
         },
         {
           headers: {
@@ -29,7 +29,7 @@ function ChatGPTSEO() {
           },
         }
       );
-      console.log(response)
+      console.log(response);
       setGptResponse(response.data.choices[0].text);
       setLoading(false);
       setError({});
@@ -81,7 +81,11 @@ function ChatGPTSEO() {
         {error.message && <p>Error: {error.message}</p>}
         {error.code && <p>Error code: {error.code}</p>}
         <div>
-          {typeof gptResponse === "string" ? <p>{gptResponse}</p> : <p>object detected</p>}
+          {typeof gptResponse === "string" ? (
+            <p>{gptResponse}</p>
+          ) : (
+            <p>object detected</p>
+          )}
         </div>
       </div>
     </div>
