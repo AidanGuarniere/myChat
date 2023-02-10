@@ -33,7 +33,6 @@ function ChatGPTSEO() {
         setError(error);
         setLoading(false);
       }
-
     } else {
       setError("please enter a valid prompt");
     }
@@ -54,37 +53,43 @@ function ChatGPTSEO() {
   //   }
   // }, []);
 
-  return (
+  return ( <div className="flex justify-center items-center h-screen bg-gray-900">
+  <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-10">
+    <form className="mb-4" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="w-full border border-gray-400 p-2 rounded-lg"
+        placeholder="Type your message here..."
+        required
+        value={userText}
+        onChange={handleChange}
+        minLength="5"
+        maxLength="300"
+      />
+      <button
+        type="submit"
+        className="bg-gray-800 text-white py-2 px-4 my-3 rounded-lg hover:bg-gray-900"
+        disabled={loading}
+      >
+        {loading ? "Loading..." : "Submit"}
+      </button>
+    </form>
+    {error.message && (
+      <p className="text-red-600 font-medium mb-2">Error: {error.message}</p>
+    )}
+    {error.code && (
+      <p className="text-red-600 font-medium mb-2">
+        Error code: {error.code}
+      </p>
+    )}
     <div>
-      <Head>
-        <title>
-          {gptResponse ? `ChatGPT response: ${gptResponse}` : "ChatGPT"}
-        </title>
-      </Head>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={userText}
-          onChange={handleChange}
-          required
-          minLength="5"
-          maxLength="300"
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Submit"}
-        </button>
-      </form>
-      <div>
-        {error.message && <p>Error: {error.message}</p>}
-        {error.code && <p>Error code: {error.code}</p>}
-        <div>
-          {typeof gptResponse === "string" ? (
-            <p>{gptResponse}</p>
-          ) : (
-            <p>{error}</p>
-          )}
-        </div>
+      {typeof gptResponse === "string" ? (
+          <p className="text-6-b-90-80">{gptResponse}</p>
+        ) : (
+          <p className="text-red-600 font-medium">{error}</p>
+        )}
       </div>
+    </div>
     </div>
   );
 }
