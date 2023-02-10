@@ -10,9 +10,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        test: "#CCE3DE",
-      },
       maxHeight: {
         120: "60vh",
         "14vw":"14vw",

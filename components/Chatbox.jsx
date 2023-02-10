@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import Head from "next/head";
 
-function ChatGPTSEO() {
+function ChatGPTChatbox() {
   const [userText, setUserText] = useState("");
   const [gptResponse, setGptResponse] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,6 +38,8 @@ function ChatGPTSEO() {
   };
 
   // basic cache logic to show previous answer if present
+  // will need to import useEffect to run
+  
   // useEffect(() => {
   //   if (gptResponse) {
   //     localStorage.setItem("gpt_response", gptResponse);
@@ -95,4 +96,4 @@ function ChatGPTSEO() {
   );
 }
 
-export default ChatGPTSEO;
+export default ChatGPTChatbox;

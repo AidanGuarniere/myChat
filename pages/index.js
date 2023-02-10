@@ -1,8 +1,6 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
 import Chatbox from "../components/Chatbox";
-import styles from "../styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
