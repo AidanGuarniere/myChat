@@ -17,9 +17,10 @@ function ChatGPTSEO() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://api.openai.com/v1/engines/text-babbage-001/completions",
+        "https://api.openai.com/v1/engines/text-davinci-003/completions",
         {
           prompt: userText,
+          max_tokens: 4000,
           temperature: 0.7,
         },
         {
