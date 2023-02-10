@@ -53,7 +53,7 @@ function ChatGPTSEO() {
   // }, []);
 
   return (
-    <div className="max-w-xl bg-gray-200 rounded-lg shadow-lg p-10 block">
+    <div className="w-5/6 h-auto max-h-100% md:max-w-xl bg-gray-200 rounded-lg shadow-lg p-10 mx-auto overflow-hidden">
       <form className="mb-4" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -82,15 +82,15 @@ function ChatGPTSEO() {
         </p>
       )}
       {gptResponse && (
-        <div className="bg-white rounded p-4 mt-4">
+        <div className="bg-white rounded p-4 mt-4 h-auto ">
           <h2 className="text-xl font-medium mb-2">Response:</h2>
-          <div className="h-auto max-h-40 overflow-y-auto">
-            <p className="text-gray-700 break-words px-2">
+          <div className=" md:max-h-14vw overflow-y-auto max-h-120">
+            <p className="text-gray-700 break-words px-2 max-h-100%">
               {loading ? "Loading..." : gptResponse}
             </p>
           </div>
         </div>
-      )}{" "}
+      )}
     </div>
   );
 }
