@@ -14,35 +14,31 @@ function ChatGPTSEO() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/engines/text-davinci-003/completions",
-        {
-          prompt: userText,
-          max_tokens: 4000,
-          temperature: 0.7,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + process.env.NEXT_PUBLIC_OPENAI_KEY,
-          },
-        }
-      );
-      console.log(response);
-      setGptResponse(response.data.choices[0].text);
-      setLoading(false);
+    if (userText.length > 2) {
+      setLoading(true);
       setError({});
-    } catch (e) {
-      setError({
-        code: e.response.status,
-        message: e.response.data.error,
-        details: e.response.data,
-      });
-      setLoading(false);
+      try {
+        // Make a request to the Next.js API endpoint
+        const response = await axios.post("/api/chat", {
+          prompt: userText,
+        });
+
+        // Extract the generated text from the response
+        const completion = response.data.completion;
+        setGptResponse(completion);
+        setLoading(false);
+
+        return completion;
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+
+    } else {
+      setError("please enter a valid prompt");
     }
   };
+
   // basic cache logic
   // useEffect(() => {
   //   // console.log(gptResponse);
@@ -85,7 +81,7 @@ function ChatGPTSEO() {
           {typeof gptResponse === "string" ? (
             <p>{gptResponse}</p>
           ) : (
-            <p>object detected</p>
+            <p>{error}</p>
           )}
         </div>
       </div>
