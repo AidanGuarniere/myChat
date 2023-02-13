@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ConversationList from "./ConversationList";
 
 function ChatGPTChatbox() {
   const [userText, setUserText] = useState("");
-  const [gptResponse, setGptResponse] = useState("");
+  const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
 
@@ -17,44 +18,43 @@ function ChatGPTChatbox() {
       setLoading(true);
       setError({});
       try {
-        // Make a request to the Next.js API endpoint
+        // Make a request to the OpenAI API
         const response = await axios.post("/api/chat", {
           prompt: userText,
         });
 
         // Extract the generated text from the response
         const completion = response.data.completion;
-        setGptResponse(completion);
+        setConversations([
+          ...conversations,
+          { prompt: userText, response: completion },
+        ]);
         setLoading(false);
-
-        return completion;
       } catch (error) {
         setError(error);
         setLoading(false);
       }
     } else {
-      setError("please enter a valid prompt");
+      setError("Please enter a valid prompt");
     }
   };
 
-  // basic cache logic to show previous answer if present
-  // will need to import useEffect to run
-  
-  // useEffect(() => {
-  //   if (gptResponse) {
-  //     localStorage.setItem("gpt_response", gptResponse);
-  //   }
-  // }, [gptResponse]);
+  // Use local storage to persist conversation history
+  useEffect(() => {
+    const storedConversations = localStorage.getItem("conversations");
+    if (storedConversations) {
+      setConversations(JSON.parse(storedConversations));
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   const cachedResponse = localStorage.getItem("gpt_response");
-  //   if (cachedResponse) {
-  //     setGptResponse(cachedResponse);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (conversations.length > 0) {
+      localStorage.setItem("conversations", JSON.stringify(conversations));
+    }
+  }, [conversations]);
 
   return (
-    <div className="w-5/6 h-auto max-h-100% md:max-w-xl bg-gray-200 rounded-lg shadow-lg p-10 mx-auto overflow-hidden">
+    <div className="w-3/4 h-auto max-h-100% bg-gray-200 rounded-lg shadow-lg p-10 mx-auto overflow-y-auto">
       <form className="mb-4" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -82,18 +82,10 @@ function ChatGPTChatbox() {
           Error code: {error.code}
         </p>
       )}
-      {gptResponse && (
-        <div className="bg-white rounded p-4 mt-4 h-auto ">
-          <h2 className="text-xl font-medium mb-2">Response:</h2>
-          <div className=" md:max-h-14vw overflow-y-auto max-h-120">
-            <p className="text-gray-700 break-words px-2 max-h-100%">
-              {loading ? "Loading..." : gptResponse}
-            </p>
-          </div>
-        </div>
-      )}
+      <div className="conversation-container overflow-y-auto">
+        <ConversationList conversations={conversations} loading={loading} />
+      </div>
     </div>
   );
 }
-
 export default ChatGPTChatbox;
