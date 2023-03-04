@@ -12,9 +12,12 @@ module.exports = {
     extend: {
       maxHeight: {
         120: "60vh",
-        "14vw":"14vw",
         "100%": "100%",
+        "30vh": "30vh",
       },
+      minHeight: {
+        "10vh": "12vh",
+      }
     },
   },
   plugins: [],

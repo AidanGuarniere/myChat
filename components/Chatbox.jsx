@@ -8,6 +8,7 @@ function ChatGPTChatbox() {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+
   const handleChange = (event) => {
     setUserText(event.target.value);
   };
@@ -23,12 +24,35 @@ function ChatGPTChatbox() {
           prompt: userText,
         });
 
-        // Extract the generated text from the response
         const completion = response.data.completion;
-        setConversations([
-          ...conversations,
-          { title: userText, prompt: userText, response: completion },
-        ]);
+
+        // If there is no selected conversation, start a new one
+        if (!selectedConversation) {
+          const newConversation = {
+            id: completion.id,
+            title: userText,
+            dialogue: [
+              {
+                prompt: userText,
+                response: completion.choices[0].text,
+              },
+            ],
+          };
+          setConversations([...conversations, newConversation]);
+          setSelectedConversation(newConversation.id);
+        } else {
+          // If there is a selected conversation, add the new prompt and response to it
+          const updatedConversations = [...conversations];
+          const selectedIndex = updatedConversations.findIndex(
+            (conversation) => conversation.id === selectedConversation
+          );
+          updatedConversations[selectedIndex].dialogue.push({
+            prompt: userText,
+            response: completion.choices[0].text,
+          });
+          setConversations(updatedConversations);
+        }
+
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -47,11 +71,15 @@ function ChatGPTChatbox() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      setSelectedConversation(conversations.length - 1);
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (!loading) {
+  //     setSelectedConversation(
+  //       conversations.length > 0
+  //         ? conversations[conversations.length - 1].id
+  //         : null
+  //     );
+  //   }
+  // }, [loading]);
 
   useEffect(() => {
     if (conversations.length > 0) {
@@ -60,7 +88,7 @@ function ChatGPTChatbox() {
   }, [conversations]);
 
   return (
-    <div className=" w-screen h-screen h-auto max-h-100% bg-gray-200  p-10 mx-auto overflow-y-auto">
+    <div className=" w-screen h-screen  mx-auto overflow-hidden">
       {error.message && (
         <p className="text-red-600 font-medium mb-2">Error: {error.message}</p>
       )}
@@ -69,18 +97,72 @@ function ChatGPTChatbox() {
           Error code: {error.code}
         </p>
       )}
-      <div className="flex">
+      <div className="flex overflow-x-hidden items-bottom">
         <ConversationHistory
           conversations={conversations}
           userText={userText}
           setUserText={setUserText}
           setSelectedConversation={setSelectedConversation}
         />
-        <div className="w-3/4 h-auto max-h-100% bg-gray-200 rounded-lg shadow-lg p-10 ml-2 overflow-hidden">
-          <form className="mb-4" onSubmit={handleSubmit}>
+        <div className="w-4/5 h-screen bg-gray-200  p-0 m-0 overflow-x-hidden overflow-y-scroll">
+          <div className="conversation">
+            {selectedConversation !== null &&
+            conversations[
+              conversations.findIndex(
+                (conversation) => conversation.id === selectedConversation
+              )
+            ] ? (
+              <div className="bg-white rounded overflow-y-scroll p-0">
+                <div className="conversation-item" key={selectedConversation}>
+                  <div className="bg-white rounded  min-h-80">
+                    {/* <p className="text-black-700 text-lg font-bold break-words p-4">
+                      {
+                        conversations[
+                          conversations.findIndex(
+                            (conversation) =>
+                              conversation.id === selectedConversation
+                          )
+                        ].title
+                      }
+                    </p> */}
+                    {conversations[
+                      conversations.findIndex(
+                        (conversation) =>
+                          conversation.id === selectedConversation
+                      )
+                    ].dialogue.map((dialogue, index) => (
+                      <div key={index}>
+                        <div className="p-4 bg-gray-200 break-words">
+                          {dialogue.prompt}
+                        </div>
+                        <div className="p-4 bg-gray-100 break-words">
+                          {dialogue.response}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="conversation-history">
+                {/* <h2 className="text-xl font-medium mb-2 ml-2">
+                  Start a Conversation:
+                </h2> */}
+                <div className="bg-white rounded p-4 h-auto">
+                  <div className="bg-white rounded p-4">
+                    <p className="text-gray-700 break-words px-2 max-h-100%"></p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <form
+            className="mt-4  fixed bottom-0 px-1 pt-4 w-4/5 fade"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
-              className="w-full border border-gray-400 p-2 rounded-lg"
+              className="w-full border border-gray-400 p-2 rounded-lg h-auto resize-y"
               placeholder="Type your message here..."
               required
               value={userText}
@@ -96,62 +178,9 @@ function ChatGPTChatbox() {
               {loading ? "Loading..." : "Submit"}
             </button>
           </form>
-          <div className="conversation">
-            {conversations[selectedConversation] ? (
-              <div className="bg-white rounded p-4 mt-4 h-auto">
-                <div className="conversation-item" key={selectedConversation}>
-                  <div className="bg-white rounded p-4 mt-4 h-auto">
-                    {selectedConversation === 0 ? (
-                      <div>
-                        {" "}
-                        <p className="text-black-700 font-bold break-words px-2 max-h-100%">
-                          {conversations[0].prompt}
-                        </p>
-                        <p className="text-gray-700 break-words px-2 max-h-100%">
-                          {conversations[selectedConversation]
-                            ? conversations[0].response
-                            : "Loading..."}
-                        </p>
-                      </div>
-                    ) : (
-                      <div>
-                        {" "}
-                        {selectedConversation && (
-                          <p className="text-black-700 font-bold break-words px-2 max-h-100%">
-                            {conversations[selectedConversation].prompt}
-                          </p>
-                        )}
-                        {selectedConversation && (
-                          <p className="text-gray-700 break-words px-2 max-h-100%">
-                            {conversations[selectedConversation]
-                              ? conversations[selectedConversation].response
-                              : "Loading..."}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="conversation-history">
-                <h2 className="text-xl font-medium mb-2">
-                  Start a Conversation:
-                </h2>
-                <div className="bg-white rounded p-4 mt-4 h-auto">
-                  <div className="conversation-item" key={selectedConversation}>
-                    <div className="bg-white rounded p-4 mt-4 h-auto">
-                      <p className="text-gray-700 break-words px-2 max-h-100%"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>
   );
 }
-
 export default ChatGPTChatbox;

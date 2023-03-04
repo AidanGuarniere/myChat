@@ -1,29 +1,20 @@
-import axios from "axios";
+import { Configuration, OpenAIApi } from "openai";
 
 const fetchDataFromAPI = async (prompt) => {
-  const apiKey = process.env.OPENAI_API_KEY;
-  try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/engines/text-davinci-003/completions",
-      {
-        prompt: prompt,
-        max_tokens: 4000,
-        temperature: 0.7,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + apiKey,
-        },
-      }
-    );
-    // Extract the generated text from the response
-    const completion = response.data.choices[0].text;
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  const openai = new OpenAIApi(configuration);
 
-    // Return the generated text to the client
-    return completion;
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      temperature: 1,
+      max_tokens: 4000,
+    });
+    return completion.data;
   } catch (error) {
-    // Return an error to the client if something went wrong
     throw error;
   }
 };
