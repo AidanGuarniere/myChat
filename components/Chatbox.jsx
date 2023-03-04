@@ -13,6 +13,10 @@ function ChatGPTChatbox() {
     setUserText(event.target.value);
   };
 
+  useEffect(() => {
+    console.log(conversations);
+  }, [conversations]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (userText.length >= 1) {
@@ -34,7 +38,7 @@ function ChatGPTChatbox() {
             dialogue: [
               {
                 prompt: userText,
-                response: completion.choices[0].text,
+                response: completion.choices[0].message.content,
               },
             ],
           };
@@ -48,7 +52,7 @@ function ChatGPTChatbox() {
           );
           updatedConversations[selectedIndex].dialogue.push({
             prompt: userText,
-            response: completion.choices[0].text,
+            response: completion.choices[0].message.content,
           });
           setConversations(updatedConversations);
         }
