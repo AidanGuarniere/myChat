@@ -14,7 +14,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center items-start md:items-center h-screen w-screen bg-gray-900">
+      <main className="flex justify-center items-start md:items-center h-screen w-screen bg-gray-1000">
         <Chatbox />
       </main>
     </>

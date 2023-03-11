@@ -17,7 +17,16 @@ module.exports = {
       },
       minHeight: {
         "10vh": "12vh",
-      }
+      },
+      height: {
+        "85%": "85%",
+        "15%": "15%",
+
+      },
+      width: {
+        "50vw": "50vw",
+        "10vw": "10vw",
+      },
     },
   },
   plugins: [],
