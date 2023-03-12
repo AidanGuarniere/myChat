@@ -7,10 +7,10 @@ function ConversationHistory({
   setSelectedConversation,
 }) {
   return (
-    <div className="w-1/5 h-screen bg-gray-1000 p-2 overflow-y-auto">
+    <div className="w-20.29% h-screen bg-gray-1000 p-2 overflow-y-auto">
       <div className="conversation-history-sidebar">
         <button
-          class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 w-full"
+          class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 w-full border border-white/20"
           onClick={() => {
             if (userText.length) {
               setUserText("");
@@ -47,7 +47,8 @@ function ConversationHistory({
             }}
           >
             <h3 className="text-lg font-medium mb-2 text-gray-200">
-              {conversation.title}
+              {/* show 1st five words of first prompt in chat */}
+              {conversation.title.split(" ").slice(0, 5).join(" ")}
             </h3>
           </div>
         ))}

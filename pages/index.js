@@ -1,11 +1,30 @@
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { Inter } from "@next/font/google";
-import Chatbox from "../components/Chatbox";
-
-
 const inter = Inter({ subsets: ["latin"] });
+import ConversationHistory from "../components/ConversationHistory";
+import Conversations from "../components/Conversations";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 export default function Home() {
+  const [conversations, setConversations] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [userText, setUserText] = useState("");
+  const [error, setError] = useState(null);
+  // Use local storage to persist conversation history
+  useEffect(() => {
+    const storedConversations = localStorage.getItem("conversations");
+    if (storedConversations) {
+      setConversations(JSON.parse(storedConversations));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (conversations.length > 0) {
+      localStorage.setItem("conversations", JSON.stringify(conversations));
+    }
+  }, [conversations]);
+
   return (
     <>
       <Head>
@@ -15,7 +34,26 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex justify-center items-start md:items-center h-screen w-screen bg-gray-1000">
-        <Chatbox />
+        <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
+          <div className="flex overflow-x-hidden items-bottom">
+            <ConversationHistory
+              conversations={conversations}
+              userText={userText}
+              setUserText={setUserText}
+              setSelectedConversation={setSelectedConversation}
+            />
+            {error && <ErrorDisplay error={error} />}
+            <Conversations
+              userText={userText}
+              setUserText={setUserText}
+              setError={setError}
+              conversations={conversations}
+              setConversations={setConversations}
+              selectedConversation={selectedConversation}
+              setSelectedConversation={setSelectedConversation}
+            />
+          </div>
+        </div>{" "}
       </main>
     </>
   );
