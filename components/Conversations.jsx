@@ -63,7 +63,7 @@ function Conversations({
               ? scrollHeight + conversationRef.current.clientHeight * 1.1 <
                   conversationRef.current.scrollHeight && (
                   <button
-                    class="cursor-pointer absolute right-6 bottom-[124px] md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200"
+                    className="cursor-pointer absolute right-6 bottom-[124px] md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200"
                     onClick={() => {
                       if (conversationRef.current) {
                         conversationRef.current.scrollTo({
@@ -80,7 +80,7 @@ function Conversations({
                       viewBox="0 0 24 24"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="h-4 w-4 m-1"
+                      className="h-4 w-4 m-1"
                       height="1em"
                       width="1em"
                       xmlns="http://www.w3.org/2000/svg"

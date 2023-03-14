@@ -11,8 +11,10 @@
   "dependencies": {
     "@next/font": "13.1.1",
     "axios": "^1.2.2",
+    "dotenv": "^16.0.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
+    "mongoose": "^7.0.1",
     "next": "13.1.1",
     "openai": "^3.2.1",
     "react": "18.2.0",

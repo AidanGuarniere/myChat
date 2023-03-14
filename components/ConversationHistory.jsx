@@ -10,7 +10,7 @@ function ConversationHistory({
     <div className="w-20.29% h-screen bg-gray-1000 p-2 overflow-y-auto">
       <div className="conversation-history-sidebar">
         <button
-          class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 w-full border border-white/20"
+          className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 w-full border border-white/20"
           onClick={() => {
             if (userText.length) {
               setUserText("");
@@ -25,7 +25,7 @@ function ConversationHistory({
             viewBox="0 0 24 24"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="h-4 w-4"
+            className="h-4 w-4"
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"

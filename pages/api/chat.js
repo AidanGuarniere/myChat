@@ -4,18 +4,14 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 const fetchDataFromAPI = async (messages) => {
-  console.log(messages);
   try {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: messages,
       // max_tokens: 4000,
     });
-    console.log("200 DATA");
-    console.log(completion.data);
     return completion.data;
   } catch (error) {
-    console.log("ERROR");
     console.log(error);
     throw error;
   }
