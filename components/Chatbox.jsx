@@ -23,25 +23,18 @@ function Chatbox({
       setError({});
       try {
         let messageHistory;
-        // Make a request to the OpenAI API
+
         if (selectedConversation) {
-          // if prev conversation is selected, find it via the index of  conversations that has an id that matches selectedConversation
           const selectedIndex = conversations.findIndex(
             (conversation) => conversation.id === selectedConversation
           );
-          // selected conversation object
           const updatedConversation = { ...conversations[selectedIndex] };
-
-          // add new user message to conversation messages
           updatedConversation.messages.push({
             role: "user",
             content: userText,
           });
-
-          // update messageHistory
           messageHistory = updatedConversation.messages;
         } else {
-          // if no conversation is selected, start message history with first user prompt
           messageHistory = [
             { role: "system", content: "You are a helpful assistant." },
             {
@@ -51,38 +44,34 @@ function Chatbox({
           ];
         }
 
-        // make openAI API request with existing messageHistory
         const response = await axios.post("/api/chat", {
           messages: messageHistory,
         });
 
-        // recieve response data as completion
         const completion = response.data.completion;
-
-        // update messageHistory with completion reponse's message
         messageHistory.push(completion.choices[0].message);
 
-        // If there is no selected conversation, start a new one
         if (!selectedConversation) {
           const newConversation = {
             id: completion.id,
             title: userText,
             messages: messageHistory,
           };
-          // add new conversation to conversations array
           setConversations([...conversations, newConversation]);
-          // set selectedConversation to most recent conversation
           setSelectedConversation(newConversation.id);
+
+          // Create a new chat in the database
+          await axios.post("/api/chats", newConversation);
         } else {
-          // If there is a selected conversation, find associated conversation object
           const updatedConversations = [...conversations];
           const selectedIndex = updatedConversations.findIndex(
             (conversation) => conversation.id === selectedConversation
           );
-
-          // set messages to updated messageHistory
           updatedConversations[selectedIndex].messages = messageHistory;
           setConversations(updatedConversations);
+
+          // Update the chat in the database
+          await axios.post("/api/chats", updatedConversations[selectedIndex]);
         }
         setUserText("");
         setLoading(false);
@@ -94,6 +83,7 @@ function Chatbox({
       setError("Please enter a valid prompt");
     }
   };
+
   return (
     <div className="h-15% absolute bottom-0 w-4/5  border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white fade">
       <form
@@ -121,10 +111,10 @@ function Chatbox({
             <svg
               stroke="currentColor"
               fill="none"
-              stroke-width="2"
+              strokeWidth="2"
               viewBox="0 0 24 24"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLineCap="round"
+              strokeLineJoin="round"
               className="h-4 w-4 mr-1"
               height="1em"
               width="1em"

@@ -5,26 +5,29 @@ const inter = Inter({ subsets: ["latin"] });
 import ConversationHistory from "../components/ConversationHistory";
 import Conversations from "../components/Conversations";
 import ErrorDisplay from "../components/ErrorDisplay";
+import axios from "axios";
 
 export default function Home() {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [userText, setUserText] = useState("");
   const [error, setError] = useState(null);
-  // Use local storage to persist conversation history
+  const [loading, setLoading] = useState(false);
+
+  // Fetch conversations from the server instead of local storage
   useEffect(() => {
-    const storedConversations = localStorage.getItem("conversations");
-    if (storedConversations) {
-      setConversations(JSON.parse(storedConversations));
-    }
+    const fetchConversations = async () => {
+      try {
+        const response = await axios.get("/api/chats");
+        if (response.data){
+        setConversations(response.data);}
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
+    };
+
+    fetchConversations();
   }, []);
-
-  useEffect(() => {
-    if (conversations.length > 0) {
-      localStorage.setItem("conversations", JSON.stringify(conversations));
-    }
-  }, [conversations]);
-
   return (
     <>
       <Head>
