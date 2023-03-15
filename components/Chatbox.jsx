@@ -91,7 +91,7 @@ function Chatbox({
         onSubmit={handleSubmit}
       >
         <input
-          tabindex="0"
+          tabIndex="0"
           data-id="root"
           rows="1"
           className="outline-none chat-text m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 focus:border-0 dark:bg-transparent md:pl-0"
@@ -113,8 +113,8 @@ function Chatbox({
               fill="none"
               strokeWidth="2"
               viewBox="0 0 24 24"
-              strokeLineCap="round"
-              strokeLineJoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="h-4 w-4 mr-1"
               height="1em"
               width="1em"
