@@ -2,31 +2,32 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 const inter = Inter({ subsets: ["latin"] });
-import ConversationHistory from "../components/ConversationHistory";
-import Conversations from "../components/Conversations";
+import ChatHistory from "../components/ChatHistory";
+import Chats from "../components/Chats";
 import ErrorDisplay from "../components/ErrorDisplay";
 import axios from "axios";
 
 export default function Home() {
-  const [conversations, setConversations] = useState([]);
-  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
   const [userText, setUserText] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch conversations from the server instead of local storage
+  // Fetch chats from the server instead of local storage
   useEffect(() => {
-    const fetchConversations = async () => {
+    const fetchChats = async () => {
       try {
         const response = await axios.get("/api/chats");
-        if (response.data){
-        setConversations(response.data);}
+        if (response.data) {
+          setChats(response.data);
+        }
       } catch (error) {
-        console.error("Error fetching conversations:", error);
+        console.error("Error fetching chats:", error);
       }
     };
 
-    fetchConversations();
+    fetchChats();
   }, []);
   return (
     <>
@@ -36,24 +37,26 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center items-start md:items-center h-screen w-screen bg-gray-1000">
+      <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
         <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
           <div className="flex overflow-x-hidden items-bottom">
-            <ConversationHistory
-              conversations={conversations}
+            <ChatHistory
+              chats={chats}
               userText={userText}
               setUserText={setUserText}
-              setSelectedConversation={setSelectedConversation}
+              setChats={setChats}
+              selectedChat={selectedChat}
+              setSelectedChat={setSelectedChat}
             />
             {error && <ErrorDisplay error={error} />}
-            <Conversations
+            <Chats
               userText={userText}
               setUserText={setUserText}
               setError={setError}
-              conversations={conversations}
-              setConversations={setConversations}
-              selectedConversation={selectedConversation}
-              setSelectedConversation={setSelectedConversation}
+              chats={chats}
+              setChats={setChats}
+              selectedChat={selectedChat}
+              setSelectedChat={setSelectedChat}
             />
           </div>
         </div>{" "}

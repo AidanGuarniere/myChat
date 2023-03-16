@@ -134,7 +134,7 @@ a {
   height: 24px;
   overflow-y: hidden;
 }
-.conversation {
+.chat {
   z-index: 99;
 }
 
@@ -175,3 +175,4 @@ a {
     transform: rotate(360deg);
   }
 }
+
