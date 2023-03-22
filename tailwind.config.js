@@ -31,6 +31,7 @@ module.exports = {
       backgroundColor: {
         "gray-800": "rgba(52,53,65,1)",
         "vert-light-gradient": "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
+        "gray-50": "rgba(247,247,248,1)"
       },
       backgroundImage:{
         "vert-light-gradient": "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
