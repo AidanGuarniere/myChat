@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Code } from 'next/document';
+import dynamic from "next/dynamic";
 import Chatbox from "./Chatbox";
 import ChatIcon from "./ChatIcon";
 import UserIcon from "./UserIcon";
+const CodeBlock = dynamic(() => import("./CodeBlock"), { ssr: false });
 import ChatScrollButton from "./ChatScrollButton";
-
 
 function Chats({
   userText,
@@ -18,10 +18,13 @@ function Chats({
   const chatRef = useRef(null);
   const [scrollHeight, setScrollHeight] = useState();
   useEffect(() => {
+    if (selectedChat) {
+      localStorage.setItem("selectedChat", selectedChat);
+    }
     if (chatRef.current) {
       chatRef.current.scrollTo({
         top: chatRef.current.scrollHeight,
-        behavior: "auto", // use "auto" for instant scrolling
+        behavior: "auto",
       });
     }
   }, [selectedChat]);
@@ -29,7 +32,6 @@ function Chats({
   return (
     <div className="md:pl-[260px] h-screen p-0 m-0 overflow-x-hidden w-full">
       <div className="chat h-full w-full overflow-y-scroll m-0 p-0 flex">
-        {/* <div className="flex w-full items-center justify-center gap-1 border-b border-black/10 bg-gray-50 p-3 text-gray-500 dark:border-gray-900/50 dark:bg-gray-700 dark:text-gray-300">Model: Default (GPT-3.5)</div> */}
         {selectedChat !== null &&
         chats[chats.findIndex((chat) => chat.id === selectedChat)] ? (
           <div
@@ -68,12 +70,12 @@ function Chats({
                                 .split(/(```.*?```)/gs)
                                 .map((part, i) =>
                                   part.startsWith("```") ? (
-                                    <Code
-                                      className="!whitespace-pre hljs "
+                                    <CodeBlock
+                                      code={part.slice(3, -3)}
+                                      language={"jsx"}
                                       key={i}
-                                    >
-                                      {part.slice(3, -3)}
-                                    </Code>
+                                      className="w-full"
+                                    />
                                   ) : (
                                     <p key={i}>{part}</p>
                                   )

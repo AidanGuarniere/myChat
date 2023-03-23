@@ -17,10 +17,15 @@ export default function Home() {
   // Fetch chats from the server instead of local storage
   useEffect(() => {
     const fetchChats = async () => {
+
       try {
         const response = await axios.get("/api/chats");
         if (response.data) {
           setChats(response.data);
+          const previouslySelectedChat = localStorage.getItem("selectedChat");
+          if (previouslySelectedChat) {
+            setSelectedChat(previouslySelectedChat)
+          }
         }
       } catch (error) {
         console.error("Error fetching chats:", error);
