@@ -65,7 +65,7 @@ function ChatHistory({
             <div className="w-full flex-col flex-1 overflow-y-auto border-b border-white/20 -mr-2 h-1/2">
               <div className="flex flex-col gap-2 text-gray-100 text-sm">
                 {chats.map((chat, index) => (
-                  <button
+                  <a
                     className={`text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
                       selectedChat === chat.id
                         ? "bg-gray-800"
@@ -107,10 +107,10 @@ function ChatHistory({
                           <svg
                             stroke="currentColor"
                             fill="none"
-                            stroke-width="2"
+                            strokeWidth="2"
                             viewBox="0 0 24 24"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             className="h-4 w-4"
                             height="1em"
                             width="1em"
@@ -129,10 +129,10 @@ function ChatHistory({
                           <svg
                             stroke="currentColor"
                             fill="none"
-                            stroke-width="2"
+                            strokeWidth="2"
                             viewBox="0 0 24 24"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             className="h-4 w-4"
                             height="1em"
                             width="1em"
@@ -146,7 +146,7 @@ function ChatHistory({
                         </button>
                       </div>
                     )}
-                  </button>
+                  </a>
                 ))}
               </div>
             </div>

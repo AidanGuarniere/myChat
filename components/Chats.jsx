@@ -5,6 +5,8 @@ import ChatIcon from "./ChatIcon";
 import UserIcon from "./UserIcon";
 const CodeBlock = dynamic(() => import("./CodeBlock"), { ssr: false });
 import ChatScrollButton from "./ChatScrollButton";
+import ChatMessage from "./ChatMessage";
+
 
 function Chats({
   userText,
@@ -27,7 +29,7 @@ function Chats({
         behavior: "auto",
       });
     }
-  }, [selectedChat]);
+  }, [chats, selectedChat]);
 
   return (
     <div className="md:pl-[260px] h-screen p-0 m-0 overflow-x-hidden w-full">
@@ -65,27 +67,7 @@ function Chats({
                       <div className="flex flex-grow flex-col gap-3">
                         <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
                           <div className="markdown prose w-full break-words dark:prose-invert light text-gray-800">
-                            {
-                              //use regex to identify and separate codeblocks from message text
-                              message.content.match(/```(.*?)```/gs) ? (
-                                message.content
-                                  .split(/(```.*?```)/gs)
-                                  .map((part, i) =>
-                                    part.startsWith("```") ? (
-                                      <CodeBlock
-                                        code={part.slice(3, -3)}
-                                        language={"javascript"}
-                                        key={i}
-                                        className="w-full"
-                                      />
-                                    ) : (
-                                      <p key={i}>{part}</p>
-                                    )
-                                  )
-                              ) : (
-                                <p>{message.content}</p>
-                              )
-                            }
+                            <ChatMessage markdownContent={message.content}/>
                           </div>
                         </div>
                       </div>
