@@ -10,6 +10,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        gray: {
+          800: "rgba(52,53,65,1)",
+          1000: "rgba(32, 33, 35, 1)",
+          50: "rgba(247,247,248,1)",
+        },
+      },
       maxHeight: {
         120: "60vh",
         "100%": "100%",
@@ -29,13 +36,13 @@ module.exports = {
         "20.29%": "20.29%",
       },
       backgroundColor: {
-        "gray-800": "rgba(52,53,65,1)",
-        "vert-light-gradient": "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
-        "gray-50": "rgba(247,247,248,1)"
+        "vert-light-gradient":
+          "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
       },
-      backgroundImage:{
-        "vert-light-gradient": "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
-      }
+      backgroundImage: {
+        "vert-light-gradient":
+          "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
+      },
     },
   },
   plugins: [],

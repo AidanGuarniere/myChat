@@ -64,25 +64,28 @@ function Chats({
                     <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
                       <div className="flex flex-grow flex-col gap-3">
                         <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-                          <div className="markdown prose w-full break-words dark:prose-invert light">
-                            {message.content.match(/```(.*?)```/gs) ? (
-                              message.content
-                                .split(/(```.*?```)/gs)
-                                .map((part, i) =>
-                                  part.startsWith("```") ? (
-                                    <CodeBlock
-                                      code={part.slice(3, -3)}
-                                      language={"jsx"}
-                                      key={i}
-                                      className="w-full"
-                                    />
-                                  ) : (
-                                    <p key={i}>{part}</p>
+                          <div className="markdown prose w-full break-words dark:prose-invert light text-gray-800">
+                            {
+                              //use regex to identify and separate codeblocks from message text
+                              message.content.match(/```(.*?)```/gs) ? (
+                                message.content
+                                  .split(/(```.*?```)/gs)
+                                  .map((part, i) =>
+                                    part.startsWith("```") ? (
+                                      <CodeBlock
+                                        code={part.slice(3, -3)}
+                                        language={"javascript"}
+                                        key={i}
+                                        className="w-full"
+                                      />
+                                    ) : (
+                                      <p key={i}>{part}</p>
+                                    )
                                   )
-                                )
-                            ) : (
-                              <p>{message.content}</p>
-                            )}
+                              ) : (
+                                <p>{message.content}</p>
+                              )
+                            }
                           </div>
                         </div>
                       </div>
