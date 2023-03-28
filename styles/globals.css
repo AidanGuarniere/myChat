@@ -41,6 +41,7 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+  
 }
 
 @media (prefers-color-scheme: dark) {
@@ -100,7 +101,7 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: none
 }
 
 @media (prefers-color-scheme: dark) {
@@ -205,5 +206,35 @@ a {
   to {
     transform: rotate(360deg);
   }
+}
+
+.prose :where(p):not(:where([class~="not-prose"] *)) {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.prose :where(pre):not(:where([class~=not-prose] *)) {
+  border-radius: 0.375rem;
+  font-weight: 400;
+  line-height: 1.7142857;
+  margin: 0;
+  overflow-x: auto;
+  padding: 0;
+}
+
+.prose * div.code-header {
+ padding: .5rem 1rem;
+}
+
+pre.code-container {
+  margin: 1rem 0;
+}
+
+.hljs {
+  background-color: (0,0,0);
+}
+
+.prose pre {
+  background-color: #000;
 }
 

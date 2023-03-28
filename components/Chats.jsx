@@ -7,7 +7,6 @@ const CodeBlock = dynamic(() => import("./CodeBlock"), { ssr: false });
 import ChatScrollButton from "./ChatScrollButton";
 import ChatMessage from "./ChatMessage";
 
-
 function Chats({
   userText,
   setUserText,
@@ -64,12 +63,12 @@ function Chats({
                     </div>
 
                     <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
-                      <div className="flex flex-grow flex-col gap-3">
-                        <div className="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
-                          <div className="markdown prose w-full break-words dark:prose-invert light text-gray-800">
-                            <ChatMessage markdownContent={message.content}/>
-                          </div>
-                        </div>
+                      <div className="min-h-[20px] flex flex-col items-start gap-4 text-gray-800">
+                        {message.role === "assistant" ? (
+                          <ChatMessage markdownContent={message.content} />
+                        ) : (
+                          <p>{message.content}</p>
+                        )}
                       </div>
                     </div>
                   </div>
