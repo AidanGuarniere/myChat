@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import dynamic from "next/dynamic";
+import ErrorDisplay from "../components/ErrorDisplay";
 import Chatbox from "./Chatbox";
 import ChatIcon from "./ChatIcon";
 import UserIcon from "./UserIcon";
-const CodeBlock = dynamic(() => import("./CodeBlock"), { ssr: false });
 import ChatScrollButton from "./ChatScrollButton";
 import ChatMessage from "./ChatMessage";
 
 function Chats({
   userText,
   setUserText,
+  error,
   setError,
   chats,
   setChats,
@@ -32,9 +32,12 @@ function Chats({
 
   return (
     <div className="md:pl-[260px] h-screen p-0 m-0 overflow-x-hidden w-full">
+      {}
       <div className="chat h-full w-full overflow-y-scroll m-0 p-0 flex">
-        {selectedChat !== null &&
-        chats[chats.findIndex((chat) => chat.id === selectedChat)] ? (
+        {error ? (
+          <ErrorDisplay error={error} />
+        ) : selectedChat !== null &&
+          chats[chats.findIndex((chat) => chat.id === selectedChat)] ? (
           <div
             className="bg-white overflow-y-scroll p-0 w-full h-full "
             ref={chatRef}
@@ -75,7 +78,7 @@ function Chats({
                 </div>
               )
             )}
-
+            {/* {error && <ErrorDisplay error={error} />} */}
             <div className="bg-white  h-1/5" />
             {/* scroll-to-bottom button */}
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
@@ -88,7 +91,6 @@ function Chats({
             </span>
           </h1>
         )}
-
         <Chatbox
           setError={setError}
           userText={userText}

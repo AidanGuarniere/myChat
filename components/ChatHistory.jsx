@@ -16,6 +16,7 @@ function ChatHistory({
         setChats(response.data);
       }
     } catch (error) {
+      setError(error)
       console.error("Error fetching chats:", error);
     }
   };

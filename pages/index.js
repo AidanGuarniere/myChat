@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import { Inter } from "@next/font/google";
-const inter = Inter({ subsets: ["latin"] });
 import ChatHistory from "../components/ChatHistory";
 import Chats from "../components/Chats";
 import ErrorDisplay from "../components/ErrorDisplay";
@@ -12,22 +10,21 @@ export default function Home() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [userText, setUserText] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   // Fetch chats from the server instead of local storage
   useEffect(() => {
     const fetchChats = async () => {
-
       try {
         const response = await axios.get("/api/chats");
         if (response.data) {
           setChats(response.data);
           const previouslySelectedChat = localStorage.getItem("selectedChat");
           if (previouslySelectedChat) {
-            setSelectedChat(previouslySelectedChat)
+            setSelectedChat(previouslySelectedChat);
           }
         }
       } catch (error) {
+        setError(error);
         console.error("Error fetching chats:", error);
       }
     };
@@ -53,10 +50,11 @@ export default function Home() {
               selectedChat={selectedChat}
               setSelectedChat={setSelectedChat}
             />
-            {error && <ErrorDisplay error={error} />}
+
             <Chats
               userText={userText}
               setUserText={setUserText}
+              error={error}
               setError={setError}
               chats={chats}
               setChats={setChats}
