@@ -75,7 +75,6 @@ export default async function handler(req, res) {
         const { id } = req.body;
         if (id) {
           const deletedChat = await Chat.deleteOne({ id });
-          console.log(deletedChat);
           res.status(200).json(deletedChat);
         } else {
           const allChats = await Chat.deleteMany();

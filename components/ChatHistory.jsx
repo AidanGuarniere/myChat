@@ -38,45 +38,44 @@ function ChatHistory({
     setSelectedChat(null);
   };
 
-  const editChatTitle = async (id, title) => {
-    console.log(id, title);
-    if (id && title) {
-      await axios.put("/api/chats", { id, title });
-      fetchChats();
-    } else {
-      setError("Please enter a valid title");
+  const editChatTitle = async (id, title, currentTitle) => {
+    if (title !== currentTitle) {
+      if (id && title) {
+        await axios.put("/api/chats", { id, title });
+        fetchChats();
+      } else {
+        setError("Please enter a valid title");
+      }
     }
-    setShowTitleInput(false);
+    hideTitleInput();
   };
 
-  const handleBlur = () => {
-    setShowTitleInput(false);
+  const hideTitleInput = () => {
     setTitleInputValue("");
+    setShowTitleInput(false);
   };
 
-  // const handleDocumentClick = (e) => {
-  //   const isEditButton = e.target.id === "show-title-input";
-  //   const isParentEditButton = e.target.parentElement.id === "show-title-input";
-  //   const isSubmitButton = e.target.id === "submit-title-edit";
+  const handleDocumentClick = (e) => {
+    const isEditButton = e.target.id === "show-title-input";
+    const isSubmitButton = e.target.id === "submit-title-edit";
 
-  //   if (!isEditButton && !isParentEditButton && !isSubmitButton) {
-  //     handleBlur();
-  //   }
-  // };
+    if (!isEditButton && !isSubmitButton) {
+      hideTitleInput();
+    }
+  };
 
-  // useEffect(() => {
-  //   if (showTitleInput && inputRef.current) {
-  //     inputRef.current.focus();
-  //     setTitleInputValue(inputRef.value);
-  //     document.addEventListener("click", handleDocumentClick);
-  //   } else {
-  //     document.removeEventListener("click", handleDocumentClick);
-  //   }
+  useEffect(() => {
+    if (showTitleInput && inputRef.current) {
+      inputRef.current.focus();
+      document.addEventListener("click", handleDocumentClick);
+    } else {
+      document.removeEventListener("click", handleDocumentClick);
+    }
 
-  //   return () => {
-  //     document.removeEventListener("click", handleDocumentClick);
-  //   };
-  // }, [showTitleInput]);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, [showTitleInput]);
 
   return (
     <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col bg-gray-1000 dark z-50">
@@ -149,9 +148,6 @@ function ChatHistory({
                             className="content h-5 w-full bg-transparent text-white border border-blue-600 outline-none focus:outline-blue-600 border-[1.5px] mb-1 align-middle pb-1"
                             value={titleInputValue}
                             onChange={(e) => setTitleInputValue(e.target.value)}
-                            // onSubmit={() => {
-                            //   editChatTitle(chat.id, e.target.value);
-                            // }}
                           ></input>
                         ) : (
                           <>
@@ -177,7 +173,11 @@ function ChatHistory({
                               id="submit-title-edit"
                               className="p-1 hover:text-white"
                               onClick={() =>
-                                editChatTitle(chat.id, titleInputValue)
+                                editChatTitle(
+                                  chat.id,
+                                  titleInputValue,
+                                  chat.title
+                                )
                               }
                             >
                               <svg
@@ -197,7 +197,7 @@ function ChatHistory({
                             </button>
                             <button
                               className="p-1 hover:text-white"
-                              onClick={handleBlur}
+                              onClick={hideTitleInput}
                             >
                               <svg
                                 stroke="currentColor"
@@ -223,7 +223,6 @@ function ChatHistory({
                               className="p-1 hover:text-white"
                               onClick={(e) => {
                                 e.stopPropagation();
-
                                 setTitleInputValue(chat.title);
                                 setShowTitleInput(true);
                               }}
