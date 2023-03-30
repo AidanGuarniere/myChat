@@ -2,17 +2,6 @@ import React from "react";
 
 function ErrorDisplay({ error }) {
   return (
-    // <div>
-    //   {" "}
-    //   {error.message && (
-    //     <p className="text-red-600 font-medium mb-2">Error: {error.message}</p>
-    //   )}
-    //   {error.code && (
-    //     <p className="text-red-600 font-medium mb-2">
-    //       Error code: {error.code}
-    //     </p>
-    //   )}
-    // </div>
     <div className="flex justify-center w-full">
       <div className="text-base md:max-w-xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
           <div className="flex w-full">

@@ -11,23 +11,29 @@ function Chatbox({
   setSelectedChat,
 }) {
   const [loading, setLoading] = useState(false);
+  const [regenVisible, setRegenVisible] = useState(false);
 
   const handleChange = (event) => {
     setUserText(event.target.value);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
   };
+  useEffect(() => {
+    if (regenVisible === true) {
+      setRegenVisible(false);
+    }
+  }, [selectedChat]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (userText.length >= 1) {
       setLoading(true);
-      setError({});
+      setError(null);
       try {
         let messageHistory;
 
@@ -85,12 +91,48 @@ function Chatbox({
         }
         setUserText("");
         setLoading(false);
+        setRegenVisible(true);
       } catch (error) {
+        console.log(error);
+        setRegenVisible(true);
         setError(error);
         setLoading(false);
       }
     } else {
       setError("Please enter a valid prompt");
+    }
+  };
+
+  const handleRegen = async () => {
+    if (selectedChat) {
+      setLoading(true);
+      setError(null);
+      try {
+        const selectedIndex = chats.findIndex(
+          (chat) => chat.id === selectedChat
+        );
+        const updatedChat = { ...chats[selectedIndex] };
+        const messageHistory = updatedChat.messages.slice(0, -1);
+
+        const response = await axios.post("/api/gpt", {
+          messages: messageHistory,
+        });
+
+        const completion = response.data.completion;
+        messageHistory.push(completion.choices[0].message);
+
+        const updatedChats = [...chats];
+        updatedChats[selectedIndex].messages = messageHistory;
+        setChats(updatedChats);
+
+        // Update the chat in the database with the new message history
+        await axios.put("/api/chats", updatedChats[selectedIndex]);
+
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
     }
   };
 
@@ -100,11 +142,43 @@ function Chatbox({
       className="pl-[260px] absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent 
       md:dark:border-transparent md:bg-vert-light-gradient dark:bg-gray-800  dark:md:bg-vert-dark-gradient pt-8"
     >
+      <div
+        id="regen"
+        className={`flex ml-1 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center ${
+          regenVisible ? "block" : "hidden"
+        }`}
+      >
+        <button
+          onClick={handleRegen}
+          className="btn relative btn-neutral border-0 md:border"
+          fdprocessedid="qe1rko"
+        >
+          <div className="flex w-full items-center justify-center gap-2">
+            <svg
+              stroke="currentColor"
+              fill="none"
+              strokeWidth="1.5"
+              viewBox="0 0 24 24"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-3 w-3"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <polyline points="23 20 23 14 17 14"></polyline>
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+            </svg>
+            Regenerate response
+          </div>
+        </button>
+      </div>
       <form
         className="flex flex-col flex-grow mx-auto my-4 py-3 px-3 relative border border-black/10 bg-white 
         dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md md:max-w-2xl lg:max-w-3xl md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-3xl"
         onSubmit={handleSubmit}
-        style={{boxShadow:"0 0 20px 0 rgba(0, 0, 0, 0.1)"}}
+        style={{ boxShadow: "0 0 20px 0 rgba(0, 0, 0, 0.1)" }}
       >
         <div className="w-full p-0 m-0">
           <textarea
@@ -120,7 +194,7 @@ function Chatbox({
               minHeight: "1rem",
               fontSize: "1rem",
               maxHeight: "10rem",
-              lineHeight: "1.5rem"
+              lineHeight: "1.5rem",
             }}
             onInput={(e) => {
               //shrink/grow on input logic
@@ -128,12 +202,14 @@ function Chatbox({
               e.target.style.height = `${e.target.scrollHeight}px`;
             }}
             onKeyDown={handleKeyDown}
-            ></textarea>
+          ></textarea>
         </div>
 
         <button
           type="submit"
-          className={`absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${loading ? "loading-icon" : null}`}
+          className={`absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
+            loading ? "loading-icon" : null
+          }`}
           disabled={loading}
         >
           {!loading && (

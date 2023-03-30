@@ -78,7 +78,6 @@ function Chats({
                 </div>
               )
             )}
-            {/* {error && <ErrorDisplay error={error} />} */}
             <div className="bg-white  h-1/5" />
             {/* scroll-to-bottom button */}
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />

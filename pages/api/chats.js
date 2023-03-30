@@ -1,5 +1,3 @@
-// pages/api/chats.js
-
 import dbConnect from "../../utils/dbConnect.js";
 import Chat from "../../models/ChatSchema";
 
@@ -48,14 +46,16 @@ export default async function handler(req, res) {
       break;
     case "PUT":
       try {
-        const { id, title } = req.body;
+        const { id, title, messages } = req.body;
 
-        if (id && title) {
-          const updatedChat = await Chat.findOneAndUpdate(
-            { id },
-            { title: title },
-            { new: true }
-          );
+        if (id) {
+          const updateData = {};
+          if (title) updateData.title = title;
+          if (messages) updateData.messages = messages;
+
+          const updatedChat = await Chat.findOneAndUpdate({ id }, updateData, {
+            new: true,
+          });
 
           if (!updatedChat) {
             return res.status(404).json({ error: "Chat not found" });
@@ -63,13 +63,14 @@ export default async function handler(req, res) {
 
           return res.status(200).json(updatedChat);
         } else {
-          return res.status(400).json({ error: "ID and title are required" });
+          return res.status(400).json({ error: "ID is required" });
         }
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
       }
       break;
+
     case "DELETE":
       try {
         const { id } = req.body;

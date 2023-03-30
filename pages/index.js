@@ -31,6 +31,12 @@ export default function Home() {
 
     fetchChats();
   }, []);
+
+  useEffect(() => {
+    console.log(error)
+
+  }, [error])
+  
   return (
     <>
       <Head>
