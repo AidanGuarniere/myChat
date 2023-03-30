@@ -78,7 +78,7 @@ function Chats({
                 </div>
               )
             )}
-            <div className="bg-white  h-1/5" />
+            <div className="bg-white  h-1/3" />
             {/* scroll-to-bottom button */}
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
           </div>

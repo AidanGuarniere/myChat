@@ -144,7 +144,7 @@ function Chatbox({
     >
       <div
         id="regen"
-        className={`flex ml-1 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center ${
+        className={`flex ml-1 md:w-full md:m-auto gap-0 md:gap-2 justify-center ${
           regenVisible ? "block" : "hidden"
         }`}
       >
@@ -175,7 +175,7 @@ function Chatbox({
         </button>
       </div>
       <form
-        className="flex flex-col flex-grow mx-auto my-4 py-3 px-3 relative border border-black/10 bg-white 
+        className="flex flex-col flex-grow mx-auto my-2 py-3 px-3 relative border border-black/10 bg-white 
         dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md md:max-w-2xl lg:max-w-3xl md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-3xl"
         onSubmit={handleSubmit}
         style={{ boxShadow: "0 0 20px 0 rgba(0, 0, 0, 0.1)" }}
