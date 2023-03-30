@@ -47,6 +47,7 @@ export default function Home() {
               userText={userText}
               setUserText={setUserText}
               setChats={setChats}
+              setError={setError}
               selectedChat={selectedChat}
               setSelectedChat={setSelectedChat}
             />

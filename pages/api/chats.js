@@ -46,12 +46,36 @@ export default async function handler(req, res) {
         res.status(500).json({ error: "Internal Server Error" });
       }
       break;
+    case "PUT":
+      try {
+        const { id, title } = req.body;
+
+        if (id && title) {
+          const updatedChat = await Chat.findOneAndUpdate(
+            { id },
+            { title: title },
+            { new: true }
+          );
+
+          if (!updatedChat) {
+            return res.status(404).json({ error: "Chat not found" });
+          }
+
+          return res.status(200).json(updatedChat);
+        } else {
+          return res.status(400).json({ error: "ID and title are required" });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+      break;
     case "DELETE":
       try {
         const { id } = req.body;
         if (id) {
           const deletedChat = await Chat.deleteOne({ id });
-          console.log(deletedChat)
+          console.log(deletedChat);
           res.status(200).json(deletedChat);
         } else {
           const allChats = await Chat.deleteMany();
