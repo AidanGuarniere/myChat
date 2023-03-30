@@ -18,6 +18,8 @@ function Chats({
 }) {
   const chatRef = useRef(null);
   const [scrollHeight, setScrollHeight] = useState();
+  const [showQueryEdit, setShowQueryEdit] = useState(false);
+
   useEffect(() => {
     if (selectedChat) {
       localStorage.setItem("selectedChat", selectedChat);
@@ -67,11 +69,14 @@ function Chats({
 
                     <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
                       <div className="min-h-[20px] flex flex-col items-start gap-4 text-gray-800">
-                        {message.role === "assistant" ? (
-                          <ChatMessage markdownContent={message.content} />
-                        ) : (
-                          <p>{message.content}</p>
-                        )}
+                        {
+                          message.role === "assistant" ? (
+                            <ChatMessage markdownContent={message.content} />
+                          ) : (
+                            // add conditional to show edit ui or message content
+                            <p>{message.content}</p>
+                          )
+                        }
                       </div>
                     </div>
                   </div>
@@ -79,7 +84,6 @@ function Chats({
               )
             )}
             <div className="bg-white  h-1/3" />
-            {/* scroll-to-bottom button */}
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
           </div>
         ) : (

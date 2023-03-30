@@ -11,7 +11,7 @@ function Chatbox({
   setSelectedChat,
 }) {
   const [loading, setLoading] = useState(false);
-  const [regenVisible, setRegenVisible] = useState(false);
+  const [showRegen, setShowRegen] = useState(false);
 
   const handleChange = (event) => {
     setUserText(event.target.value);
@@ -24,8 +24,8 @@ function Chatbox({
     }
   };
   useEffect(() => {
-    if (regenVisible === true) {
-      setRegenVisible(false);
+    if (showRegen === true) {
+      setShowRegen(false);
     }
   }, [selectedChat]);
 
@@ -91,10 +91,10 @@ function Chatbox({
         }
         setUserText("");
         setLoading(false);
-        setRegenVisible(true);
+        setShowRegen(true);
       } catch (error) {
         console.log(error);
-        setRegenVisible(true);
+        setShowRegen(true);
         setError(error);
         setLoading(false);
       }
@@ -145,7 +145,7 @@ function Chatbox({
       <div
         id="regen"
         className={`flex ml-1 md:w-full md:m-auto gap-0 md:gap-2 justify-center ${
-          regenVisible ? "block" : "hidden"
+          showRegen ? "block" : "hidden"
         }`}
       >
         <button
@@ -207,10 +207,12 @@ function Chatbox({
 
         <button
           type="submit"
-          className={`absolute p-1 rounded-md text-gray-500 bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
+          className={`absolute p-1 rounded-md  bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
             loading ? "loading-icon" : null
+          } ${
+            userText.length === 0 ? "text-gray-300" : "text-gray-500"
           }`}
-          disabled={loading}
+          disabled={loading || userText.length === 0}
         >
           {!loading && (
             <svg
