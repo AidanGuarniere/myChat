@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import { deleteChats, editChatTitle } from "../utils/chatUtils";
 
 function ChatHistory({
   chats,
@@ -13,42 +13,6 @@ function ChatHistory({
   const [titleInputValue, setTitleInputValue] = useState("");
   const [showTitleInput, setShowTitleInput] = useState(false);
   const inputRef = useRef(null);
-
-  const fetchChats = async () => {
-    try {
-      const response = await axios.get("/api/chats");
-      if (response.data) {
-        setChats(response.data);
-      }
-    } catch (error) {
-      setError(error);
-      console.error("Error fetching chats:", error);
-    }
-  };
-
-  const deleteChats = async (id) => {
-    if (id) {
-      await axios.delete("/api/chats", { data: { id } });
-      setSelectedChat(null);
-      fetchChats();
-    } else {
-      await axios.delete("/api/chats");
-      setChats([]);
-    }
-    setSelectedChat(null);
-  };
-
-  const editChatTitle = async (id, title, currentTitle) => {
-    if (title !== currentTitle) {
-      if (id && title) {
-        await axios.put("/api/chats", { id, title });
-        fetchChats();
-      } else {
-        setError("Please enter a valid title");
-      }
-    }
-    hideTitleInput();
-  };
 
   const hideTitleInput = () => {
     setTitleInputValue("");
@@ -76,6 +40,22 @@ function ChatHistory({
       document.removeEventListener("click", handleDocumentClick);
     };
   }, [showTitleInput]);
+
+  // Update the deleteChats and editChatTitle function calls to use the correct signature
+  const handleDeleteChats = async (id) => {
+    await deleteChats(id, setSelectedChat, setChats);
+  };
+
+  const handleEditChatTitle = async (id, title, currentTitle) => {
+    await editChatTitle(
+      id,
+      title,
+      currentTitle,
+      hideTitleInput,
+      setError,
+      setChats
+    );
+  };
 
   return (
     <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col bg-gray-1000 dark z-50">
@@ -179,7 +159,7 @@ function ChatHistory({
                                 id="submit-title-edit"
                                 className="p-1 hover:text-white"
                                 onClick={() =>
-                                  editChatTitle(
+                                  handleEditChatTitle(
                                     chat.id,
                                     titleInputValue,
                                     chat.title
@@ -253,7 +233,7 @@ function ChatHistory({
                                 className="p-1 hover:text-white"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  deleteChats(selectedChat);
+                                  handleDeleteChats(selectedChat);
                                 }}
                               >
                                 <svg
@@ -286,7 +266,7 @@ function ChatHistory({
               <button
                 className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
                 onClick={() => {
-                  deleteChats();
+                  handleDeleteChats();
                 }}
               >
                 <svg
