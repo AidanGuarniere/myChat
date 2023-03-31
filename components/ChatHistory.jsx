@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { deleteChats, editChatTitle } from "../utils/chatUtils";
+import { fetchChats, deleteChats, updateChat } from "../utils/chatUtils";
 
 function ChatHistory({
   chats,
@@ -43,18 +43,30 @@ function ChatHistory({
 
   // Update the deleteChats and editChatTitle function calls to use the correct signature
   const handleDeleteChats = async (id) => {
-    await deleteChats(id, setSelectedChat, setChats);
+    await deleteChats(id);
+    if (id && chats.length > 1) {
+      const updatedChats = await fetchChats();
+      setChats(updatedChats);
+    } else {
+      setChats([]);
+    }
   };
 
-  const handleEditChatTitle = async (id, title, currentTitle) => {
-    await editChatTitle(
-      id,
-      title,
-      currentTitle,
-      hideTitleInput,
-      setError,
-      setChats
-    );
+  // Inside the component that used editChatTitle
+
+  const handleEditChatTitle = async (id, title) => {
+    if (id && title) {
+      try {
+        await updateChat({ id, title });
+        const updatedChats = await fetchChats();
+        setChats(updatedChats);
+      } catch (error) {
+        setError("Error updating chat title:", error);
+      }
+    } else {
+      setError("Please enter a valid title");
+    }
+    hideTitleInput();
   };
 
   return (
@@ -70,6 +82,7 @@ function ChatHistory({
                 }
                 setSelectedChat(null);
               }}
+              // disabled={loading}
             >
               <svg
                 stroke="currentColor"
@@ -158,13 +171,14 @@ function ChatHistory({
                               <button
                                 id="submit-title-edit"
                                 className="p-1 hover:text-white"
-                                onClick={() =>
-                                  handleEditChatTitle(
-                                    chat.id,
-                                    titleInputValue,
-                                    chat.title
-                                  )
-                                }
+                                onClick={() => {
+                                  if (chat.title !== titleInputValue) {
+                                    handleEditChatTitle(
+                                      selectedChat,
+                                      titleInputValue
+                                    );
+                                  }
+                                }}
                               >
                                 <svg
                                   stroke="currentColor"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { fetchChats, createChat, updateChat } from "../utils/chatUtils";
 import axios from "axios";
 
 function Chatbox({
@@ -37,6 +38,7 @@ function Chatbox({
       try {
         let messageHistory;
 
+        // If there's a selected chat, append the user's message to its message history
         if (selectedChat) {
           const selectedIndex = chats.findIndex(
             (chat) => chat.id === selectedChat
@@ -51,6 +53,7 @@ function Chatbox({
             content: message.content,
           }));
         } else {
+          // If there's no selected chat, create a new message history with the user's message
           messageHistory = [
             { role: "system", content: "You are a helpful assistant." },
             {
@@ -60,6 +63,7 @@ function Chatbox({
           ];
         }
 
+        // Send the message history to the API to get the assistant's response
         const response = await axios.post("/api/gpt", {
           messages: messageHistory,
         });
@@ -67,29 +71,26 @@ function Chatbox({
         const completion = response.data.completion;
         messageHistory.push(completion.choices[0].message);
 
+        // If there's no selected chat, create a new chat with the given message history
         if (!selectedChat) {
           const newChat = {
             id: completion.id,
             title: userText,
             messages: messageHistory,
           };
-          setChats([...chats, newChat]);
-          setSelectedChat(newChat.id);
-
-          // Create a new chat in the database
-          await axios.post("/api/chats", newChat);
+          await createChat(newChat);
+          setSelectedChat(completion.id);
         } else {
-          const updatedChats = [...chats];
-          const selectedIndex = updatedChats.findIndex(
-            (chat) => chat.id === selectedChat
-          );
-          updatedChats[selectedIndex].messages = messageHistory;
-          setChats(updatedChats);
-
-          // Update the chat in the database
-          await axios.post("/api/chats", updatedChats[selectedIndex]);
+          // If there's a selected chat, update it with the new message history
+          const updatedChat = {
+            id: selectedChat,
+            messages: messageHistory,
+          };
+          await updateChat(updatedChat, setChats);
         }
         setUserText("");
+        const updatedChats = await fetchChats();
+        setChats(updatedChats);
         setLoading(false);
         setShowRegen(true);
       } catch (error) {
@@ -112,8 +113,13 @@ function Chatbox({
           (chat) => chat.id === selectedChat
         );
         const updatedChat = { ...chats[selectedIndex] };
-        const messageHistory = updatedChat.messages.slice(0, -1);
 
+        const messageHistory = updatedChat.messages
+          .slice(0, -1)
+          .map((message) => ({
+            role: message.role,
+            content: message.content,
+          }));
         const response = await axios.post("/api/gpt", {
           messages: messageHistory,
         });
@@ -121,12 +127,15 @@ function Chatbox({
         const completion = response.data.completion;
         messageHistory.push(completion.choices[0].message);
 
-        const updatedChats = [...chats];
-        updatedChats[selectedIndex].messages = messageHistory;
-        setChats(updatedChats);
+        updatedChat.messages = messageHistory;
 
         // Update the chat in the database with the new message history
-        await axios.put("/api/chats", updatedChats[selectedIndex]);
+        await updateChat(updatedChat);
+
+        // Update the local state with the new chat data
+        const updatedChats = [...chats];
+        updatedChats[selectedIndex] = updatedChat;
+        setChats(updatedChats);
 
         setLoading(false);
       } catch (error) {
@@ -137,7 +146,6 @@ function Chatbox({
   };
 
   return (
-    // <div className="h-15% absolute bottom-0 w-4/6  border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white fade">
     <div
       className="pl-[260px] absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent 
       md:dark:border-transparent md:bg-vert-light-gradient dark:bg-gray-800  dark:md:bg-vert-dark-gradient pt-8"
@@ -209,9 +217,7 @@ function Chatbox({
           type="submit"
           className={`absolute p-1 rounded-md  bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
             loading ? "loading-icon" : null
-          } ${
-            userText.length === 0 ? "text-gray-300" : "text-gray-500"
-          }`}
+          } ${userText.length === 0 ? "text-gray-300" : "text-gray-500"}`}
           disabled={loading || userText.length === 0}
         >
           {!loading && (
