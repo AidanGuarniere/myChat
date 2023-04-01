@@ -5,7 +5,7 @@ import ChatIcon from "./ChatIcon";
 import UserIcon from "./UserIcon";
 import ChatScrollButton from "./ChatScrollButton";
 import ChatMessage from "./ChatMessage";
-import { sendMessagesToGPT } from "../utils/gptUtils";
+import { sendMessageHistoryToGPT } from "../utils/gptUtils";
 import { updateChat, fetchChats } from "../utils/chatUtils";
 
 function Chats({
@@ -71,12 +71,11 @@ function Chats({
     );
 
     // Send the updated message history to /api/gpt
-    const gptResponse = await sendMessagesToGPT(messageHistoryForGPT);
-    const completion = gptResponse.completion.choices[0].message;
-    // Update the message history with the response from sendMessagesToGPT and update the chat
+    const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
+    // Update the message history with the response from sendMessageHistoryToGPT and update the chat
     const updatedChat = {
       ...chats[chatIndex],
-      messages: updatedMessageHistory.concat(completion),
+      messages: updatedMessageHistory.concat(gptResponse),
     };
     console.log(updatedChat);
     await updateChat(updatedChat);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchChats, createChat, updateChat } from "../utils/chatUtils";
-import axios from "axios";
+import { sendMessageHistoryToGPT } from "../utils/gptUtils";
 
 function Chatbox({
   setError,
@@ -55,7 +55,11 @@ function Chatbox({
         } else {
           // If there's no selected chat, create a new message history with the user's message
           messageHistory = [
-            { role: "system", content: "You are a helpful assistant and expert programmer. You excel at solving problems and turning natural language into functioning code. You speak efficiently and format your code properly." },
+            {
+              role: "system",
+              content:
+                "You are a helpful assistant and expert programmer. You excel at solving problems and turning natural language into functioning code. You speak efficiently and format your code properly.",
+            },
             {
               role: "user",
               content: userText,
@@ -64,12 +68,9 @@ function Chatbox({
         }
 
         // Send the message history to the API to get the assistant's response
-        const response = await axios.post("/api/gpt", {
-          messages: messageHistory,
-        });
+        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
 
-        const completion = response.data.completion;
-        messageHistory.push(completion.choices[0].message);
+        messageHistory.push(gptResponse);
 
         // If there's no selected chat, create a new chat with the given message history
         if (!selectedChat) {
@@ -120,12 +121,9 @@ function Chatbox({
             role: message.role,
             content: message.content,
           }));
-        const response = await axios.post("/api/gpt", {
-          messages: messageHistory,
-        });
+        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
 
-        const completion = response.data.completion;
-        messageHistory.push(completion.choices[0].message);
+        messageHistory.push(gptResponse);
 
         updatedChat.messages = messageHistory;
 
