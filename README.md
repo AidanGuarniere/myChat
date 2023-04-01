@@ -1,6 +1,6 @@
 # ChatGPT UI Template
 
-This is a basic Next.js template for a ChatGPT powered UI using Next.js and Tailwind.
+This is a basic Next.js template for a ChatGPT powered UI using Next.js and Tailwind. Not directly affiliated with OpenAI.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ This is a basic Next.js template for a ChatGPT powered UI using Next.js and Tail
 - [Next.js](https://nextjs.org/) - A React-based framework for building server-side rendered and statically exported web applications
 - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework for rapidly building custom user interfaces
 - [Axios](https://github.com/axios/axios) - A popular library for making HTTP requests in JavaScript
-- [OpenAI text-davinci-003](https://beta.openai.com/docs/models/gpt-3) - A state-of-the-art language model developed by OpenAI.
+- [OpenAI gpt-3.5-turbo](https://beta.openai.com/docs/models/gpt-3) - A state-of-the-art language model developed by OpenAI.
 
 ## Installation
 

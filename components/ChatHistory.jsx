@@ -104,9 +104,6 @@ function ChatHistory({
             <div className="w-full flex-col flex-1 overflow-y-auto border-b border-white/20 -mr-2 h-1/2">
               <div className="flex flex-col gap-2 text-gray-100 text-sm">
                 {chats
-                  .sort((a, b) =>
-                    a.id === selectedChat ? -1 : b.id === selectedChat ? 1 : 0
-                  )
                   .map((chat, index) => (
                     <a
                       className={`text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${

@@ -55,7 +55,7 @@ function Chatbox({
         } else {
           // If there's no selected chat, create a new message history with the user's message
           messageHistory = [
-            { role: "system", content: "You are a helpful assistant." },
+            { role: "system", content: "You are a helpful assistant and expert programmer. You excel at solving problems and turning natural language into functioning code. You speak efficiently and format your code properly." },
             {
               role: "user",
               content: userText,
@@ -100,7 +100,7 @@ function Chatbox({
         setLoading(false);
       }
     } else {
-      setError("Please enter a valid prompt");
+      console.log("Please enter a valid prompt");
     }
   };
 
@@ -151,7 +151,6 @@ function Chatbox({
       md:dark:border-transparent md:bg-vert-light-gradient dark:bg-gray-800  dark:md:bg-vert-dark-gradient pt-8"
     >
       <div
-        id="regen"
         className={`flex ml-1 md:w-full md:m-auto gap-0 md:gap-2 justify-center ${
           showRegen ? "block" : "hidden"
         }`}

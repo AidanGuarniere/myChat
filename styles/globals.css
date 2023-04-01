@@ -242,7 +242,7 @@ pre.code-container {
   border-radius: 0.25rem;
   border-width: 1px;
   display: inline-flex;
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.25rem;
   padding: 0.5rem 0.75rem;
   pointer-events: auto;
@@ -259,4 +259,13 @@ pre.code-container {
   line-height: 1.25rem;
 }
 
+.btn-primary {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  background-color: rgba(16, 163, 127, var(--tw-bg-opacity));
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
 
+:hover.btn-primary {
+  background-color: rgb(15, 138, 107,var(--tw-text-opacity));
+}
