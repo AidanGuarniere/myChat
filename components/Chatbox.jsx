@@ -36,7 +36,7 @@ function Chatbox({
       setLoading(true);
       setError(null);
       try {
-        let messageHistory;
+        let messageHistoryForGPT;
 
         // If there's a selected chat, append the user's message to its message history
         if (selectedChat) {
@@ -48,13 +48,13 @@ function Chatbox({
             role: "user",
             content: userText,
           });
-          messageHistory = updatedChat.messages.map((message) => ({
+          messageHistoryForGPT = updatedChat.messages.map((message) => ({
             role: message.role,
             content: message.content,
           }));
         } else {
           // If there's no selected chat, create a new message history with the user's message
-          messageHistory = [
+          messageHistoryForGPT = [
             {
               role: "system",
               content:
@@ -70,22 +70,21 @@ function Chatbox({
         // Send the message history to the API to get the assistant's response
         const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
 
-        messageHistory.push(gptResponse);
-
+        messageHistoryForGPT.push(gptResponse.choices[0].message);
         // If there's no selected chat, create a new chat with the given message history
         if (!selectedChat) {
           const newChat = {
-            id: completion.id,
+            id: gptResponse.id,
             title: userText,
-            messages: messageHistory,
+            messages: messageHistoryForGPT,
           };
           await createChat(newChat);
-          setSelectedChat(completion.id);
+          setSelectedChat(gptResponse.id);
         } else {
           // If there's a selected chat, update it with the new message history
           const updatedChat = {
             id: selectedChat,
-            messages: messageHistory,
+            messages: messageHistoryForGPT,
           };
           await updateChat(updatedChat, setChats);
         }
@@ -95,7 +94,6 @@ function Chatbox({
         setLoading(false);
         setShowRegen(true);
       } catch (error) {
-        console.log(error);
         setShowRegen(true);
         setError(error);
         setLoading(false);
@@ -115,7 +113,7 @@ function Chatbox({
         );
         const updatedChat = { ...chats[selectedIndex] };
 
-        const messageHistory = updatedChat.messages
+        const messageHistoryForGPT = updatedChat.messages
           .slice(0, -1)
           .map((message) => ({
             role: message.role,
@@ -123,9 +121,9 @@ function Chatbox({
           }));
         const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
 
-        messageHistory.push(gptResponse);
+        messageHistoryForGPT.push(gptResponse);
 
-        updatedChat.messages = messageHistory;
+        updatedChat.messages = messageHistoryForGPT;
 
         // Update the chat in the database with the new message history
         await updateChat(updatedChat);

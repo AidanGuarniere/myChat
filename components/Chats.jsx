@@ -77,12 +77,10 @@ function Chats({
       ...chats[chatIndex],
       messages: updatedMessageHistory.concat(gptResponse),
     };
-    console.log(updatedChat);
     await updateChat(updatedChat);
 
     // Call fetchChats and update the chats state
     const updatedChats = await fetchChats();
-    console.log(updatedChats);
     setChats(updatedChats);
 
     // Hide the edit UI

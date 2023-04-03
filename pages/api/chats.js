@@ -1,5 +1,5 @@
 import dbConnect from "../../utils/dbConnect.js";
-import Chat from "../../models/ChatSchema";
+import {Chat} from "../../models/ChatSchema";
 
 dbConnect();
 
