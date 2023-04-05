@@ -1,5 +1,5 @@
 import dbConnect from "../../utils/dbConnect.js";
-import {Chat} from "../../models/ChatSchema";
+import { Chat } from "../../models/ChatSchema";
 
 dbConnect();
 
@@ -8,11 +8,13 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const allChats = await Chat.find({});
-        res.status(200).json(allChats);
+        const userId = req.query.userId;
+        const userChats = await Chat.find({ userId });
+        res.status(200).json(userChats);
       } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
       }
+
       break;
     case "POST":
       try {
