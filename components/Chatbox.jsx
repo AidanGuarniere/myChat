@@ -99,7 +99,7 @@ function Chatbox({
         setLoading(false);
       }
     } else {
-      console.log("Please enter a valid prompt");
+      console.error("Please enter a valid prompt");
     }
   };
 

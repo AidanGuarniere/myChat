@@ -12,7 +12,7 @@ const fetchDataFromAPI = async (messages) => {
     });
     return completion.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 };

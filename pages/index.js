@@ -2,41 +2,51 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import ChatHistory from "../components/ChatHistory";
 import Chats from "../components/Chats";
-import ErrorDisplay from "../components/ErrorDisplay";
 import axios from "axios";
+import AuthForm from "../components/AuthForm";
+// pages/index.js
+import { useSession } from "next-auth/react";
+
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context);
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }
+
+
 
 export default function Home() {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [userText, setUserText] = useState("");
   const [error, setError] = useState(null);
+  const { data: session, status } = useSession();
 
-  // Fetch chats from the server instead of local storage
   useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        const response = await axios.get("/api/chats");
-        if (response.data) {
-          setChats(response.data);
-          const previouslySelectedChat = localStorage.getItem("selectedChat");
-          if (previouslySelectedChat) {
-            setSelectedChat(previouslySelectedChat);
+    if (session) {
+      const fetchChats = async () => {
+        try {
+          const response = await axios.get("/api/chats");
+          if (response.data) {
+            setChats(response.data);
+            const previouslySelectedChat = localStorage.getItem("selectedChat");
+            if (previouslySelectedChat) {
+              setSelectedChat(previouslySelectedChat);
+            }
           }
+        } catch (error) {
+          setError(error);
+          console.error("Error fetching chats:", error);
         }
-      } catch (error) {
-        setError(error);
-        console.error("Error fetching chats:", error);
-      }
-    };
+      };
 
-    fetchChats();
-  }, []);
+      fetchChats();
+    }
+  }, [session]);
 
-  useEffect(() => {
-    console.log(error)
-
-  }, [error])
-  
   return (
     <>
       <Head>
@@ -47,29 +57,33 @@ export default function Home() {
       </Head>
       <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
         <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
-          <div className="flex overflow-x-hidden items-bottom">
-            <ChatHistory
-              chats={chats}
-              userText={userText}
-              setUserText={setUserText}
-              setChats={setChats}
-              setError={setError}
-              selectedChat={selectedChat}
-              setSelectedChat={setSelectedChat}
-            />
+          {session ? (
+            <div className="flex overflow-x-hidden items-bottom">
+              <ChatHistory
+                chats={chats}
+                userText={userText}
+                setUserText={setUserText}
+                setChats={setChats}
+                setError={setError}
+                selectedChat={selectedChat}
+                setSelectedChat={setSelectedChat}
+              />
 
-            <Chats
-              userText={userText}
-              setUserText={setUserText}
-              error={error}
-              setError={setError}
-              chats={chats}
-              setChats={setChats}
-              selectedChat={selectedChat}
-              setSelectedChat={setSelectedChat}
-            />
-          </div>
-        </div>{" "}
+              <Chats
+                userText={userText}
+                setUserText={setUserText}
+                error={error}
+                setError={setError}
+                chats={chats}
+                setChats={setChats}
+                selectedChat={selectedChat}
+                setSelectedChat={setSelectedChat}
+              />
+            </div>
+          ) : (
+            <AuthForm />
+          )}
+        </div>
       </main>
     </>
   );
