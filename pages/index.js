@@ -16,8 +16,6 @@ import { useSession } from "next-auth/react";
 //   };
 // }
 
-
-
 export default function Home() {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
@@ -26,16 +24,12 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (session) {
+    if (session && status === "authenticated") {
       const fetchChats = async () => {
         try {
           const response = await axios.get("/api/chats");
           if (response.data) {
             setChats(response.data);
-            const previouslySelectedChat = localStorage.getItem("selectedChat");
-            if (previouslySelectedChat) {
-              setSelectedChat(previouslySelectedChat);
-            }
           }
         } catch (error) {
           setError(error);
@@ -46,6 +40,10 @@ export default function Home() {
       fetchChats();
     }
   }, [session]);
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   return (
     <>
@@ -70,6 +68,7 @@ export default function Home() {
               />
 
               <Chats
+                session={session}
                 userText={userText}
                 setUserText={setUserText}
                 error={error}

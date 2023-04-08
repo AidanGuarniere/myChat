@@ -9,6 +9,7 @@ import { sendMessageHistoryToGPT } from "../utils/gptUtils";
 import { updateChat, fetchChats } from "../utils/chatUtils";
 
 function Chats({
+  session,
   userText,
   setUserText,
   error,
@@ -27,8 +28,9 @@ function Chats({
 
   useEffect(() => {
     if (selectedChat) {
-      if(editMessageId){setEditMessageId(null)}
-      localStorage.setItem("selectedChat", selectedChat);
+      if (editMessageId) {
+        setEditMessageId(null);
+      }
     }
     if (chatRef.current) {
       chatRef.current.scrollTo({
@@ -57,9 +59,11 @@ function Chats({
       0,
       messageIndex - 1
     );
+
     updatedMessageHistory.push({
       role: "user",
       content: editedMessage,
+      // _id: editMessageId,
     });
 
     // Filter out unnecessary properties before sending to GPT
@@ -73,9 +77,10 @@ function Chats({
     // Send the updated message history to /api/gpt
     const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
     // Update the message history with the response from sendMessageHistoryToGPT and update the chat
+
     const updatedChat = {
       ...chats[chatIndex],
-      messages: updatedMessageHistory.concat(gptResponse),
+      messages: updatedMessageHistory.concat(gptResponse.choices[0].message),
     };
     await updateChat(updatedChat);
 
@@ -216,6 +221,7 @@ function Chats({
           </h1>
         )}
         <Chatbox
+          session={session}
           setError={setError}
           userText={userText}
           setUserText={setUserText}

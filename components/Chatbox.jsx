@@ -3,6 +3,7 @@ import { fetchChats, createChat, updateChat } from "../utils/chatUtils";
 import { sendMessageHistoryToGPT } from "../utils/gptUtils";
 
 function Chatbox({
+  session,
   setError,
   userText,
   setUserText,
@@ -37,7 +38,7 @@ function Chatbox({
       setError(null);
       try {
         let messageHistoryForGPT;
-
+  
         // If there's a selected chat, append the user's message to its message history
         if (selectedChat) {
           const selectedIndex = chats.findIndex(
@@ -66,14 +67,15 @@ function Chatbox({
             },
           ];
         }
-
+  
         // Send the message history to the API to get the assistant's response
         const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
-
+  
         messageHistoryForGPT.push(gptResponse.choices[0].message);
         // If there's no selected chat, create a new chat with the given message history
         if (!selectedChat) {
           const newChat = {
+            userId: session.user.id,
             id: gptResponse.id,
             title: userText,
             messages: messageHistoryForGPT,
@@ -83,13 +85,14 @@ function Chatbox({
         } else {
           // If there's a selected chat, update it with the new message history
           const updatedChat = {
+            userId: session.user.id,
             id: selectedChat,
             messages: messageHistoryForGPT,
           };
           await updateChat(updatedChat, setChats);
         }
         setUserText("");
-        const updatedChats = await fetchChats();
+        const updatedChats = await fetchChats(session.user.id);
         setChats(updatedChats);
         setLoading(false);
         setShowRegen(true);
@@ -102,6 +105,7 @@ function Chatbox({
       console.error("Please enter a valid prompt");
     }
   };
+  
 
   const handleRegen = async () => {
     if (selectedChat) {

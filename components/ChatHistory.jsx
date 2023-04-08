@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { fetchChats, deleteChats, updateChat } from "../utils/chatUtils";
-import AuthForm from "./AuthForm";
 
 function ChatHistory({
   chats,
@@ -51,6 +50,7 @@ function ChatHistory({
     } else {
       setChats([]);
     }
+    setSelectedChat(null)
   };
 
   // Inside the component that used editChatTitle
