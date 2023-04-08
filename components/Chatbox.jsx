@@ -69,7 +69,7 @@ function Chatbox({
         }
   
         // Send the message history to the API to get the assistant's response
-        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
+        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT, session.user.apiKey);
   
         messageHistoryForGPT.push(gptResponse.choices[0].message);
         // If there's no selected chat, create a new chat with the given message history
@@ -123,7 +123,7 @@ function Chatbox({
             role: message.role,
             content: message.content,
           }));
-        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
+          const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT, session.user.apiKey);
 
         messageHistoryForGPT.push(gptResponse);
 

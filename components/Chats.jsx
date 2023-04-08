@@ -75,7 +75,7 @@ function Chats({
     );
 
     // Send the updated message history to /api/gpt
-    const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
+    const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT, session.user.apiKey);
     // Update the message history with the response from sendMessageHistoryToGPT and update the chat
 
     const updatedChat = {
