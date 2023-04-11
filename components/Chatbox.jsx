@@ -35,6 +35,7 @@ function Chatbox({
     event.preventDefault();
     if (userText.length >= 1) {
       setLoading(true);
+      setUserText("");
       setError(null);
       try {
         let messageHistoryForGPT;
@@ -94,7 +95,6 @@ function Chatbox({
           };
           await updateChat(updatedChat, setChats);
         }
-        setUserText("");
         const updatedChats = await fetchChats(session.user.id);
         setChats(updatedChats);
         setLoading(false);
@@ -154,7 +154,7 @@ function Chatbox({
       <div
         className={`flex ml-1 md:w-full md:m-auto gap-0 md:gap-2 justify-center ${
           showRegen && "block"
-        } ${loading && "hidden"}
+        } ${loading || !showRegen && "hidden"}
         }`}
       >
         <button
