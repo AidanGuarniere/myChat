@@ -3,18 +3,8 @@ import Head from "next/head";
 import ChatHistory from "../components/ChatHistory";
 import Chats from "../components/Chats";
 import axios from "axios";
-import AuthForm from "../components/AuthForm";
-// pages/index.js
 import { useSession } from "next-auth/react";
-
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
-//   return {
-//     props: {
-//       session,
-//     },
-//   };
-// }
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [chats, setChats] = useState([]);
@@ -22,9 +12,12 @@ export default function Home() {
   const [userText, setUserText] = useState("");
   const [error, setError] = useState(null);
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    if (session && status === "authenticated") {
+    if (status === "unauthenticated") {
+      router.push("/auth");
+    } else if (session && status === "authenticated") {
       const fetchChats = async () => {
         try {
           const response = await axios.get("/api/chats");
@@ -39,7 +32,7 @@ export default function Home() {
 
       fetchChats();
     }
-  }, [session]);
+  }, [session, status, router]);
 
   useEffect(() => {
     console.log(error);
@@ -55,7 +48,7 @@ export default function Home() {
       </Head>
       <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
         <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
-          {session ? (
+          {status === "authenticated" && (
             <div className="flex overflow-x-hidden items-bottom">
               <ChatHistory
                 chats={chats}
@@ -79,8 +72,6 @@ export default function Home() {
                 setSelectedChat={setSelectedChat}
               />
             </div>
-          ) : (
-            <AuthForm />
           )}
         </div>
       </main>
