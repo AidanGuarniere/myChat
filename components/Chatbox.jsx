@@ -38,7 +38,7 @@ function Chatbox({
       setError(null);
       try {
         let messageHistoryForGPT;
-  
+
         // If there's a selected chat, append the user's message to its message history
         if (selectedChat) {
           const selectedIndex = chats.findIndex(
@@ -67,10 +67,13 @@ function Chatbox({
             },
           ];
         }
-  
+
         // Send the message history to the API to get the assistant's response
-        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT, session.user.apiKey);
-  
+        const gptResponse = await sendMessageHistoryToGPT(
+          messageHistoryForGPT,
+          session.user.apiKey
+        );
+
         messageHistoryForGPT.push(gptResponse.choices[0].message);
         // If there's no selected chat, create a new chat with the given message history
         if (!selectedChat) {
@@ -105,17 +108,14 @@ function Chatbox({
       console.error("Please enter a valid prompt");
     }
   };
-  
 
   const handleRegen = async () => {
     if (selectedChat) {
       setLoading(true);
       setError(null);
       try {
-        const selectedIndex = chats.findIndex(
-          (chat) => chat.id === selectedChat
-        );
-        const updatedChat = { ...chats[selectedIndex] };
+        const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
+        const updatedChat = { ...chats[chatIndex] };
 
         const messageHistoryForGPT = updatedChat.messages
           .slice(0, -1)
@@ -123,20 +123,21 @@ function Chatbox({
             role: message.role,
             content: message.content,
           }));
-          const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT, session.user.apiKey);
+        //edit chats
+        const gptResponse = await sendMessageHistoryToGPT(
+          messageHistoryForGPT,
+          session.user.apiKey
+        );
 
-        messageHistoryForGPT.push(gptResponse);
+        messageHistoryForGPT.push(gptResponse.choices[0].message);
 
         updatedChat.messages = messageHistoryForGPT;
-
         // Update the chat in the database with the new message history
         await updateChat(updatedChat);
 
+        const updatedChats = await fetchChats();
         // Update the local state with the new chat data
-        const updatedChats = [...chats];
-        updatedChats[selectedIndex] = updatedChat;
         setChats(updatedChats);
-
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -152,13 +153,15 @@ function Chatbox({
     >
       <div
         className={`flex ml-1 md:w-full md:m-auto gap-0 md:gap-2 justify-center ${
-          showRegen ? "block" : "hidden"
+          showRegen && "block"
+        } ${loading && "hidden"}
         }`}
       >
         <button
           onClick={handleRegen}
           className="btn relative btn-neutral border-0 md:border"
           fdprocessedid="qe1rko"
+          disabled={loading}
         >
           <div className="flex w-full items-center justify-center gap-2">
             <svg

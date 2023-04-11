@@ -27,6 +27,13 @@ function Chats({
   const [editedMessage, setEditedMessage] = useState("");
 
   useEffect(() => {
+    console.log(editMessageId)
+  
+
+  }, [editMessageId])
+  
+
+  useEffect(() => {
     if (selectedChat) {
       if (editMessageId) {
         setEditMessageId(null);
@@ -51,13 +58,16 @@ function Chats({
   const handleSaveAndSubmit = async () => {
     const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
     const messageIndex = chats[chatIndex].messages.findIndex(
-      (msg) => msg.id === editMessageId
+      (msg) => msg._id === editMessageId
     );
+    console.log("messages:",chats[chatIndex].messages)
+    console.log("index:",messageIndex)
+    console.log("message:",chats[chatIndex].messages[messageIndex])
 
     // Update message history with the edited message and remove all subsequent messages
     const updatedMessageHistory = chats[chatIndex].messages.slice(
       0,
-      messageIndex - 1
+      messageIndex
     );
 
     updatedMessageHistory.push({
