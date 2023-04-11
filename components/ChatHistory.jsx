@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { fetchChats, deleteChats, updateChat } from "../utils/chatUtils";
 
 function ChatHistory({
@@ -13,6 +14,7 @@ function ChatHistory({
   const [titleInputValue, setTitleInputValue] = useState("");
   const [showTitleInput, setShowTitleInput] = useState(false);
   const inputRef = useRef(null);
+  const { data: session } = useSession();
 
   const hideTitleInput = () => {
     setTitleInputValue("");
@@ -26,6 +28,10 @@ function ChatHistory({
     if (!isEditButton && !isSubmitButton) {
       hideTitleInput();
     }
+  };
+
+  const handleLogout = () => {
+    signOut();
   };
 
   useEffect(() => {
@@ -50,7 +56,7 @@ function ChatHistory({
     } else {
       setChats([]);
     }
-    setSelectedChat(null)
+    setSelectedChat(null);
   };
 
   // Inside the component that used editChatTitle
@@ -104,176 +110,197 @@ function ChatHistory({
             </button>
             <div className="w-full flex-col flex-1 overflow-y-auto border-b border-white/20 -mr-2 h-1/2">
               <div className="flex flex-col gap-2 text-gray-100 text-sm">
-                {chats
-                  .map((chat, index) => (
-                    <a
-                      className={`text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
-                        selectedChat === chat.id
-                          ? "bg-gray-800"
-                          : "bg-gray-1000 hover:bg-[rgba(52,53,65,.5)]"
-                      } group animate-flash `}
-                      key={index}
-                      onClick={() => {
-                        if (userText.length) {
-                          setUserText("");
-                        }
-                        setSelectedChat(chat.id);
-                      }}
+                {chats.map((chat, index) => (
+                  <a
+                    className={`text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
+                      selectedChat === chat.id
+                        ? "bg-gray-800"
+                        : "bg-gray-1000 hover:bg-[rgba(52,53,65,.5)]"
+                    } group animate-flash `}
+                    key={index}
+                    onClick={() => {
+                      if (userText.length) {
+                        setUserText("");
+                      }
+                      setSelectedChat(chat.id);
+                    }}
+                  >
+                    <svg
+                      stroke="currentColor"
+                      fill="none"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                      </svg>
-                      <span className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
-                        {selectedChat === chat.id ? (
-                          showTitleInput ? (
-                            <input
-                              ref={inputRef}
-                              type="text"
-                              className="content h-5 w-full bg-transparent text-white border border-blue-600 outline-none focus:outline-blue-600 border-[1.5px] mb-1 align-middle pb-1"
-                              value={titleInputValue}
-                              onChange={(e) =>
-                                setTitleInputValue(e.target.value)
-                              }
-                            ></input>
-                          ) : (
-                            <>
-                              <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800" />
-                              {chat.title}
-                            </>
-                          )
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
+                      {selectedChat === chat.id ? (
+                        showTitleInput ? (
+                          <input
+                            ref={inputRef}
+                            type="text"
+                            className="content h-5 w-full bg-transparent text-white border border-blue-600 outline-none focus:outline-blue-600 border-[1.5px] mb-1 align-middle pb-1"
+                            value={titleInputValue}
+                            onChange={(e) => setTitleInputValue(e.target.value)}
+                          ></input>
                         ) : (
                           <>
-                            <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-1000 group-hover:from-[#2A2B32]" />
+                            <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800" />
                             {chat.title}
                           </>
-                        )}
-                      </span>
-                      {selectedChat === chat.id && (
-                        <div
-                          className="absolute flex right-1 z-10 text-gray-300 visible"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {showTitleInput ? (
-                            <>
-                              <button
-                                id="submit-title-edit"
-                                className="p-1 hover:text-white"
-                                onClick={() => {
-                                  if (chat.title !== titleInputValue) {
-                                    handleEditChatTitle(
-                                      selectedChat,
-                                      titleInputValue
-                                    );
-                                  }
-                                }}
-                              >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="none"
-                                  strokeWidth="2"
-                                  viewBox="0 0 24 24"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="h-4 w-4"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                              </button>
-                              <button
-                                className="p-1 hover:text-white"
-                                onClick={hideTitleInput}
-                              >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="none"
-                                  strokeWidth="2"
-                                  viewBox="0 0 24 24"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="h-4 w-4"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                                </svg>
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                id="show-title-input"
-                                className="p-1 hover:text-white"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setTitleInputValue(chat.title);
-                                  setShowTitleInput(true);
-                                }}
-                              >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="none"
-                                  strokeWidth="2"
-                                  viewBox="0 0 24 24"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="h-4 w-4"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path d="M12 20h9"></path>
-                                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                                </svg>
-                              </button>
-                              <button
-                                className="p-1 hover:text-white"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteChats(selectedChat);
-                                }}
-                              >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="none"
-                                  strokeWidth="2"
-                                  viewBox="0 0 24 24"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="h-4 w-4"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <polyline points="3 6 5 6 21 6"></polyline>
-                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                  <line x1="10" y1="11" x2="10" y2="17"></line>
-                                  <line x1="14" y1="11" x2="14" y2="17"></line>
-                                </svg>
-                              </button>
-                            </>
-                          )}
-                        </div>
+                        )
+                      ) : (
+                        <>
+                          <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-1000 group-hover:from-[#2A2B32]" />
+                          {chat.title}
+                        </>
                       )}
-                    </a>
-                  ))}
+                    </span>
+                    {selectedChat === chat.id && (
+                      <div
+                        className="absolute flex right-1 z-10 text-gray-300 visible"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {showTitleInput ? (
+                          <>
+                            <button
+                              id="submit-title-edit"
+                              className="p-1 hover:text-white"
+                              onClick={() => {
+                                if (chat.title !== titleInputValue) {
+                                  handleEditChatTitle(
+                                    selectedChat,
+                                    titleInputValue
+                                  );
+                                }
+                              }}
+                            >
+                              <svg
+                                stroke="currentColor"
+                                fill="none"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="h-4 w-4"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            </button>
+                            <button
+                              className="p-1 hover:text-white"
+                              onClick={hideTitleInput}
+                            >
+                              <svg
+                                stroke="currentColor"
+                                fill="none"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="h-4 w-4"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              id="show-title-input"
+                              className="p-1 hover:text-white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setTitleInputValue(chat.title);
+                                setShowTitleInput(true);
+                              }}
+                            >
+                              <svg
+                                stroke="currentColor"
+                                fill="none"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="h-4 w-4"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M12 20h9"></path>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                              </svg>
+                            </button>
+                            <button
+                              className="p-1 hover:text-white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteChats(selectedChat);
+                              }}
+                            >
+                              <svg
+                                stroke="currentColor"
+                                fill="none"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="h-4 w-4"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                              </svg>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </a>
+                ))}
               </div>
             </div>
+            {session && (
+              <button
+                className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+                onClick={handleLogout}
+              >
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Logout
+              </button>
+            )}
             {chats.length > 0 && (
               <button
                 className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
