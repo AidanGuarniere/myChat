@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { fetchChats, deleteChats, updateChat } from "../utils/chatUtils";
+import useDarkMode from "../hooks/useDarkMode";
 
 function ChatHistory({
   chats,
@@ -15,7 +16,7 @@ function ChatHistory({
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
   const [apiKeyInputValue, setApiKeyInputValue] = useState("");
-  const [showFullKey, setShowFullKey] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const inputRef = useRef(null);
   const { data: session, status, update } = useSession();
   const handleApiKeySubmitClick = (e) => {
@@ -44,11 +45,8 @@ function ChatHistory({
       });
 
       if (response.ok) {
-        // Update the session to store the new API key
-        // session.user.apiKey = apiKeyInputValue;
-        // Hide the editing UI
         const updatedUser = await response.json();
-        console.log(updatedUser.apiKey)
+        console.log(updatedUser.apiKey);
         await update({
           apiKey: updatedUser.apiKey,
         });
@@ -79,7 +77,6 @@ function ChatHistory({
     signOut();
   };
 
-  // Update the deleteChats and editChatTitle function calls to use the correct signature
   const handleDeleteChats = async (id) => {
     await deleteChats(id);
     if (id && chats.length > 1) {
@@ -237,7 +234,7 @@ function ChatHistory({
                                     titleInputValue
                                   );
                                 } else {
-                                  setShowTitleInput(false)
+                                  setShowTitleInput(false);
                                 }
                               }}
                             >
@@ -438,7 +435,22 @@ function ChatHistory({
                     </div>
                   )}
                 </a>
-
+                {/* dark mode toggle *darkmode classes need to be integrated to UI*
+                <button
+                  className="flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+                  onClick={toggleDarkMode}
+                >
+                  <img
+                    src={
+                      isDarkMode
+                        ? "/light-mode-icon.svg"
+                        : "/dark-mode-icon.svg"
+                    }
+                    alt="Toggle Mode Icon"
+                    className="h-4 w-4"
+                  />
+                  {isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                </button> */}
                 <button
                   className="flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
                   onClick={handleLogout}
