@@ -236,6 +236,8 @@ function ChatHistory({
                                     selectedChat,
                                     titleInputValue
                                   );
+                                } else {
+                                  setShowTitleInput(false)
                                 }
                               }}
                             >
@@ -379,8 +381,8 @@ function ChatHistory({
                       API Key:{" "}
                       {`${session.user.apiKey.slice(
                         0,
-                        4
-                      )}****${session.user.apiKey.slice(-4)}`}
+                        3
+                      )} . . . ${session.user.apiKey.slice(-4)}`}
                     </span>
                   )}
                   {showApiKeyInput && (
