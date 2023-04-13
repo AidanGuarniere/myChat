@@ -35,7 +35,8 @@ export default function Home() {
   }, [session, status, router]);
 
   useEffect(() => {
-    console.log(error);
+    if(error !==null){
+    console.error(error);}
   }, [error]);
 
   return (

@@ -154,7 +154,7 @@ function Chatbox({
       <div
         className={`flex ml-1 md:w-full md:m-auto gap-0 md:gap-2 justify-center ${
           showRegen && "block"
-        } ${loading || !showRegen && "hidden"}
+        } ${loading || (!showRegen && "hidden")}
         }`}
       >
         <button

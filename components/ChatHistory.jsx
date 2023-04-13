@@ -13,8 +13,53 @@ function ChatHistory({
 }) {
   const [titleInputValue, setTitleInputValue] = useState("");
   const [showTitleInput, setShowTitleInput] = useState(false);
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
+  const [apiKeyInputValue, setApiKeyInputValue] = useState("");
+  const [showFullKey, setShowFullKey] = useState(false);
   const inputRef = useRef(null);
-  const { data: session } = useSession();
+  const { data: session, status, update } = useSession();
+  const handleApiKeySubmitClick = (e) => {
+    const isEditButton = e.target.id === "show-api-key-input";
+    const isSubmitButton = e.target.id === "submit-api-key-edit";
+
+    if (!isEditButton && !isSubmitButton) {
+      setShowApiKeyInput(false);
+    }
+  };
+
+  const handleEditApiKey = async () => {
+    if (!apiKeyInputValue.match(/^sk-[\w]+$/)) {
+      alert("Invalid API key format.");
+      setApiKeyInputValue(session.user.apiKey);
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/users/updateApiKey", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          newApiKey: apiKeyInputValue,
+        }),
+      });
+
+      if (response.ok) {
+        // Update the session to store the new API key
+        // session.user.apiKey = apiKeyInputValue;
+        // Hide the editing UI
+        const updatedUser = await response.json();
+        console.log(updatedUser.apiKey)
+        await update({
+          apiKey: updatedUser.apiKey,
+        });
+        setShowApiKeyInput(false);
+      } else {
+        alert("Failed to update API key.");
+      }
+    } catch (error) {
+      console.error("Error updating API key:", error);
+    }
+  };
 
   const hideTitleInput = () => {
     setTitleInputValue("");
@@ -34,19 +79,6 @@ function ChatHistory({
     signOut();
   };
 
-  useEffect(() => {
-    if (showTitleInput && inputRef.current) {
-      inputRef.current.focus();
-      document.addEventListener("click", handleDocumentClick);
-    } else {
-      document.removeEventListener("click", handleDocumentClick);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
-  }, [showTitleInput]);
-
   // Update the deleteChats and editChatTitle function calls to use the correct signature
   const handleDeleteChats = async (id) => {
     await deleteChats(id);
@@ -59,6 +91,32 @@ function ChatHistory({
     setSelectedChat(null);
   };
 
+  useEffect(() => {
+    if (apiKeyInputValue !== session.user.apiKey) {
+      setApiKeyInputValue(session.user.apiKey);
+    }
+    console.log(session);
+  }, [session]);
+
+  useEffect(() => {
+    if (showTitleInput && inputRef.current) {
+      inputRef.current.focus();
+      document.addEventListener("click", handleDocumentClick);
+    } else {
+      document.removeEventListener("click", handleDocumentClick);
+    }
+
+    if (showApiKeyInput) {
+      document.addEventListener("click", handleApiKeySubmitClick);
+    } else {
+      document.removeEventListener("click", handleApiKeySubmitClick);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+      document.removeEventListener("click", handleApiKeySubmitClick);
+    };
+  }, [showTitleInput, showApiKeyInput]);
   // Inside the component that used editChatTitle
 
   const handleEditChatTitle = async (id, title) => {
@@ -78,9 +136,9 @@ function ChatHistory({
 
   return (
     <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col bg-gray-1000 dark z-50">
-      <div className="flex h-full min-h-0 flex-col">
-        <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
-          <nav className="flex h-full flex-1 flex-col space-y-1 p-2">
+      <div className="flex md:w-full h-full min-h-0 flex-col">
+        <div className="scrollbar-trigger flex md:w-full h-full w-full flex-1 items-start border-white/20">
+          <nav className="flex md:w-full h-full flex-1 flex-col space-y-1 p-2">
             <button
               className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20"
               onClick={() => {
@@ -278,32 +336,134 @@ function ChatHistory({
               </div>
             </div>
             {session && (
-              <button
-                className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
-                onClick={handleLogout}
-              >
-                <svg
-                  stroke="currentColor"
-                  fill="none"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+              <>
+                <a
+                  type="button"
+                  id="show-api-key-input"
+                  onClick={() => {
+                    if (!showApiKeyInput) {
+                      setShowApiKeyInput(true);
+                    }
+                  }}
+                  className="text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 text-white text-sm hover:bg-gray-500/10 transition-colors duration-200"
                 >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                Logout
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-4 w-4"
+                    height="1em"
+                    width="1em"
+                  >
+                    <path d="M7 7a5 5 0 0 1 9.9 1H23v4h-1.9c-.6 1.5-1.7 2.8-3.2 3.5-1.4.7-3.1 1.1-4.9 1-3.5-.3-6.3-3.1-6.7-6.6V7zm5 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+                  </svg>
+                  {showApiKeyInput ? (
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      className="content h-5 w-full bg-transparent text-white border-none outline-none focus:outline-blue-600 border-[1.5px] mb-1 align-middle pb-1"
+                      value={apiKeyInputValue}
+                      autoFocus
+                      onChange={(e) => setApiKeyInputValue(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                    ></input>
+                  ) : (
+                    <span
+                      className="text-left whitespace-normal break-words overflow-y-scroll"
+                      style={{ pointerEvents: "none" }}
+                    >
+                      API Key:{" "}
+                      {`${session.user.apiKey.slice(
+                        0,
+                        4
+                      )}****${session.user.apiKey.slice(-4)}`}
+                    </span>
+                  )}
+                  {showApiKeyInput && (
+                    <div
+                      className="absolute flex right-1 z-10 text-gray-300 visible"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        id="submit-api-key-edit"
+                        className="p-1 hover:text-white"
+                        onClick={() => {
+                          if (session.user.apiKey !== apiKeyInputValue) {
+                            handleEditApiKey(apiKeyInputValue);
+                          }
+                          setShowApiKeyInput(false);
+                        }}
+                      >
+                        <svg
+                          stroke="currentColor"
+                          fill="none"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-4 w-4"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </button>
+                      <button
+                        className="p-1 hover:text-white"
+                        onClick={() => setShowApiKeyInput(false)}
+                      >
+                        <svg
+                          stroke="currentColor"
+                          fill="none"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-4 w-4"
+                          height="1em"
+                          width="1em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </a>
+
+                <button
+                  className="flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+                  onClick={handleLogout}
+                >
+                  <svg
+                    stroke="currentColor"
+                    fill="none"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-4 w-4"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  Logout
+                </button>
+              </>
             )}
             {chats.length > 0 && (
               <button
-                className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+                className="flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
                 onClick={() => {
                   handleDeleteChats();
                 }}
