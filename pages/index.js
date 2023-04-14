@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import ChatHistory from "../components/ChatHistory";
-import Chats from "../components/Chats";
+import Navigation from "../components/Navigation";
+import MessageSection from "../components/MessageSection";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -39,6 +39,10 @@ export default function Home() {
     console.error(error);}
   }, [error]);
 
+  useEffect(() => {
+    setUserText("")
+  }, [selectedChat])
+  
   return (
     <>
       <Head>
@@ -51,7 +55,7 @@ export default function Home() {
         <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
           {status === "authenticated" && (
             <div className="flex overflow-x-hidden items-bottom">
-              <ChatHistory
+              <Navigation
                 chats={chats}
                 userText={userText}
                 setUserText={setUserText}
@@ -61,7 +65,7 @@ export default function Home() {
                 setSelectedChat={setSelectedChat}
               />
 
-              <Chats
+              <MessageSection
                 session={session}
                 userText={userText}
                 setUserText={setUserText}
