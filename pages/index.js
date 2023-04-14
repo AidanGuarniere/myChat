@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import Navigation from "../components/Navigation";
-import MessageSection from "../components/MessageSection";
+import Dashboard from "../components/Dashboard";
+import Dialogue from "../components/Dialogue";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -55,7 +55,7 @@ export default function Home() {
         <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
           {status === "authenticated" && (
             <div className="flex overflow-x-hidden items-bottom">
-              <Navigation
+              <Dashboard
                 chats={chats}
                 userText={userText}
                 setUserText={setUserText}
@@ -65,7 +65,7 @@ export default function Home() {
                 setSelectedChat={setSelectedChat}
               />
 
-              <MessageSection
+              <Dialogue
                 session={session}
                 userText={userText}
                 setUserText={setUserText}
