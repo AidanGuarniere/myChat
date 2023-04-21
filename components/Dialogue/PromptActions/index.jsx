@@ -32,7 +32,6 @@ function PromptActions({
       try {
         let messageHistoryForGPT;
 
-        // If there's a selected chat, append the user's message to its message history
         if (selectedChat) {
           const selectedIndex = chats.findIndex(
             (chat) => chat.id === selectedChat
@@ -47,7 +46,6 @@ function PromptActions({
             content: message.content,
           }));
         } else {
-          // If there's no selected chat, create a new message history with the user's message
           messageHistoryForGPT = [
             {
               role: "system",
@@ -61,14 +59,12 @@ function PromptActions({
           ];
         }
 
-        // Send the message history to the API to get the assistant's response
         const gptResponse = await sendMessageHistoryToGPT(
           messageHistoryForGPT,
           session.user.apiKey
         );
 
         messageHistoryForGPT.push(gptResponse.choices[0].message);
-        // If there's no selected chat, create a new chat with the given message history
         if (!selectedChat) {
           const newChat = {
             userId: session.user.id,
@@ -79,7 +75,6 @@ function PromptActions({
           await createChat(newChat);
           setSelectedChat(gptResponse.id);
         } else {
-          // If there's a selected chat, update it with the new message history
           const updatedChat = {
             userId: session.user.id,
             id: selectedChat,
@@ -115,7 +110,6 @@ function PromptActions({
             role: message.role,
             content: message.content,
           }));
-        //edit chats
         const gptResponse = await sendMessageHistoryToGPT(
           messageHistoryForGPT,
           session.user.apiKey
@@ -124,11 +118,9 @@ function PromptActions({
         messageHistoryForGPT.push(gptResponse.choices[0].message);
 
         updatedChat.messages = messageHistoryForGPT;
-        // Update the chat in the database with the new message history
         await updateChat(updatedChat);
 
         const updatedChats = await fetchChats();
-        // Update the local state with the new chat data
         setChats(updatedChats);
         setLoading(false);
       } catch (error) {

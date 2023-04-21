@@ -49,7 +49,6 @@ function ApiKeyInput({ session, update, setError }) {
     }
 
     return () => {
-      // document.removeEventListener("click", handleDocumentClick);
       document.removeEventListener("click", handleApiKeySubmitClick);
     };
   }, [showApiKeyInput]);

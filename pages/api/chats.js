@@ -27,16 +27,13 @@ export default async function handler(req, res) {
       try {
         const { id, title, messages } = req.body;
 
-        // If an ID is provided, update the existing chat with the new messages
         if (id) {
-          // Try to find and update the chat with the given ID
           let updatedChat = await Chat.findOneAndUpdate(
             { id, userId },
             { messages: messages },
             { new: true }
           );
 
-          // If the chat with the given ID doesn't exist, create a new chat
           if (!updatedChat) {
             updatedChat = await Chat.create({ id, userId, title, messages });
             return res.status(201).json(updatedChat);
@@ -44,7 +41,6 @@ export default async function handler(req, res) {
 
           return res.status(200).json(updatedChat);
         } else {
-          // If no ID is provided, create a new chat
           const newChat = await Chat.create({ userId, title, messages });
           return res.status(201).json(newChat);
         }

@@ -7,7 +7,6 @@ function NewChatButton({ setSelectedChat }) {
       onClick={() => {
         setSelectedChat(null);
       }}
-      // disabled={loading}
     >
       <svg
         stroke="currentColor"

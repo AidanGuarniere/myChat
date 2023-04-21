@@ -36,7 +36,6 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
               lineHeight: "1.5rem",
             }}
             onInput={(e) => {
-              //shrink/grow on input logic
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;
             }}
