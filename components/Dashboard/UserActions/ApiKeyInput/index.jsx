@@ -7,7 +7,6 @@ function ApiKeyInput({ session, update, setError }) {
 
   const handleEditApiKey = async () => {
     if (!apiKeyInputValue.match(/^sk-[\w]+$/)) {
-      //   setError("Invalid API key format.");
       setApiKeyInputValue("");
       return;
     }
@@ -27,9 +26,7 @@ function ApiKeyInput({ session, update, setError }) {
           apiKey: updatedUser.apiKey,
         });
         setShowApiKeyInput(false);
-      } else {
-        // setError("Failed to update API key.");
-      }
+      } 
     } catch (error) {
       setError("Error updating API key:", error);
     }
