@@ -17,6 +17,11 @@ const messageSchema = new mongoose.Schema({
 
 
 const chatSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   id: {
     type: String,
     required: true,
@@ -32,4 +37,4 @@ const chatSchema = new mongoose.Schema({
 
 const Chat = mongoose.models.Chat || mongoose.model('Chat', chatSchema);
 
-module.exports = Chat;
+module.exports = { Chat, chatSchema };

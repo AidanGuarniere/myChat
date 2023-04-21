@@ -1,0 +1,4 @@
+# CODEOWNERS file
+
+# Assign the entire repository to a single owner:
+* @aidan-guarniere
