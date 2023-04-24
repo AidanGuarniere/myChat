@@ -139,7 +139,7 @@ function PromptActions({
   };
 
   return (
-    <div className="pl-[260px] absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient dark:bg-gray-800  dark:md:bg-vert-dark-gradient pt-8">
+    <div className="md:pl-[260px] absolute bottom-0 left-0 w-full border-t border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent bg-vert-light-gradient dark:bg-gray-800  dark:bg-vert-dark-gradient pt-8">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}
@@ -151,6 +151,7 @@ function PromptActions({
         handleSubmit={handleSubmit}
         loading={loading}
       />
+      <div className="h-16 md:hidden"></div>
     </div>
   );
 }

@@ -35,14 +35,15 @@ export default function Home() {
   }, [session, status, router]);
 
   useEffect(() => {
-    if(error !==null){
-    console.error(error);}
+    if (error !== null) {
+      console.error(error);
+    }
   }, [error]);
 
   useEffect(() => {
-    setUserText("")
-  }, [selectedChat])
-  
+    setUserText("");
+  }, [selectedChat]);
+
   return (
     <>
       <Head>
@@ -51,20 +52,19 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
-        <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
+      <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
+        <Dashboard
+          chats={chats}
+          userText={userText}
+          setUserText={setUserText}
+          setChats={setChats}
+          setError={setError}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
+        />
+        <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
           {status === "authenticated" && (
             <div className="flex overflow-x-hidden items-bottom">
-              <Dashboard
-                chats={chats}
-                userText={userText}
-                setUserText={setUserText}
-                setChats={setChats}
-                setError={setError}
-                selectedChat={selectedChat}
-                setSelectedChat={setSelectedChat}
-              />
-
               <Dialogue
                 session={session}
                 userText={userText}
@@ -78,8 +78,8 @@ export default function Home() {
               />
             </div>
           )}
-        </div>
-      </main>
+        </main>
+      </div>
     </>
   );
 }

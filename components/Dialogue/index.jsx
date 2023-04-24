@@ -49,7 +49,6 @@ function Dialogue({
               session={session}
               setChats={setChats}
             />
-            <div className="bg-white h-1/3" />
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
           </div>
         ) : (

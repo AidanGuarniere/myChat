@@ -14,7 +14,10 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
 
   return (
     <form
-      className="flex flex-col flex-grow mx-auto my-2 py-3 px-3 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md md:max-w-2xl lg:max-w-3xl md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-3xl"
+      className="flex flex-col flex-grow mx-auto my-2 py-3 px-3 relative border border-black/10 bg-white 
+                  rounded-md md:max-w-2xl lg:max-w-3xl md:mx-4 
+                  md:last:mb-6 lg:mx-auto w-4/5
+                  dark:border-gray-900/50 dark:text-white dark:bg-gray-700 "
       onSubmit={handleSubmit}
       style={{ boxShadow: "0 0 20px 0 rgba(0, 0, 0, 0.1)" }}
     >

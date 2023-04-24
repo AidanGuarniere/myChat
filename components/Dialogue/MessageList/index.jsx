@@ -19,9 +19,9 @@ function MessageList({ chats, selectedChat, session, setChats }) {
           />
         )
       )}
+      <div className="bg-white h-[10%] md:h-[21.5%]" />
     </>
   );
 }
 
 export default MessageList;
-
