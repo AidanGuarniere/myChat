@@ -31,7 +31,6 @@ function Dashboard({
   };
 
   useEffect(() => {
-    setShowChatActions(false);
     if (selectedChat) {
       const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
       const selectedChatTitle = { ...chats[chatIndex] };
@@ -41,7 +40,7 @@ function Dashboard({
 
   return (
     <>
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col bg-gray-1000 dark z-50">
+      <div className="hidden w-full md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col bg-gray-1000 dark z-50">
         <div className="flex md:w-full h-full min-h-0 flex-col">
           <div className="scrollbar-trigger flex md:w-full h-full w-full flex-1 items-start border-white/20">
             <nav className="flex md:w-full h-full flex-1 flex-col space-y-1 p-2">
@@ -62,12 +61,11 @@ function Dashboard({
           </div>
         </div>
       </div>
-      <div className="md:hidden flex justify-between items-center bg-gray-800 text-gray-200 p-2">
+      <div className="md:hidden w-full flex justify-between items-center bg-gray-800 text-gray-200 p-2">
         <button
           onClick={toggleActions}
           className="inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
         >
-          <span className="sr-only">Open Chat Actions</span>
           <svg
             stroke="currentColor"
             fill="none"
@@ -85,7 +83,10 @@ function Dashboard({
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <h1 className="text-base font-normal">{chatTitle && chatTitle}</h1>
+        <h1 className="text-base font-normal whitespace-nowrap overflow-hidden relative mx-8">
+          {chatTitle && chatTitle}
+          <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"></div>
+        </h1>
       </div>
 
       <div

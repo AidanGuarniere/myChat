@@ -151,7 +151,7 @@ function PromptActions({
         handleSubmit={handleSubmit}
         loading={loading}
       />
-      <div className="h-16 md:hidden"></div>
+      <div className="h-[5rem] md:h-4"></div>
     </div>
   );
 }

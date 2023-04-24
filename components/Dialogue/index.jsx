@@ -29,7 +29,7 @@ function Dialogue({
   }, [chats, selectedChat]);
 
   return (
-    <div className="md:pl-[260px] h-screen p-0 m-0 overflow-x-hidden w-full">
+    <div className="md:pl-[260px] w-full h-screen p-0 m-0 overflow-x-hidden">
       <div className="chat h-full w-full overflow-y-scroll m-0 p-0 flex">
         {error ? (
           <ErrorDisplay error={error} />
