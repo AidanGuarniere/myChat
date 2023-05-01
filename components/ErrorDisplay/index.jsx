@@ -1,6 +1,11 @@
-import React from "react";
+import React,{useEffect} from "react";
 
 function ErrorDisplay({ error }) {
+useEffect(() => {
+  console.log(error)
+
+}, [error])
+
   return (
     <div className="flex justify-center w-full">
       <div className="text-base md:max-w-xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">

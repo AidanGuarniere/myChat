@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { sendMessageHistoryToGPT } from "../../../../../utils/gptUtils";
 import { updateChat, fetchChats } from "../../../../../utils/chatUtils";
 
-function UserMessage({ message, hoveredMessageId, chats, selectedChat, session, setChats }) {
+function UserMessage({ message, selectedMessageId, chats, selectedChat, session, setChats }) {
     const [editMessageId, setEditMessageId] = useState(null);
     const [editedMessage, setEditedMessage] = useState("");
   
@@ -91,7 +91,7 @@ function UserMessage({ message, hoveredMessageId, chats, selectedChat, session, 
       ) : (
         <div className="relative w-full">
         <p className="break-words px-[1.6rem] md:px-0">{message.content}</p>
-        {hoveredMessageId === message["_id"] && (
+        {selectedMessageId === message["_id"] && (
             <div className="text-gray-400 flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible">
             <button
                 className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"

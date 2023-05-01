@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { fetchChats, deleteChats } from "../../utils/chatUtils";
+import { deleteChats } from "../../utils/chatUtils";
 import ChatActions from "./ChatActions";
 import UserActions from "./UserActions";
 
 function Dashboard({
+  session,
   chats,
   setChats,
   setError,
@@ -17,7 +18,7 @@ function Dashboard({
   const handleDeleteChats = async (id) => {
     await deleteChats(id);
     if (id && chats.length > 1) {
-      const updatedChats = await fetchChats();
+      const updatedChats = chats.filter((chat) => chat.id !== id);
       setChats(updatedChats);
     } else {
       setChats([]);
@@ -40,11 +41,12 @@ function Dashboard({
 
   return (
     <>
-      <div className="hidden w-full md:fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col bg-gray-1000 dark z-50">
+      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[289px] md:flex-col bg-gray-1000 dark z-50">
         <div className="flex md:w-full h-full min-h-0 flex-col">
           <div className="scrollbar-trigger flex md:w-full h-full w-full flex-1 items-start border-white/20">
             <nav className="flex md:w-full h-full flex-1 flex-col space-y-1 p-2">
               <ChatActions
+                session={session}
                 chats={chats}
                 setChats={setChats}
                 setError={setError}

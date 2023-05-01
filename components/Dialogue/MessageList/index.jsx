@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import MessageItem from "./MessageItem";
 
 function MessageList({ chats, selectedChat, session, setChats }) {
