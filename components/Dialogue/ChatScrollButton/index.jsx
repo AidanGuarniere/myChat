@@ -7,7 +7,7 @@ function ChatScrollButton({chatRef, scrollHeight}) {
         ? scrollHeight + chatRef.current.clientHeight * 1.2 <
             chatRef.current.scrollHeight && (
             <button
-              className="cursor-pointer absolute right-6 bottom-[140px] md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200"
+              className="cursor-pointer absolute right-6 bottom-44 md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200"
               onClick={() => {
                 if (chatRef.current) {
                   chatRef.current.scrollTo({

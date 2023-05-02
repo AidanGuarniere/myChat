@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 
 function PromptForm({ userText, setUserText, handleSubmit, loading }) {
+  const textareaRef = useRef(null);
+
   const handleChange = (event) => {
     setUserText(event.target.value);
   };
@@ -14,16 +16,20 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
 
   return (
     <form
-      className="flex flex-col flex-grow mx-auto my-2 py-3 px-3 relative border border-black/10 bg-white 
+      className="stretch flex flex-col flex-grow mx-auto my-2 p-3 relative border border-black/10 bg-white 
                   rounded-md md:max-w-2xl lg:max-w-3xl  
                   md:last:mb-6 lg:mx-auto w-4/5
                   dark:border-gray-900/50 dark:text-white dark:bg-gray-700 "
-      onSubmit={handleSubmit}
+      onSubmit={(e) => {
+        handleSubmit(e);
+        textareaRef.current.style.height = "auto";
+      }}
       style={{ boxShadow: "0 0 20px 0 rgba(0, 0, 0, 0.1)" }}
     >
       <div className="w-full p-0 m-0">
         <textarea
-          className="resize-none h-full w-full m-0 overflow-hidden border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 focus:outline-none focus:border-0 dark:bg-transparent md:pl-1 text-base align-top"
+          ref={textareaRef}
+          className="resize-none h-full w-full m-0 overflow-hidden border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 focus:outline-none focus:border-0 dark:bg-transparent md:pl-1 text-xl align-top"
           tabIndex="0"
           data-id="root"
           value={userText}

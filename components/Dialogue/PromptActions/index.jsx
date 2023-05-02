@@ -141,7 +141,7 @@ function PromptActions({
   };
 
   return (
-    <div className="md:pl-[289px] absolute bottom-0 left-0 w-full border-t  md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-8">
+    <div className="md:pl-[289px] absolute bottom-0 left-0 w-full border-t  md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2 md:py-0 md:pt-8">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}
@@ -153,8 +153,8 @@ function PromptActions({
         handleSubmit={handleSubmit}
         loading={loading}
       />
-      <div className="h-[5rem] md:h-6 w-4/5 flex justify-center mx-auto pb-10 lg:pb-4">
-        <span className="text-[0.6rem] font-semibold text-gray-600 text-center">
+      <div className="h-[5rem] md:h-12 w-4/5 flex justify-center items-center mx-auto lg:pb-4">
+        <span className="text-sm font-semibold text-gray-600 text-center">
           MyGPT is not affiliated with OpenAI. MyGPT is an open source project
           modeled after ChatGPT. MyGPT may produce inaccurate information.
         </span>
