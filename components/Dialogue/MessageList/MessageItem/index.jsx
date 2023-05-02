@@ -5,17 +5,27 @@ import AssistantMessage from "./AssistantMessage";
 import UserMessage from "./UserMessage";
 
 function MessageItem({ message, chats, selectedChat, session, setChats }) {
-  const [hoveredMessageId, setHoveredMessageId] = useState(null);
+  const [selectedMessageId, setSelectedMessageId] = useState(null);
+  const handleMessageSelect = () => {
+    if (message.role === "user" && selectedMessageId !== message["_id"]) {
+      setSelectedMessageId(message["_id"]);
+    }
+  };
+
+  const resetMessageSelect = () => {
+    if (message.role === "user") {
+      setSelectedMessageId(null);
+    }
+  };
 
   return (
     <div
-      className={`group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50  ${
+      className={`group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 ${
         message.role === "user" ? "bg-white" : "bg-gray-50"
       } dark:bg-[#444654]`}
-      onMouseEnter={() =>
-        message.role === "user" && setHoveredMessageId(message["_id"])
-      }
-      onMouseLeave={() => message.role === "user" && setHoveredMessageId(null)}
+      onMouseEnter={handleMessageSelect}
+      onClick={handleMessageSelect}
+      onMouseLeave={resetMessageSelect}
     >
       <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-2xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
         <div className="w-[30px] flex flex-col relative items-end">
@@ -28,7 +38,7 @@ function MessageItem({ message, chats, selectedChat, session, setChats }) {
           ) : (
             <UserMessage
               message={message}
-              hoveredMessageId={hoveredMessageId}
+              selectedMessageId={selectedMessageId}
               chats={chats}
               selectedChat={selectedChat}
               session={session}

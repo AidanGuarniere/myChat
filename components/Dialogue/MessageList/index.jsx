@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import MessageItem from "./MessageItem";
 
 function MessageList({ chats, selectedChat, session, setChats }) {
@@ -19,9 +19,9 @@ function MessageList({ chats, selectedChat, session, setChats }) {
           />
         )
       )}
+      <div className="bg-white h-[21.5%]" />
     </>
   );
 }
 
 export default MessageList;
-

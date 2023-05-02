@@ -23,6 +23,61 @@ function PromptActions({
     }
   }, [selectedChat]);
 
+  const createMessageHistoryForGPT = () => {
+    if (selectedChat) {
+      const selectedIndex = chats.findIndex((chat) => chat.id === selectedChat);
+      const updatedChat = { ...chats[selectedIndex] };
+      updatedChat.messages.push({
+        role: "user",
+        content: userText,
+      });
+      return updatedChat.messages.map((message) => ({
+        role: message.role,
+        content: message.content,
+      }));
+    } else {
+      return [
+        {
+          role: "system",
+          content:
+            "You are a helpful AI based on OpenAI's GPT-4 model. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately.",
+        },
+        {
+          role: "user",
+          content: userText,
+        },
+      ];
+    }
+  };
+
+  const handleGPTResponse = async (gptResponse, messageHistoryForGPT) => {
+    messageHistoryForGPT.push(gptResponse.choices[0].message);
+
+    if (!selectedChat) {
+      const newChat = {
+        userId: session.user.id,
+        id: gptResponse.id,
+        title: userText,
+        messages: messageHistoryForGPT,
+      };
+      await createChat(newChat);
+      setSelectedChat(gptResponse.id);
+      setChats((prevChats) => [...prevChats, newChat]);
+    } else {
+      const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
+      const updatedChat = {
+        userId: session.user.id,
+        id: selectedChat,
+        messages: messageHistoryForGPT,
+      };
+      await updateChat(selectedChat, updatedChat);
+      updatedChat.title = chats[chatIndex].title;
+      setChats((prevChats) =>
+        prevChats.map((chat) => (chat.id === selectedChat ? updatedChat : chat))
+      );
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (userText.length >= 1) {
@@ -30,65 +85,12 @@ function PromptActions({
       setUserText("");
       setError(null);
       try {
-        let messageHistoryForGPT;
-
-        // If there's a selected chat, append the user's message to its message history
-        if (selectedChat) {
-          const selectedIndex = chats.findIndex(
-            (chat) => chat.id === selectedChat
-          );
-          const updatedChat = { ...chats[selectedIndex] };
-          updatedChat.messages.push({
-            role: "user",
-            content: userText,
-          });
-          messageHistoryForGPT = updatedChat.messages.map((message) => ({
-            role: message.role,
-            content: message.content,
-          }));
-        } else {
-          // If there's no selected chat, create a new message history with the user's message
-          messageHistoryForGPT = [
-            {
-              role: "system",
-              content:
-                "You are a helpful assistant and expert programmer. You excel at solving problems and turning natural language into functioning code. You speak efficiently and format your code properly.",
-            },
-            {
-              role: "user",
-              content: userText,
-            },
-          ];
-        }
-
-        // Send the message history to the API to get the assistant's response
+        const messageHistoryForGPT = createMessageHistoryForGPT();
         const gptResponse = await sendMessageHistoryToGPT(
           messageHistoryForGPT,
           session.user.apiKey
         );
-
-        messageHistoryForGPT.push(gptResponse.choices[0].message);
-        // If there's no selected chat, create a new chat with the given message history
-        if (!selectedChat) {
-          const newChat = {
-            userId: session.user.id,
-            id: gptResponse.id,
-            title: userText,
-            messages: messageHistoryForGPT,
-          };
-          await createChat(newChat);
-          setSelectedChat(gptResponse.id);
-        } else {
-          // If there's a selected chat, update it with the new message history
-          const updatedChat = {
-            userId: session.user.id,
-            id: selectedChat,
-            messages: messageHistoryForGPT,
-          };
-          await updateChat(updatedChat, setChats);
-        }
-        const updatedChats = await fetchChats(session.user.id);
-        setChats(updatedChats);
+        await handleGPTResponse(gptResponse, messageHistoryForGPT);
         setLoading(false);
         setShowRegen(true);
       } catch (error) {
@@ -139,7 +141,7 @@ function PromptActions({
   };
 
   return (
-    <div className="pl-[260px] absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient dark:bg-gray-800  dark:md:bg-vert-dark-gradient pt-8">
+    <div className="md:pl-[289px] absolute bottom-0 left-0 w-full border-t  md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2 md:py-0 md:pt-8">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}
@@ -151,6 +153,12 @@ function PromptActions({
         handleSubmit={handleSubmit}
         loading={loading}
       />
+      <div className="h-[5rem] md:h-12 w-4/5 flex justify-center items-center mx-auto lg:pb-4">
+        <span className="text-sm font-semibold text-gray-600 text-center">
+          MyGPT is not affiliated with OpenAI. MyGPT is an open source project
+          modeled after ChatGPT. MyGPT may produce inaccurate information.
+        </span>
+      </div>
     </div>
   );
 }
