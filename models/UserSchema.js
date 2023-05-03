@@ -3,9 +3,6 @@ const crypto =require('crypto');
 const bcrypt = require("bcrypt");
 const { encrypt } = require('../utils/crypto');
 
-// Update the pre-save hook
-
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
