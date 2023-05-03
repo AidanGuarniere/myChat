@@ -3,6 +3,7 @@ import NewChatButton from "./NewChatButton";
 import ChatItem from "./ChatItem";
 
 function ChatActions({
+  session,
   chats,
   setChats,
   setError,
@@ -14,10 +15,11 @@ function ChatActions({
     <>
       <NewChatButton setSelectedChat={setSelectedChat} />
       <div className="w-full flex-col flex-1 overflow-y-auto border-b border-white/20 -mr-2 h-1/2">
-        <div className="flex flex-col gap-2 text-gray-100 text-sm">
-          {chats.map((chat, index) => (
+        <div className="flex flex-col gap-2 text-gray-100 text-sm my-2">
+        {[...chats].reverse().map((chat, index) => (
             <ChatItem
               key={`${chat.id}${index}`}
+              session={session}
               chat={chat}
               index={index}
               setChats={setChats}

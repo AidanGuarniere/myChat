@@ -21,10 +21,10 @@ const AuthForm = () => {
     } else {
       if (!openAIAPIKey.match(/^sk-[\w]+$/)) {
         alert("Invalid API key format.");
-        setUsername("")
-        setPassword("")
-        setOpenAIAPIKey("")
-        return
+        setUsername("");
+        setPassword("");
+        setOpenAIAPIKey("");
+        return;
       }
       handleSignUp(username, password, openAIAPIKey);
     }
@@ -38,9 +38,12 @@ const AuthForm = () => {
   // Render the appropriate form based on the action
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-200">
+      <h1 className="text-3xl mb-4 font-bold absolute top-[25%]">
+        Welcome to myGPT
+      </h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-100 p-6 w-full md:w-1/2 xl:w-1/3 rounded-lg"
+        className="absolute top-[32.5%] bg-gray-100 p-6 w-5/6 md:w-1/2 xl:w-1/3 mx-auto rounded-lg"
       >
         <h1 className="text-dark text-center text-2xl mb-4">
           {isLogin ? "Login" : "Sign Up"}
@@ -78,7 +81,11 @@ const AuthForm = () => {
           {isLogin ? "Login" : "Sign Up"}
         </button>
       </form>
-      <div className="mt-4 text-dark">
+      <div
+        className={`relative ${
+          isLogin ? "top-[16.6%] md:top-[25%]" : "top-[22.5%] md:top-[35%]"
+        } w-[85%] mx-auto text-center text-dark text-xl`}
+      >
         {isLogin ? (
           <span>
             If you don't already have an account,{" "}
@@ -86,7 +93,7 @@ const AuthForm = () => {
               href="/auth/signup"
               className="underline text-green-200 hover:text-blue-800"
             >
-              sign up here
+              sign up
             </a>
           </span>
         ) : (
@@ -96,7 +103,7 @@ const AuthForm = () => {
               href="/auth/login"
               className="underline text-green-200 hover:text-blue-800"
             >
-              login here
+              login
             </a>
           </span>
         )}

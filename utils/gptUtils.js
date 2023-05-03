@@ -1,11 +1,10 @@
 // gptUtils.js
 import axios from "axios";
 
-export const sendMessageHistoryToGPT = async (messageHistory, apiKey) => {
+export const sendMessageHistoryToGPT = async (messageHistory) => {
   try {
-    const response = await axios.post("/api/gpt", {
+    const response = await axios.post("/api/proxy/gpt", {
       messages: messageHistory,
-      apiKey,
     });
     if (response.status === 200) {
       return response.data.completion;

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Head from "next/head";
 import Dashboard from "../components/Dashboard";
 import Dialogue from "../components/Dialogue";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { fetchChatTitles } from "../utils/chatUtils";
 
 export default function Home() {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [userText, setUserText] = useState("");
   const [error, setError] = useState(null);
+  const [selectedChatLoading, setSelectedChatLoading] = useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -18,31 +20,53 @@ export default function Home() {
     if (status === "unauthenticated") {
       router.push("/auth");
     } else if (session && status === "authenticated") {
-      const fetchChats = async () => {
+      const handleFetchChatTitles = async () => {
         try {
-          const response = await axios.get("/api/chats");
-          if (response.data) {
-            setChats(response.data);
+          const chatTitles = await fetchChatTitles();
+          if (chatTitles.length !== chats.length) {
+            setChats(chatTitles);
           }
         } catch (error) {
-          setError(error);
-          console.error("Error fetching chats:", error);
+          console.error("Error fetching chat titles:", error);
         }
       };
 
-      fetchChats();
+      handleFetchChatTitles();
     }
-  }, [session, status, router]);
+  }, [status, router, chats.length]);
+
+  const shouldFetchChatContent = useMemo(() => {
+    const chat = chats.find((chat) => chat.id === selectedChat);
+    return !chat || (chat && !chat.messages);
+  }, [selectedChat]);
 
   useEffect(() => {
-    if(error !==null){
-    console.error(error);}
-  }, [error]);
+    if (selectedChat !== null && shouldFetchChatContent) {
+      setSelectedChatLoading(true);
+      const fetchSelectedChat = async () => {
+        try {
+          const response = await axios.get(`/api/chats/${selectedChat}`);
+          if (response.data) {
+            const updatedChats = [...chats];
+            const selectedIndex = updatedChats.findIndex(
+              (chat) => chat.id === selectedChat
+            );
+            console.log(response.data)
+            updatedChats[selectedIndex] = response.data;
+            console.log("uc",updatedChats)
+            setChats(updatedChats);
+          }
+        } catch (error) {
+          setError(error);
+          console.error("Error fetching selected chat:", error);
+        } finally {
+          setSelectedChatLoading(false);
+        }
+      };
 
-  useEffect(() => {
-    setUserText("")
-  }, [selectedChat])
-  
+      fetchSelectedChat();
+    }
+  }, [selectedChat, shouldFetchChatContent]);
   return (
     <>
       <Head>
@@ -51,20 +75,20 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
-        <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
+      <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
+        <Dashboard
+          session={session}
+          chats={chats}
+          userText={userText}
+          setUserText={setUserText}
+          setChats={setChats}
+          setError={setError}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
+        />
+        <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
           {status === "authenticated" && (
             <div className="flex overflow-x-hidden items-bottom">
-              <Dashboard
-                chats={chats}
-                userText={userText}
-                setUserText={setUserText}
-                setChats={setChats}
-                setError={setError}
-                selectedChat={selectedChat}
-                setSelectedChat={setSelectedChat}
-              />
-
               <Dialogue
                 session={session}
                 userText={userText}
@@ -75,11 +99,14 @@ export default function Home() {
                 setChats={setChats}
                 selectedChat={selectedChat}
                 setSelectedChat={setSelectedChat}
+                selectedChatLoading={selectedChatLoading}
+                setSelectedChatLoading={setSelectedChatLoading}
+                
               />
             </div>
           )}
-        </div>
-      </main>
+        </main>
+      </div>
     </>
   );
 }

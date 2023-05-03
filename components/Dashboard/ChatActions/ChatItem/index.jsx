@@ -4,6 +4,7 @@ import TitleInput from './TitleInput';
 import EditDeleteButtons from './EditDeleteButtons';
 
 export default function ChatItem({
+  session,
   chat,
   index,
   selectedChat,
@@ -54,6 +55,7 @@ export default function ChatItem({
       </span>
       {isSelectedChat && (
         <EditDeleteButtons
+        session={session}
           showTitleInput={showTitleInput}
           selectedChat={selectedChat}
           chat={chat}

@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MessageItem from "./MessageItem";
 
 function MessageList({ chats, selectedChat, session, setChats }) {
-  const selectedChatIndex = chats.findIndex((chat) => chat.id === selectedChat);
-  const messages = chats[selectedChatIndex]?.messages || [];
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    const selectedChatIndex = chats.findIndex(
+      (chat) => chat.id === selectedChat
+    );
+    console.log(selectedChatIndex)
+    const currentMessages = chats[selectedChatIndex]?.messages;
+    if (messages !== currentMessages) {
+      setMessages(currentMessages);
+    }
+    // console.log(selectedChat)
+    // console.log("m", messages);
+    // console.log("cm", currentMessages);
+  }, [selectedChat, chats]);
 
   return (
     <>
@@ -19,9 +31,9 @@ function MessageList({ chats, selectedChat, session, setChats }) {
           />
         )
       )}
+      <div className="bg-white h-[21.5%]" />
     </>
   );
 }
 
 export default MessageList;
-

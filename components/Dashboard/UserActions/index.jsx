@@ -13,7 +13,7 @@ function UserActions({ chats, setError, handleDeleteChats }) {
     <>
       {session && (
         <>
-          <ApiKeyInput session={session} update={update} setError={setError} />
+          <ApiKeyInput session={session} setError={setError} />
           {/* dark mode toggle *darkmode classes need to be integrated to UI*
           <button
             className="flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
