@@ -51,7 +51,9 @@ export default function Home() {
             const selectedIndex = updatedChats.findIndex(
               (chat) => chat.id === selectedChat
             );
+            console.log(response.data)
             updatedChats[selectedIndex] = response.data;
+            console.log("uc",updatedChats)
             setChats(updatedChats);
           }
         } catch (error) {
@@ -99,6 +101,7 @@ export default function Home() {
                 setSelectedChat={setSelectedChat}
                 selectedChatLoading={selectedChatLoading}
                 setSelectedChatLoading={setSelectedChatLoading}
+                
               />
             </div>
           )}

@@ -67,7 +67,7 @@ export const createChat = async (chatData) => {
 };
 
 // Updates an existing chat with the given data
-export const updateChat = async ({id, updatedChatData}) => {
+export const updateChat = async (id, updatedChatData) => {
   try {
     if (id) {
       const response = await axios.put(`/api/chats/${id}`, updatedChatData);

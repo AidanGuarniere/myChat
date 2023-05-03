@@ -21,7 +21,6 @@ async function validateUser(username, password) {
 
   if (user && (await comparePasswords(password, user.password))) {
     // Decrypt the API key before returning the user object
-    user.apiKey = decrypt(user.apiKey);
     return user;
   }
 

@@ -7,6 +7,13 @@ dbConnect();
 
 export default async function handler(req, res) {
   const { method } = req;
+
+  if (method !== "GET") {
+    res.setHeader("Allow", ["GET"]);
+    res.status(405).end(`Method ${method} Not Allowed`);
+    return;
+  }
+
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
@@ -16,17 +23,10 @@ export default async function handler(req, res) {
 
   const userId = session.user.id;
 
-  switch (method) {
-    case "GET":
-      try {
-        const userChats = await Chat.find({ userId }, "id title");
-        res.status(200).json(userChats);
-      } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-      }
-      break;
-    default:
-      res.setHeader("Allow", ["GET"]);
-      res.status(405).end(`Method ${method} Not Allowed`);
+  try {
+    const userChats = await Chat.find({ userId }, "id title");
+    res.status(200).json(userChats);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }

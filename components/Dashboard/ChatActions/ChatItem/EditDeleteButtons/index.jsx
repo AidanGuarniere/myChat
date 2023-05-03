@@ -76,7 +76,6 @@ export default function EditDeleteButtons({
             className="p-1 hover:text-white"
             onClick={() => {
               if (chat.title !== titleInputValue) {
-                console.log(selectedChat);
                 handleEditChatTitle(selectedChat, titleInputValue);
               } else {
                 setShowTitleInput(false);

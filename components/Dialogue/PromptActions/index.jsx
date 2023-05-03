@@ -52,7 +52,6 @@ function PromptActions({
 
   const handleGPTResponse = async (gptResponse, messageHistoryForGPT) => {
     messageHistoryForGPT.push(gptResponse.choices[0].message);
-
     if (!selectedChat) {
       const newChat = {
         userId: session.user.id,
@@ -65,15 +64,16 @@ function PromptActions({
       setChats((prevChats) => [...prevChats, newChat]);
     } else {
       const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
-      const updatedChat = {
+      const updatedChatData = {
         userId: session.user.id,
         id: selectedChat,
         messages: messageHistoryForGPT,
       };
-      await updateChat(selectedChat, updatedChat);
-      updatedChat.title = chats[chatIndex].title;
+      console.log("UC", updatedChatData);
+      await updateChat(selectedChat, updatedChatData);
+      updatedChatData.title = chats[chatIndex].title;
       setChats((prevChats) =>
-        prevChats.map((chat) => (chat.id === selectedChat ? updatedChat : chat))
+        prevChats.map((chat) => (chat.id === selectedChat ? updatedChatData : chat))
       );
     }
   };
@@ -86,10 +86,7 @@ function PromptActions({
       setError(null);
       try {
         const messageHistoryForGPT = createMessageHistoryForGPT();
-        const gptResponse = await sendMessageHistoryToGPT(
-          messageHistoryForGPT,
-          session.user.apiKey
-        );
+        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
         await handleGPTResponse(gptResponse, messageHistoryForGPT);
         setLoading(false);
         setShowRegen(true);
@@ -118,10 +115,7 @@ function PromptActions({
             content: message.content,
           }));
         //edit chats
-        const gptResponse = await sendMessageHistoryToGPT(
-          messageHistoryForGPT,
-          session.user.apiKey
-        );
+        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
 
         messageHistoryForGPT.push(gptResponse.choices[0].message);
 

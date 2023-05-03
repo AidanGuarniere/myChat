@@ -39,7 +39,6 @@ function UserMessage({ message, selectedMessageId, chats, selectedChat, session,
   
       const gptResponse = await sendMessageHistoryToGPT(
         messageHistoryForGPT,
-        session.user.apiKey
       );
   
       const updatedChat = {
