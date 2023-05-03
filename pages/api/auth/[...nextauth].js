@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
+const { decrypt } = require('../../../utils/crypto');
 import bcrypt from "bcrypt";
 
 const events = {
@@ -19,6 +20,8 @@ async function validateUser(username, password) {
   const user = await User.findOne({ username });
 
   if (user && (await comparePasswords(password, user.password))) {
+    // Decrypt the API key before returning the user object
+    user.apiKey = decrypt(user.apiKey);
     return user;
   }
 

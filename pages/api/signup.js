@@ -2,6 +2,8 @@ import { nanoid } from "nanoid";
 import dbConnect from "../../utils/dbConnect.js";
 import User from "../../models/UserSchema";
 
+//u removed id, pretty sure u dont need it
+
 export default async function handler(req, res) {
   dbConnect();
 
@@ -17,7 +19,6 @@ export default async function handler(req, res) {
 
       // Create a new user
       const newUser = new User({
-        id: nanoid(),
         username,
         password, // Provide plain-text password
         apiKey: openAIAPIKey,
@@ -28,7 +29,6 @@ export default async function handler(req, res) {
       // Return the created user (without the password)
       return res.status(201).json({
         user: {
-          id: newUser.id,
           username: newUser.username,
           apiKey: newUser.apiKey,
         },
