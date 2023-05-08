@@ -43,7 +43,6 @@ function UserMessage({
         content,
       })
     );
-    console.log(messageHistoryForGPT);
     const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
     const updatedChatData = {
       ...chats[chatIndex],

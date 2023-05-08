@@ -18,13 +18,39 @@ function PromptActions({
   const [showRegen, setShowRegen] = useState(false);
 
   useEffect(() => {
+    // resubmit if last user message recieved no response
+    const submitFailedMessage = async (chat) => {
+      const messageHistory = chat.messages.map((message) => ({
+        role: message.role,
+        content: message.content,
+      }));
+      const gptResponse = await sendMessageHistoryToGPT(messageHistory);
+      await handleGPTResponse(selectedChat, gptResponse);
+    };
+    if (selectedChat) {
+      const selectedIndex = chats.findIndex(
+        (chat) => chat._id === selectedChat
+      );
+      const chat = { ...chats[selectedIndex] };
+      // if last message in array is a user message
+      if (
+        chat &&
+        chat.messages[chat.message.length - 1].role === "user" &&
+        chat.messages.length % 2 === 0
+      ) {
+        submitFailedMessage(chat);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (showRegen === true) {
       setShowRegen(false);
     }
   }, [selectedChat]);
 
-  const createMessageHistoryForGPT = async (e) => {
-    let gptMessages = [];
+  const createMessageData = async (e) => {
+    let messageHistory = [];
     let chatId = selectedChat;
     if (selectedChat) {
       const selectedIndex = chats.findIndex(
@@ -38,7 +64,7 @@ function PromptActions({
       let updatedChats = [...chats];
       updatedChats[selectedIndex] = updatedChat;
       setChats(updatedChats);
-      gptMessages = updatedChat.messages.map((message) => ({
+      messageHistory = updatedChat.messages.map((message) => ({
         role: message.role,
         content: message.content,
       }));
@@ -60,7 +86,7 @@ function PromptActions({
         messages: firstMessages,
       };
       const newChat = await createChat(newChatData);
-      gptMessages = firstMessages;
+      messageHistory = firstMessages;
       chatId = newChat._id;
       setChats((prevChats) =>
         prevChats.length ? [...prevChats, newChat] : [newChat]
@@ -69,13 +95,13 @@ function PromptActions({
     }
     setUserText("");
     e.target.style.height = "auto";
-    return { chatId, gptMessages };
+    return { chatId, messageHistory };
   };
 
-  const handleGPTResponse = async (chatId, messageHistoryForGPT) => {
+  const handleGPTResponse = async (chatId, messageData) => {
     const updatedChatData = {
       userId: session.user.id,
-      messages: messageHistoryForGPT,
+      messages: messageData,
     };
     const updatedChat = await updateChat(chatId, updatedChatData);
     setChats((prevChats) =>
@@ -89,11 +115,14 @@ function PromptActions({
       setLoading(true);
       setError(null);
       try {
-        const messageHistoryForGPT = await createMessageHistoryForGPT(e);
+        // create Chat based on user prompt
+        const messageData = await createMessageData(e);
+        // send Chat message data to GPT API
         const gptResponse = await sendMessageHistoryToGPT(
-          messageHistoryForGPT.gptMessages
+          messageData.messageHistory
         );
-        await handleGPTResponse(messageHistoryForGPT.chatId, gptResponse);
+        // update Chat with GPT response
+        await handleGPTResponse(messageData.chatId, gptResponse);
         setLoading(false);
         setShowRegen(true);
       } catch (error) {
@@ -114,15 +143,15 @@ function PromptActions({
         const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
         const updatedChat = { ...chats[chatIndex] };
 
-        const messageHistoryForGPT = updatedChat.messages
+        const messageData = updatedChat.messages
           .slice(0, -1)
           .map((message) => ({
             role: message.role,
             content: message.content,
           }));
-        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
-        messageHistoryForGPT.push(gptResponse.choices[0].message);
-        updatedChat.messages = messageHistoryForGPT;
+        const gptResponse = await sendMessageHistoryToGPT(messageData);
+        messageData.push(gptResponse.choices[0].message);
+        updatedChat.messages = messageData;
         await updateChat(selectedChat, updatedChat);
         const updatedChats = await fetchChats();
         setChats(updatedChats);
