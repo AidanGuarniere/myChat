@@ -54,7 +54,7 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
 
       <button
         type="submit"
-        className={`absolute p-1 rounded-md  bottom-3 sm:bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
+        className={`absolute p-1 rounded-md bottom-3 sm:bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent ${
           loading ? "loading-icon" : null
         } ${userText.length === 0 ? "text-gray-300" : "text-gray-500"}`}
         disabled={loading || userText.length === 0}
