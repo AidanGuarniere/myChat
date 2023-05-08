@@ -65,6 +65,13 @@ export default function Home() {
       fetchSelectedChat();
     }
   }, [selectedChat, shouldFetchChatContent]);
+
+  useEffect(() => {
+    if(error){
+      setError(null)
+    }
+  }, [chats, selectedChat])
+  
   return (
     <>
       <Head>
