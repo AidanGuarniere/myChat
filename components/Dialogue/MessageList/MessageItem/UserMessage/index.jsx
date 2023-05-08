@@ -89,7 +89,7 @@ function UserMessage({
         </div>
       ) : (
         <div className="relative w-full">
-          <p className="break-words px-[1.6rem] md:px-0">{message.content}</p>
+          <p className="whitespace-pre-wrap px-[1.6rem] md:px-0">{message.content}</p>
           {selectedMessageId === message["_id"] && (
             <div className="text-gray-400 flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible">
               <button

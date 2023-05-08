@@ -273,3 +273,56 @@ pre.code-container {
 :hover.btn-primary {
   background-color: rgb(15, 138, 107, var(--tw-text-opacity));
 }
+
+@keyframes openSidebar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes closeSidebar {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.openSidebar {
+  animation: openSidebar 0.2s forwards;
+}
+
+.closeSidebar {
+  animation: closeSidebar 0.2s forwards;
+}
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 0.2s forwards;
+}
+
+.fadeOut {
+  animation: fadeOut 0.2s forwards;
+}

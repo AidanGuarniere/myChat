@@ -13,8 +13,8 @@ function Dashboard({
   selectedChat,
   setSelectedChat,
 }) {
-  const [showChatActions, setShowChatActions] = useState(false);
-  const [showUserActions, setShowUserActions] = useState(false);
+  const [closeSidebar, setCloseSidebar] = useState(false);
+  const [showActions, setShowActions] = useState(false);
   const [chatTitle, setChatTitle] = useState(null);
 
   const handleDeleteChats = async (id) => {
@@ -28,10 +28,19 @@ function Dashboard({
     setSelectedChat(null);
   };
 
-  const toggleActions = () => {
-    setShowChatActions(!showChatActions);
-    setShowUserActions(false);
+  const toggleSidebar = () => {
+    setCloseSidebar(!closeSidebar);
   };
+
+  useEffect(() => {
+    if (closeSidebar === false) {
+      setTimeout(() => {
+        setShowActions(false);
+      }, 200);
+    } else {
+      setShowActions(true);
+    }
+  }, [closeSidebar]);
 
   useEffect(() => {
     if (selectedChat) {
@@ -67,7 +76,7 @@ function Dashboard({
       </div>
       <div className="md:hidden w-full flex justify-between items-center bg-gray-800 text-gray-200 p-2.5">
         <button
-          onClick={toggleActions}
+          onClick={toggleSidebar}
           className="inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
         >
           <svg
@@ -94,15 +103,20 @@ function Dashboard({
       </div>
 
       <div
-        className={`${
-          showChatActions ? "fixed" : "hidden"
-        } inset-0 z-40 md:hidden`}
+        className={`${showActions ? "fixed" : "hidden"} inset-0 z-40 md:hidden`}
       >
         <div
-          onClick={toggleActions}
-          className="fixed inset-0 bg-gray-600 bg-opacity-75"
+          onClick={toggleSidebar}
+          className={`fixed inset-0 bg-gray-600 ${
+            closeSidebar ? "fadeIn" : "fadeOut"
+          } bg-opacity-75 bg-div`}
         ></div>
-        <aside className="fixed top-0 left-0 bottom-0 w-[82%] bg-gray-1000 dark z-50 p-2 overflow-y-auto">
+
+        <aside
+          className={`fixed top-0 left-0 bottom-0 w-[82%] bg-gray-1000 dark z-50 p-2 overflow-y-auto ${
+            closeSidebar ? "openSidebar" : "closeSidebar"
+          }`}
+        >
           <ChatActions
             chats={chats}
             setChats={setChats}
@@ -117,11 +131,15 @@ function Dashboard({
             handleDeleteChats={handleDeleteChats}
           />
         </aside>
-        <div className="absolute top-0 right-4 pt-2 opacity-100">
+        <div
+          className={`${
+            closeSidebar ? "absolute" : "hidden"
+          } top-0 right-4 pt-2 opacity-100`}
+        >
           <button
             type="button"
             className="ml-1 flex h-10 w-10 items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-            onClick={toggleActions}
+            onClick={toggleSidebar}
           >
             <span className="sr-only">Close sidebar</span>
             <svg
