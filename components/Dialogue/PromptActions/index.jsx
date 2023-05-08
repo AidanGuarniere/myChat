@@ -23,71 +23,77 @@ function PromptActions({
     }
   }, [selectedChat]);
 
-  const createMessageHistoryForGPT = () => {
+  const createMessageHistoryForGPT = async (e) => {
+    let gptMessages = [];
+    let chatId = selectedChat;
     if (selectedChat) {
-      const selectedIndex = chats.findIndex((chat) => chat.id === selectedChat);
+      const selectedIndex = chats.findIndex(
+        (chat) => chat._id === selectedChat
+      );
       const updatedChat = { ...chats[selectedIndex] };
       updatedChat.messages.push({
         role: "user",
         content: userText,
       });
-      return updatedChat.messages.map((message) => ({
+      let updatedChats = [...chats];
+      updatedChats[selectedIndex] = updatedChat;
+      setChats(updatedChats);
+      gptMessages = updatedChat.messages.map((message) => ({
         role: message.role,
         content: message.content,
       }));
     } else {
-      return [
+      const firstMessages = [
         {
           role: "system",
           content:
-            "You are a helpful AI based on OpenAI's GPT-4 model. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately.",
+            "You are a helpful AI based on OpenAI's GPT model. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately. You do not needlessly apologize",
         },
         {
           role: "user",
           content: userText,
         },
       ];
-    }
-  };
-
-  const handleGPTResponse = async (gptResponse, messageHistoryForGPT) => {
-    messageHistoryForGPT.push(gptResponse.choices[0].message);
-    if (!selectedChat) {
-      const newChat = {
+      const newChatData = {
         userId: session.user.id,
-        id: gptResponse.id,
         title: userText,
-        messages: messageHistoryForGPT,
+        messages: firstMessages,
       };
-      await createChat(newChat);
-      setSelectedChat(gptResponse.id);
-      setChats((prevChats) => [...prevChats, newChat]);
-    } else {
-      const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
-      const updatedChatData = {
-        userId: session.user.id,
-        id: selectedChat,
-        messages: messageHistoryForGPT,
-      };
-      console.log("UC", updatedChatData);
-      await updateChat(selectedChat, updatedChatData);
-      updatedChatData.title = chats[chatIndex].title;
+      const newChat = await createChat(newChatData);
+      gptMessages = firstMessages;
+      chatId = newChat._id;
       setChats((prevChats) =>
-        prevChats.map((chat) => (chat.id === selectedChat ? updatedChatData : chat))
+        prevChats.length ? [...prevChats, newChat] : [newChat]
       );
+      setSelectedChat(chatId);
     }
+    setUserText("");
+    e.target.style.height = "auto";
+    return { chatId, gptMessages };
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleGPTResponse = async (chatId, messageHistoryForGPT) => {
+    const updatedChatData = {
+      userId: session.user.id,
+      messages: messageHistoryForGPT,
+    };
+    const updatedChat = await updateChat(chatId, updatedChatData);
+    setChats((prevChats) =>
+      prevChats.map((chat) => (chat._id === chatId ? updatedChat : chat))
+    );
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (userText.length >= 1) {
       setLoading(true);
-      setUserText("");
       setError(null);
       try {
-        const messageHistoryForGPT = createMessageHistoryForGPT();
-        const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
-        await handleGPTResponse(gptResponse, messageHistoryForGPT);
+        const messageHistoryForGPT = await createMessageHistoryForGPT(e);
+        const gptResponse = await sendMessageHistoryToGPT(
+          messageHistoryForGPT.gptMessages
+        );
+        await handleGPTResponse(messageHistoryForGPT.chatId, gptResponse);
         setLoading(false);
         setShowRegen(true);
       } catch (error) {
@@ -105,7 +111,7 @@ function PromptActions({
       setLoading(true);
       setError(null);
       try {
-        const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
+        const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
         const updatedChat = { ...chats[chatIndex] };
 
         const messageHistoryForGPT = updatedChat.messages
@@ -114,17 +120,11 @@ function PromptActions({
             role: message.role,
             content: message.content,
           }));
-        //edit chats
         const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
-
         messageHistoryForGPT.push(gptResponse.choices[0].message);
-
         updatedChat.messages = messageHistoryForGPT;
-        // Update the chat in the database with the new message history
-        await updateChat(updatedChat);
-
+        await updateChat(selectedChat, updatedChat);
         const updatedChats = await fetchChats();
-        // Update the local state with the new chat data
         setChats(updatedChats);
         setLoading(false);
       } catch (error) {

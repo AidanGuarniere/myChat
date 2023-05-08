@@ -2,62 +2,66 @@ import React, { useState } from "react";
 import { sendMessageHistoryToGPT } from "../../../../../utils/gptUtils";
 import { updateChat, fetchChats } from "../../../../../utils/chatUtils";
 
-function UserMessage({ message, selectedMessageId, chats, selectedChat, session, setChats }) {
-    const [editMessageId, setEditMessageId] = useState(null);
-    const [editedMessage, setEditedMessage] = useState("");
-  
-    const handleEditToggle = (messageId) => {
-      if (editMessageId === messageId) {
-        setEditMessageId(null);
-      } else {
-        setEditMessageId(messageId);
-      }
-    };
-  
-    const handleMessageEdit = async () => {
-      const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
-      const messageIndex = chats[chatIndex].messages.findIndex(
-        (msg) => msg._id === editMessageId
-      );
-  
-      const updatedMessageHistory = chats[chatIndex].messages.slice(
-        0,
-        messageIndex
-      );
-  
-      updatedMessageHistory.push({
-        role: "user",
-        content: editedMessage,
-      });
-  
-      const messageHistoryForGPT = updatedMessageHistory.map(
-        ({ role, content }) => ({
-          role,
-          content,
-        })
-      );
-  
-      const gptResponse = await sendMessageHistoryToGPT(
-        messageHistoryForGPT,
-      );
-  
-      const updatedChat = {
-        ...chats[chatIndex],
-        messages: updatedMessageHistory.concat(gptResponse.choices[0].message),
-      };
-      await updateChat(updatedChat);
-  
-      const updatedChats = await fetchChats();
-      setChats(updatedChats);
-  
+function UserMessage({
+  message,
+  selectedMessageId,
+  chats,
+  selectedChat,
+  session,
+  setChats,
+}) {
+  const [editMessageId, setEditMessageId] = useState(null);
+  const [editedMessage, setEditedMessage] = useState("");
+
+  const handleEditToggle = (messageId) => {
+    if (editMessageId === messageId) {
       setEditMessageId(null);
-      setEditedMessage("");
+    } else {
+      setEditMessageId(messageId);
+    }
+  };
+
+  const handleMessageEdit = async () => {
+    const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
+    const messageIndex = chats[chatIndex].messages.findIndex(
+      (msg) => msg._id === editMessageId
+    );
+
+    const updatedMessageHistory = chats[chatIndex].messages.slice(
+      0,
+      messageIndex
+    );
+
+    updatedMessageHistory.push({
+      role: "user",
+      content: editedMessage,
+    });
+
+    const messageHistoryForGPT = updatedMessageHistory.map(
+      ({ role, content }) => ({
+        role,
+        content,
+      })
+    );
+    console.log(messageHistoryForGPT);
+    const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
+    const updatedChatData = {
+      ...chats[chatIndex],
+      messages: gptResponse,
     };
-  
-    const handleCancel = () => {
-      setEditMessageId(null);
-      setEditedMessage("");
-    };
+    await updateChat(selectedChat, updatedChatData);
+
+    const updatedChats = await fetchChats();
+    setChats(updatedChats);
+
+    setEditMessageId(null);
+    setEditedMessage("");
+  };
+
+  const handleCancel = () => {
+    setEditMessageId(null);
+    setEditedMessage("");
+  };
   return (
     <div className="w-full min-h-[20px] flex flex-col items-start gap-4 text-gray-800">
       {editMessageId === message["_id"] ? (
@@ -77,10 +81,7 @@ function UserMessage({ message, selectedMessageId, chats, selectedChat, session,
                 Save &amp; Submit
               </div>
             </button>
-            <button
-              className="btn relative btn-neutral"
-              onClick={handleCancel}
-            >
+            <button className="btn relative btn-neutral" onClick={handleCancel}>
               <div className="flex w-full items-center justify-center gap-2">
                 Cancel
               </div>
@@ -89,10 +90,10 @@ function UserMessage({ message, selectedMessageId, chats, selectedChat, session,
         </div>
       ) : (
         <div className="relative w-full">
-        <p className="break-words px-[1.6rem] md:px-0">{message.content}</p>
-        {selectedMessageId === message["_id"] && (
+          <p className="break-words px-[1.6rem] md:px-0">{message.content}</p>
+          {selectedMessageId === message["_id"] && (
             <div className="text-gray-400 flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible">
-            <button
+              <button
                 className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"
                 onClick={() => handleEditToggle(message["_id"])}
               >

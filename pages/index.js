@@ -36,7 +36,7 @@ export default function Home() {
   }, [status, router, chats.length]);
 
   const shouldFetchChatContent = useMemo(() => {
-    const chat = chats.find((chat) => chat.id === selectedChat);
+    const chat = chats.find((chat) => chat._id === selectedChat);
     return !chat || (chat && !chat.messages);
   }, [selectedChat]);
 
@@ -49,11 +49,9 @@ export default function Home() {
           if (response.data) {
             const updatedChats = [...chats];
             const selectedIndex = updatedChats.findIndex(
-              (chat) => chat.id === selectedChat
+              (chat) => chat._id === selectedChat
             );
-            console.log(response.data)
             updatedChats[selectedIndex] = response.data;
-            console.log("uc",updatedChats)
             setChats(updatedChats);
           }
         } catch (error) {
@@ -101,7 +99,6 @@ export default function Home() {
                 setSelectedChat={setSelectedChat}
                 selectedChatLoading={selectedChatLoading}
                 setSelectedChatLoading={setSelectedChatLoading}
-                
               />
             </div>
           )}

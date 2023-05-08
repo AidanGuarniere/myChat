@@ -22,11 +22,6 @@ const chatSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   title: {
     type: String,
     required: true,

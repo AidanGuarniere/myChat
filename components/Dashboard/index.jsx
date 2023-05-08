@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { deleteChats } from "../../utils/chatUtils";
+import resetError from "../../hooks/useResetError";
 import ChatActions from "./ChatActions";
 import UserActions from "./UserActions";
 
@@ -7,6 +8,7 @@ function Dashboard({
   session,
   chats,
   setChats,
+  error,
   setError,
   selectedChat,
   setSelectedChat,
@@ -18,7 +20,7 @@ function Dashboard({
   const handleDeleteChats = async (id) => {
     await deleteChats(id);
     if (id && chats.length > 1) {
-      const updatedChats = chats.filter((chat) => chat.id !== id);
+      const updatedChats = chats.filter((chat) => chat._id !== id);
       setChats(updatedChats);
     } else {
       setChats([]);
@@ -33,7 +35,7 @@ function Dashboard({
 
   useEffect(() => {
     if (selectedChat) {
-      const chatIndex = chats.findIndex((chat) => chat.id === selectedChat);
+      const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
       const selectedChatTitle = { ...chats[chatIndex] };
       setChatTitle(selectedChatTitle.title);
     }
@@ -63,33 +65,33 @@ function Dashboard({
           </div>
         </div>
       </div>
-          <div className="md:hidden w-full flex justify-between items-center bg-gray-800 text-gray-200 p-2.5">
-            <button
-              onClick={toggleActions}
-              className="inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
-            >
-              <svg
-                stroke="currentColor"
-                fill="none"
-                strokeWidth="1.5"
-                viewBox="0 0 24 24"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-8 w-8"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-              </svg>
-            </button>
-            <h1 className="text-base font-normal whitespace-nowrap overflow-hidden relative mx-8 w-screen text-center">
-              {chatTitle && chatTitle}
-              <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"></div>
-            </h1>
-          </div>
+      <div className="md:hidden w-full flex justify-between items-center bg-gray-800 text-gray-200 p-2.5">
+        <button
+          onClick={toggleActions}
+          className="inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
+        >
+          <svg
+            stroke="currentColor"
+            fill="none"
+            strokeWidth="1.5"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-8 w-8"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <h1 className="text-base font-normal whitespace-nowrap overflow-hidden relative mx-8 w-screen text-center">
+          {chatTitle && chatTitle}
+          <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"></div>
+        </h1>
+      </div>
 
       <div
         className={`${

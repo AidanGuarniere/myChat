@@ -7,7 +7,8 @@ export const sendMessageHistoryToGPT = async (messageHistory) => {
       messages: messageHistory,
     });
     if (response.status === 200) {
-      return response.data.completion;
+      messageHistory.push(response.data.completion.choices[0].message);
+      return messageHistory;
     } else {
       throw new Error("Error while sending message history to GPT");
     }

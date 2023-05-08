@@ -13,7 +13,7 @@ export default function ChatItem({
   setError,
   handleDeleteChats,
 }) {
-  const isSelectedChat = selectedChat === chat.id;
+  const isSelectedChat = selectedChat === chat._id;
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [titleInputValue, setTitleInputValue] = useState("");
 
@@ -22,13 +22,13 @@ export default function ChatItem({
   return (
     <a
       className={`text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
-        selectedChat === chat.id
+        selectedChat === chat._id
           ? "bg-gray-800"
           : "bg-gray-1000 hover:bg-[rgba(52,53,65,.5)]"
       } group animate-flash `}
       key={index}
       onClick={() => {
-        setSelectedChat(chat.id);
+        setSelectedChat(chat._id);
       }}
     >
       <ChatItemIcon />

@@ -31,16 +31,15 @@ export default function EditDeleteButtons({
   const handleEditChatTitle = async (id, title) => {
     if (id && title) {
       try {
-        await updateChat({ id, updatedChatData: { title } });
+        await updateChat(id, { title });
         const updatedChat = {
           userId: session.user.id,
           title: title,
-          id: id,
           messages: chat.messages,
         };
         setChats((prevChats) =>
           prevChats.map((chat) =>
-            chat.id === selectedChat ? updatedChat : chat
+            chat._id === selectedChat ? updatedChat : chat
           )
         );
       } catch (error) {

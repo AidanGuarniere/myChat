@@ -25,8 +25,8 @@ export default async function handler(req, res) {
       break;
     case "POST":
       try {
-        const { id, title, messages } = req.body;
-        const newChat = await Chat.create({ userId, id, title, messages });
+        const { title, messages } = req.body;
+        const newChat = await Chat.create({ userId, title, messages });
         return res.status(201).json(newChat);
       } catch (error) {
         console.error(error);
