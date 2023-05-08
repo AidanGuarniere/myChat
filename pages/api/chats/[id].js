@@ -20,7 +20,10 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const selectedChat = await Chat.findOne({ id: selectedChatId, userId });
+        const selectedChat = await Chat.findOne({
+          _id: selectedChatId,
+          userId,
+        });
         if (!selectedChat) {
           return res.status(404).json({ error: "Chat not found" });
         }
@@ -39,7 +42,7 @@ export default async function handler(req, res) {
           if (messages) updateData.messages = messages;
 
           const updatedChat = await Chat.findOneAndUpdate(
-            { id: selectedChatId, userId },
+            { _id: selectedChatId, userId },
             updateData,
             { new: true }
           );
@@ -61,7 +64,7 @@ export default async function handler(req, res) {
       try {
         if (selectedChatId) {
           const deletedChat = await Chat.deleteOne({
-            id: selectedChatId,
+            _id: selectedChatId,
             userId,
           });
           res.status(200).json(deletedChat);

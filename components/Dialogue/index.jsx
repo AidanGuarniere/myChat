@@ -21,12 +21,12 @@ function Dialogue({
   const [scrollHeight, setScrollHeight] = useState();
   const [prevSelectedChat, setPrevSelectedChat] = useState(null);
   const [prevMessageCount, setPrevMessageCount] = useState(0);
-  const selectedChatIndex = chats.findIndex((chat) => chat.id === selectedChat);
+  const selectedChatIndex = chats.findIndex((chat) => chat._id === selectedChat);
 
   useEffect(() => {
     if (selectedChatLoading === false && selectedChat !== null) {
       const currentChat =
-        chats[chats.findIndex((chat) => chat.id === selectedChat)];
+        chats[chats.findIndex((chat) => chat._id === selectedChat)];
       if (
         chatRef.current &&
         (prevSelectedChat !== selectedChat ||
@@ -49,7 +49,7 @@ function Dialogue({
       <div className="chat h-full w-full overflow-y-scroll m-0 p-0 flex">
         {error ? (
           <ErrorDisplay error={error} />
-        ) : selectedChat !== null && chats[selectedChatIndex].messages ? (
+        ) : selectedChat !== null && chats[selectedChatIndex]?.messages ? (
           <div
             className="bg-white overflow-y-scroll p-0 w-full h-full "
             ref={chatRef}

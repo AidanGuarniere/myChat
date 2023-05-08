@@ -21,8 +21,6 @@ const AuthForm = () => {
     } else {
       if (!openAIAPIKey.match(/^sk-[\w]+$/)) {
         alert("Invalid API key format.");
-        setUsername("");
-        setPassword("");
         setOpenAIAPIKey("");
         return;
       }

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       // Check if the user already exists
       const existingUser = await User.findOne({ username });
       if (existingUser) {
-        return res.status(400).json({ error: "Username is already taken." });
+        return res.status(400).json({ error: "Signup failed." });
       }
 
       // Create a new user
@@ -38,10 +38,7 @@ export default async function handler(req, res) {
         },
       });
     } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .json({ error: "An error occurred while creating the user." });
+      res.status(400).json({ error: "Signup failed." });
     }
   } else {
     res.status(405).json({ error: "Method not allowed." });

@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
-const { decrypt } = require('../../../utils/crypto');
 import bcrypt from "bcrypt";
 
 const events = {
@@ -29,14 +29,27 @@ async function validateUser(username, password) {
 
 const clientPromise = (async () => {
   const connection = await dbConnect();
-  while (!connection?.s?.client) {
+  let tries = 0;
+  while (!connection?.s?.client && tries < 10) {
     await new Promise((resolve) => setTimeout(resolve, 100));
+    tries++;
   }
   return connection.s.client;
 })();
 
 const authOptions = {
   providers: [
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    //   authorization: {
+    //     params: {
+    //       prompt: "consent",
+    //       access_type: "offline",
+    //       response_type: "code",
+    //     },
+    //   },
+    // }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -53,7 +66,6 @@ const authOptions = {
           const formattedUser = {
             id: user._id.toString(),
             username: user.username,
-            apiKey: user.apiKey,
           };
           return Promise.resolve(formattedUser);
         } else {
@@ -77,7 +89,10 @@ const authOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn(user, account, profile) {
+    async signIn({ account, profile }) {
+      // if (account.provider === "google") {
+      //   return profile.email_verified;
+      // }
       return true;
     },
     async jwt({ token, trigger, user, session }) {
@@ -85,11 +100,7 @@ const authOptions = {
         token.user = {
           id: user.id,
           username: user.username,
-          apiKey: user.apiKey,
         };
-      }
-      if (trigger === "update" && session.apiKey) {
-        token.user.apiKey = session.apiKey;
       }
       return token;
     },

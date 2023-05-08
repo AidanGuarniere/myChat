@@ -186,24 +186,28 @@ a {
 
 .loading-icon-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   height: 100%;
 }
-
-.loading-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 50%;
-  border: 0.25rem solid rgb(252, 250, 250);
-  border-top-color: #3498db;
-  animation: spin 1s infinite linear;
+@keyframes loading-ellipsis {
+  0% {
+    content: ".  ";
+  }
+  33% {
+    content: ".. ";
+  }
+  66% {
+    content: "...";
+  }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.loading-icon::after {
+  width: 1em;
+  display: flex;
+  content: ".";
+  animation: loading-ellipsis 1s steps(1, end) infinite;
+  font-size: 1.5rem;
 }
 
 .prose :where(p):not(:where([class~="not-prose"] *)) {
@@ -262,10 +266,10 @@ pre.code-container {
 .btn-primary {
   --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
-  background-color: rgba(16, 163, 127,1);
+  background-color: rgba(16, 163, 127, 1);
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
 
 :hover.btn-primary {
-  background-color: rgb(15, 138, 107,var(--tw-text-opacity));
+  background-color: rgb(15, 138, 107, var(--tw-text-opacity));
 }

@@ -28,9 +28,9 @@ export const fetchChatTitles = async () => {
 };
 
 // Fetches a specific chat by id
-export const fetchChatById = async (id) => {
+export const fetchChatById = async (chatId) => {
   try {
-    const response = await axios.get(`/api/chats/${id}`);
+    const response = await axios.get(`/api/chats/${chatId}`);
     if (response.data) {
       return response.data;
     }
@@ -42,10 +42,10 @@ export const fetchChatById = async (id) => {
 };
 
 // Deletes all chats or a specific chat by id
-export const deleteChats = async (id) => {
+export const deleteChats = async (chatId) => {
   try {
-    if (id) {
-      await axios.delete(`/api/chats/${id}`);
+    if (chatId) {
+      await axios.delete(`/api/chats/${chatId}`);
     } else {
       await axios.delete("/api/chats");
     }
@@ -67,10 +67,11 @@ export const createChat = async (chatData) => {
 };
 
 // Updates an existing chat with the given data
-export const updateChat = async (id, updatedChatData) => {
+export const updateChat = async (chatId, updatedChatData) => {
+  console.log(chatId, updatedChatData);
   try {
-    if (id) {
-      const response = await axios.put(`/api/chats/${id}`, updatedChatData);
+    if (chatId) {
+      const response = await axios.put(`/api/chats/${chatId}`, updatedChatData);
       return response.data;
     } else {
       throw new Error("ID is required");
