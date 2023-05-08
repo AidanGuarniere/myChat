@@ -18,7 +18,7 @@ function ChatActions({
         <div className="flex flex-col gap-2 text-gray-100 text-sm my-2">
         {[...chats].reverse().map((chat, index) => (
             <ChatItem
-              key={`${chat.id}${index}`}
+              key={`${chat._id}${index}`}
               session={session}
               chat={chat}
               index={index}

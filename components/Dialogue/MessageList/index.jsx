@@ -5,16 +5,12 @@ function MessageList({ chats, selectedChat, session, setChats }) {
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     const selectedChatIndex = chats.findIndex(
-      (chat) => chat.id === selectedChat
+      (chat) => chat._id === selectedChat
     );
-    console.log(selectedChatIndex)
     const currentMessages = chats[selectedChatIndex]?.messages;
     if (messages !== currentMessages) {
       setMessages(currentMessages);
     }
-    // console.log(selectedChat)
-    // console.log("m", messages);
-    // console.log("cm", currentMessages);
   }, [selectedChat, chats]);
 
   return (
