@@ -1,5 +1,3 @@
-I have added instructions on how to deploy your MyGPT Clone to Vercel in the README.md file.
-
 # MyGPT: A ChatGPT Clone
 
 MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. It provides a user-friendly interface for interacting with GPT-like language models. This project is not directly affiliated with OpenAI.

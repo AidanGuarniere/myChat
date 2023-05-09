@@ -89,9 +89,9 @@ function UserMessage({
         </div>
       ) : (
         <div className="relative w-full">
-          <p className="whitespace-pre-wrap px-[1.6rem] md:px-0">{message.content}</p>
+          <p className="dark:text-gray-100 whitespace-pre-wrap px-[1.6rem] md:px-0">{message.content}</p>
           {selectedMessageId === message["_id"] && (
-            <div className="text-gray-400 flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible">
+            <div className="flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible">
               <button
                 className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"
                 onClick={() => handleEditToggle(message["_id"])}

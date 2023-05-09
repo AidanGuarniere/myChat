@@ -66,6 +66,7 @@ function Dashboard({
                 handleDeleteChats={handleDeleteChats}
               />
               <UserActions
+                session={session}
                 chats={chats}
                 setError={setError}
                 handleDeleteChats={handleDeleteChats}

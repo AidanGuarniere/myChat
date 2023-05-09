@@ -98,6 +98,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.dark body, .dark html{
+  --tw-bg-opacity: 1;
+  background-color: rgba(52,53,65,var(--tw-bg-opacity));
+}
 a {
   color: inherit;
   text-decoration: none;
@@ -261,6 +265,15 @@ pre.code-container {
   color: rgba(64, 65, 79, var(--tw-text-opacity));
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.dark .btn-neutral {
+  --tw-border-opacity: 1;
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  background-color: rgba(52,53,65,var(--tw-bg-opacity));
+  border-color: rgba(86,88,105,var(--tw-border-opacity));
+  color: rgba(217,217,227,var(--tw-text-opacity))
 }
 
 .btn-primary {
