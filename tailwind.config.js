@@ -8,7 +8,7 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -17,9 +17,9 @@ module.exports = {
           1000: "rgba(32, 33, 35, 1)",
           50: "rgba(247,247,248,1)",
         },
-        green:{
-          200:" rgba(16, 163, 127,1)",
-        }
+        green: {
+          200: " rgba(16, 163, 127,1)",
+        },
       },
       maxHeight: {
         120: "60vh",
@@ -46,8 +46,10 @@ module.exports = {
       backgroundImage: {
         "vert-light-gradient":
           "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
+        "vert-dark-gradient":
+          "linear-gradient(180deg,rgba(53,55,64,0),#353740 58.85%)",
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [require("@tailwindcss/typography")],
 };

@@ -1,8 +1,6 @@
-I have added instructions on how to deploy your MyGPT Clone to Vercel in the README.md file.
-
 # MyGPT: A ChatGPT Clone
 
-MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. It provides a user-friendly interface for interacting with GPT-like language models. This project is not directly affiliated with OpenAI.
+MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI.
 
 ## Table of Contents
 
@@ -10,6 +8,7 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Encryption Setup](#encryption-setup)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
 - [License](#license)
@@ -17,7 +16,7 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
 ## Prerequisites
 
 - Node.js >= 14
-- An [OpenAI API Key](https://beta.openai.com/signup)
+- An [OpenAI API Key](https://platform.openai.com/account/api-keys)
 
 ## Technologies Used
 
@@ -26,7 +25,8 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
 - [Axios](https://github.com/axios/axios) - A popular library for making HTTP requests in JavaScript
 - [NextAuth.js](https://next-auth.js.org/) - A complete authentication solution for Next.js applications
 - [MongoDB](https://www.mongodb.com/) - A popular NoSQL database used for storing user information
-- [OpenAI GPT-like models](https://beta.openai.com/docs/models/overview) - Large language models developed by OpenAI
+- [OpenAI LLMs](https://platform.openai.com/docs/models/overview) - Large language models developed by OpenAI
+- [Crypto](https://nodejs.org/api/crypto.html) - A built-in Node.js module for handling cryptographic operations
 
 ## Installation
 
@@ -35,6 +35,8 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
    ```
    git clone https://github.com/your-username/mygpt.git
    ```
+
+   or get started using GitHub's template feature
 
 2. Navigate to the project directory:
 
@@ -60,9 +62,10 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
    NEXTAUTH_URL=http://localhost:3000
    MONGODB_URI=yourURI
    NEXTAUTH_SECRET=yourSecret
+   ENCRYPTION_KEY: a 32-digit hexadecimal string for AES-128 encryption (for users' API key)
    ```
 
-   Replace `yourURI` with your MongoDB connection string and `yourSecret` with a secure random string.
+   Replace `http://localhost:3000` with whatever port your application is running on, `yourURI` with your MongoDB connection string, and `yourSecret` with the secure random string you used in the `.env.local` file.
 
 ## Usage
 

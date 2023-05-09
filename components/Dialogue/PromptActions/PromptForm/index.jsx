@@ -17,8 +17,8 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
   return (
     <form
       className="stretch flex flex-col flex-grow mx-auto my-2 p-3 relative border border-black/10 
-                 bg-white rounded-md md:max-w-2xl lg:max-w-3xl  md:last:mb-6 
-                 w-4/5 dark:border-gray-900/50 dark:text-white dark:bg-gray-700 "
+                 bg-white rounded-md md:max-w-3xl lg:max-w-4xl  md:last:mb-6 
+                 w-[75.25%] dark:border-gray-900/50 dark:text-white dark:bg-[#444654] md:min-h-[1rem] xl:min-h-[3.45rem]"
       onSubmit={(e) => {
         handleSubmit(e);
         textareaRef.current.style.height = "auto";
@@ -56,7 +56,11 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
         type="submit"
         className={`absolute p-1 rounded-md bottom-3 sm:bottom-1.5 right-1 md:bottom-2.5 md:right-2 hover:bg-gray-100 
                     dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent 
-                    ${loading ? "loading-icon" : null} ${userText.length === 0 ? "text-gray-300" : "text-gray-500"}
+                    ${loading ? "loading-icon" : null} ${
+          userText.length === 0
+            ? "text-gray-300 dark:text-gray-500"
+            : "text-gray-500 dark:text-gray-100"
+        }
                    `}
         disabled={loading || userText.length === 0}
       >

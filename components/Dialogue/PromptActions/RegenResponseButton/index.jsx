@@ -12,7 +12,7 @@ function RegenButton({ handleRegen, loading, showRegen }) {
       >
         <button
           onClick={handleRegen}
-          className="btn relative btn-neutral border-0 md:border"
+          className="btn relative btn-neutral border-0 md:border dark:bg-gray-800 dark:text-gray-100"
           fdprocessedid="qe1rko"
           disabled={loading}
         >
