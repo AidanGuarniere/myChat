@@ -3,7 +3,7 @@ import React from "react";
 function NewChatButton({ setSelectedChat }) {
   return (
     <button
-      className="w-full flex md:mb-0 py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm  flex-shrink-0 border border-white/20 font-semibold text-sm"
+      className="dashboard-text w-full flex md:mb-0 p-[.775rem] items-center gap-3 rounded-[.425rem] hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer flex-shrink-0 border border-white/20"
       onClick={() => {
         setSelectedChat(null);
       }}
@@ -12,7 +12,7 @@ function NewChatButton({ setSelectedChat }) {
       <svg
         stroke="currentColor"
         fill="none"
-        strokeWidth="2"
+        strokeWidth="2.5"
         viewBox="0 0 24 24"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -30,5 +30,3 @@ function NewChatButton({ setSelectedChat }) {
 }
 
 export default NewChatButton;
-
-

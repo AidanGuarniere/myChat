@@ -50,31 +50,29 @@ function Dialogue({
   }, [chats, selectedChat, selectedChatLoading]);
 
   return (
-    <div className="md:pl-[289px] w-full h-screen p-0 m-0 overflow-x-hidden">
+    <div className="md:pl-[289px] w-full h-screen p-0 m-0 overflow-x-hidden bg-white dark:bg-gray-800">
       <div className="flex chat w-full h-full">
         {error ? (
           <ErrorDisplay error={error} />
         ) : selectedChat !== null && chats[selectedChatIndex]?.messages ? (
           <div
-            className="bg-white dark:bg-gray-800 overflow-y-scroll p-0 w-full h-full "
+            className=" overflow-y-scroll p-0 w-full h-full "
             ref={chatRef}
             key={selectedChat}
             onScroll={() => {
               setScrollHeight(chatRef.current.scrollTop);
             }}
           >
-            {selectedChatLoading === false && (
-              <MessageList
-                chats={chats}
-                selectedChat={selectedChat}
-                session={session}
-                setChats={setChats}
-              />
-            )}
+            <MessageList
+              chats={chats}
+              selectedChat={selectedChat}
+              session={session}
+              setChats={setChats}
+            />
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
           </div>
         ) : (
-          <h1 className="text-5xl font-semibold text-center text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow dark:bg-gray-800">
+          <h1 className="text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow ">
             MyGPT
           </h1>
         )}

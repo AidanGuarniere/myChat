@@ -82,7 +82,8 @@ function ApiKeyInput({ session, update, setError }) {
         <input
           ref={inputRef}
           type="text"
-          className="content h-5 w-full bg-transparent text-white border-none outline-none focus:outline-blue-600 border-[1.5px] mb-1 align-middle pb-1"
+          placeholder="Enter your new API key"
+          className="content h-5 w-full bg-transparent text-white border-none outline-none focus:outline-blue-600 border-[1.5px]  pb-1"
           value={apiKeyInputValue}
           autoFocus
           onChange={(e) => setApiKeyInputValue(e.target.value)}
@@ -93,11 +94,7 @@ function ApiKeyInput({ session, update, setError }) {
           className="text-left whitespace-normal break-words overflow-y-scroll"
           style={{ pointerEvents: "none" }}
         >
-          API Key:{" "}
-          {`${session.user.apiKey.slice(
-            0,
-            3
-          )} . . . ${session.user.apiKey.slice(-4)}`}
+          Edit your API key
         </span>
       )}
       {showApiKeyInput && (

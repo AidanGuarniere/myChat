@@ -138,7 +138,7 @@ function PromptActions({
         const messageData = updatedChat.messages
           .slice(0, -1)
           .map((message) => ({
-            role: message.role,
+            role: message.role, 
             content: message.content,
           }));
         const gptResponse = await sendMessageHistoryToGPT(messageData);
@@ -156,7 +156,7 @@ function PromptActions({
   };
 
   return (
-    <div className="md:pl-[289px] absolute bottom-0 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8">
+    <div className="md:pl-[289px] absolute bottom-0 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}
@@ -168,8 +168,8 @@ function PromptActions({
         handleSubmit={handleSubmit}
         loading={loading}
       />
-      <div className="min-h-[6rem] md:h-10 md:min-h-0 w-4/5 flex justify-center items-start md:items-center mx-auto lg:pb-4">
-        <span className="text-xs font-semibold text-gray-600 dark:text-gray-100 text-center">
+      <div className="h-20 sm:h-12 w-4/5 flex justify-center items-start sm:items-center mx-auto">
+        <span className="text-[.625rem] sm:text-[.75rem] text-gray-600 dark:text-gray-300 text-center">
           MyGPT is not affiliated with OpenAI. MyGPT is an open source project
           modeled after ChatGPT. MyGPT may produce inaccurate information.
         </span>

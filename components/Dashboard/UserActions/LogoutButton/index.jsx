@@ -2,6 +2,7 @@ import React from "react";
 import { signOut } from "next-auth/react";
 function LogoutButton() {
   const handleLogout = () => {
+    localStorage.removeItem("darkMode")
     signOut();
   };
   return (
