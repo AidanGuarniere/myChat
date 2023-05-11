@@ -23,7 +23,10 @@ const fetchDataFromAPI = async (messages, apiKey) => {
   }
 };
 
-dbConnect();
+const handleRequest = async (user, messages) => {
+  const decryptedApiKey = await decrypt(user.apiKey);
+  return fetchDataFromAPI(messages, decryptedApiKey);
+};
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -31,6 +34,8 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
+  await dbConnect();
+  
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
@@ -38,11 +43,9 @@ export default async function handler(req, res) {
   }
 
   const user = await User.findById(session.user.id);
-  const decryptedApiKey = await decrypt(user.apiKey);
-
   const { messages } = req.body;
   try {
-    const completion = await fetchDataFromAPI(messages, decryptedApiKey);
+    const completion = await handleRequest(user, messages);
     res.status(200).json({ completion });
   } catch (error) {
     const statusCode = error.status || 500;

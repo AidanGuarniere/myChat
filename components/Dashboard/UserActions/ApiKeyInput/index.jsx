@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { encrypt } from "../../../../utils/crypto";
+import ConfirmAction from "../../ConfirmAction";
 
 function ApiKeyInput({ session, update, setError }) {
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
@@ -12,21 +14,16 @@ function ApiKeyInput({ session, update, setError }) {
     }
 
     try {
+      const newApiKey = encrypt(apiKeyInputValue);
       const response = await fetch("/api/users/updateApiKey", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          newApiKey: apiKeyInputValue,
+          newApiKey: newApiKey,
         }),
       });
-
-      if (response.ok) {
-        const updatedUser = await response.json();
-        await update({
-          apiKey: updatedUser.apiKey,
-        });
-        setShowApiKeyInput(false);
-      } 
+      setShowApiKeyInput(false);
+      setApiKeyInputValue("");
     } catch (error) {
       setError("Error updating API key:", error);
     }
@@ -34,9 +31,9 @@ function ApiKeyInput({ session, update, setError }) {
 
   const handleApiKeySubmitClick = (e) => {
     const isEditButton = e.target.id === "show-api-key-input";
-    const isSubmitButton = e.target.id === "submit-api-key-edit";
+    const isConfirmActionButton = e.target.id === "confirm-action-button";
 
-    if (!isEditButton && !isSubmitButton) {
+    if (!isEditButton && !isConfirmActionButton) {
       setShowApiKeyInput(false);
     }
   };
@@ -47,9 +44,7 @@ function ApiKeyInput({ session, update, setError }) {
     } else {
       document.removeEventListener("click", handleApiKeySubmitClick);
     }
-
     return () => {
-      // document.removeEventListener("click", handleDocumentClick);
       document.removeEventListener("click", handleApiKeySubmitClick);
     };
   }, [showApiKeyInput]);
@@ -72,12 +67,16 @@ function ApiKeyInput({ session, update, setError }) {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="h-4 w-4"
+        className="h-5 w-5"
         height="1em"
         width="1em"
       >
-        <path d="M7 7a5 5 0 0 1 9.9 1H23v4h-1.9c-.6 1.5-1.7 2.8-3.2 3.5-1.4.7-3.1 1.1-4.9 1-3.5-.3-6.3-3.1-6.7-6.6V7zm5 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+        <path d="M5 5a4 4 0 1 1 0 8 4 4 0 0 1 0 -8Z M10 9h9"></path>
+        <path d="M13 9v4"></path>
+        <path d="M16 9v2"></path>
+        <path d="M19 9v4"></path>
       </svg>
+
       {showApiKeyInput ? (
         <input
           ref={inputRef}
@@ -98,56 +97,14 @@ function ApiKeyInput({ session, update, setError }) {
         </span>
       )}
       {showApiKeyInput && (
-        <div
-          className="absolute flex right-1 z-10 text-gray-300 visible"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            id="submit-api-key-edit"
-            className="p-1 hover:text-white"
-            onClick={() => {
-              if (session.user.apiKey !== apiKeyInputValue) {
-                handleEditApiKey(apiKeyInputValue);
-              }
-              setShowApiKeyInput(false);
-            }}
-          >
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </button>
-          <button
-            className="p-1 hover:text-white"
-            onClick={() => setShowApiKeyInput(false)}
-          >
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
+        <ConfirmAction
+          confirmAction={() => {
+            console.log(apiKeyInputValue);
+            handleEditApiKey(apiKeyInputValue);
+            setShowApiKeyInput(false);
+          }}
+          denyAction={() => setShowApiKeyInput(false)}
+        />
       )}
     </a>
   );

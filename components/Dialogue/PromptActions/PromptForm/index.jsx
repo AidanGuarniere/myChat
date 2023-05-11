@@ -56,8 +56,8 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
                     dark:hover:text-gray-300 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent 
                     ${loading ? "loading-icon" : null} ${
             userText.length === 0
-              ? "text-gray-400 dark:text-gray-600"
-              : "text-gray-500 dark:text-gray-300"
+              ? "text-gray-300 dark:text-gray-600"
+              : "text-gray-500"
           }
                    `}
           disabled={loading || userText.length === 0}
