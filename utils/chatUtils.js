@@ -16,7 +16,9 @@ export const fetchChats = async () => {
 
 export const fetchChatTitles = async () => {
   try {
-    const response = await axios.get("/api/chats/titles");
+    const response = await axios.get("/api/chats", {
+      params: { fields: "id,title" },
+    });
     if (response.data) {
       return response.data;
     }
@@ -68,7 +70,6 @@ export const createChat = async (chatData) => {
 
 // Updates an existing chat with the given data
 export const updateChat = async (chatId, updatedChatData) => {
-  console.log(chatId, updatedChatData);
   try {
     if (chatId) {
       const response = await axios.put(`/api/chats/${chatId}`, updatedChatData);

@@ -6,7 +6,6 @@ const useDarkMode = () => {
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode");
-    console.log(savedDarkMode);
     setIsDarkMode(savedDarkMode === "true");
   }, []);
 

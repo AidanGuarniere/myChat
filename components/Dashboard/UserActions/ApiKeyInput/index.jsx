@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { encrypt } from "../../../../utils/crypto";
 import ConfirmAction from "../../ConfirmAction";
+import { updateUser } from "../../../../utils/userUtils";
 
 function ApiKeyInput({ session, update, setError }) {
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
@@ -12,22 +12,17 @@ function ApiKeyInput({ session, update, setError }) {
       setApiKeyInputValue("");
       return;
     }
-
+  
     try {
-      const newApiKey = encrypt(apiKeyInputValue);
-      const response = await fetch("/api/users/updateApiKey", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          newApiKey: newApiKey,
-        }),
-      });
+      await updateUser({ apiKey: apiKeyInputValue });
       setShowApiKeyInput(false);
       setApiKeyInputValue("");
     } catch (error) {
       setError("Error updating API key:", error);
     }
   };
+  
+  
 
   const handleApiKeySubmitClick = (e) => {
     const isEditButton = e.target.id === "show-api-key-input";
@@ -99,7 +94,6 @@ function ApiKeyInput({ session, update, setError }) {
       {showApiKeyInput && (
         <ConfirmAction
           confirmAction={() => {
-            console.log(apiKeyInputValue);
             handleEditApiKey(apiKeyInputValue);
             setShowApiKeyInput(false);
           }}

@@ -1,5 +1,5 @@
+import { dbConnect, dbDisconnect } from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
-import dbConnect from "../../../utils/dbConnect";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import { decrypt } from "../../../utils/crypto";
@@ -35,20 +35,23 @@ export default async function handler(req, res) {
   }
 
   await dbConnect();
-  
+
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const user = await User.findById(session.user.id);
-  const { messages } = req.body;
   try {
+    const user = await User.findById(session.user.id);
+    const { messages } = req.body;
     const completion = await handleRequest(user, messages);
     res.status(200).json({ completion });
   } catch (error) {
     const statusCode = error.status || 500;
     res.status(statusCode).json({ error: error.message });
-  }
+  } 
+  // finally {
+  //   await dbDisconnect();
+  // }
 }
