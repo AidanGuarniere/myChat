@@ -1,7 +1,7 @@
-import React, {useState, useRef} from 'react'
-import ChatItemIcon from './ChatItemIcon';
-import TitleInput from './TitleInput';
-import EditDeleteButtons from './EditDeleteButtons';
+import React, { useState, useRef } from "react";
+import ChatItemIcon from "./ChatItemIcon";
+import TitleInput from "./TitleInput";
+import EditDeleteButtons from "./EditDeleteButtons";
 
 export default function ChatItem({
   session,
@@ -21,7 +21,7 @@ export default function ChatItem({
 
   return (
     <a
-      className={`text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
+      className={`text-left flex p-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
         selectedChat === chat._id
           ? "bg-gray-800"
           : "bg-gray-1000 hover:bg-[rgba(52,53,65,.5)]"
@@ -32,7 +32,7 @@ export default function ChatItem({
       }}
     >
       <ChatItemIcon />
-      <span className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
+      <span className="flex-1 text-ellipsis overflow-hidden break-all relative">
         {isSelectedChat ? (
           showTitleInput ? (
             <TitleInput
@@ -42,20 +42,20 @@ export default function ChatItem({
             />
           ) : (
             <>
-              <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800" />
+              <p className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800" />
               {chat.title}
             </>
           )
         ) : (
           <>
-            <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-1000 group-hover:from-[#2A2B32]" />
+            <p className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-1000 group-hover:from-[#2A2B32]" />
             {chat.title}
           </>
         )}
       </span>
       {isSelectedChat && (
         <EditDeleteButtons
-        session={session}
+          session={session}
           showTitleInput={showTitleInput}
           selectedChat={selectedChat}
           chat={chat}

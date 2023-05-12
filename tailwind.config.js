@@ -13,8 +13,12 @@ module.exports = {
     extend: {
       colors: {
         gray: {
-          800: "rgba(52,53,65,1)",
           1000: "rgba(32, 33, 35, 1)",
+          800: "rgba(52,53,65,1)",
+          700:"rgba(64,65,79,1)",
+          600: "rgba(86,88,105,1)",
+          500: "rgb(142,142,160,1)",
+          400: "rgb(172,172,190,1)",
           50: "rgba(247,247,248,1)",
         },
         green: {
@@ -48,6 +52,9 @@ module.exports = {
           "linear-gradient(180deg,hsla(0,0%,100%,0) 13.94%,#fff 54.73%)",
         "vert-dark-gradient":
           "linear-gradient(180deg,rgba(53,55,64,0),#353740 58.85%)",
+      },
+      fontWeight: {
+        semimedium: "450",
       },
     },
   },

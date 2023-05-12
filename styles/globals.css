@@ -4,9 +4,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --font-mono: /* Söhne */ ui-sans-serif, system-ui, -apple-system, Segoe UI,
+    Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -98,9 +98,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-.dark body, .dark html{
+.dark body,
+.dark html {
   --tw-bg-opacity: 1;
-  background-color: rgba(52,53,65,var(--tw-bg-opacity));
+  background-color: rgba(52, 53, 65, var(--tw-bg-opacity));
 }
 a {
   color: inherit;
@@ -171,6 +172,7 @@ a {
   height: 24px;
   overflow-y: hidden;
 }
+
 .chat {
   z-index: 99;
 }
@@ -271,9 +273,9 @@ pre.code-container {
   --tw-border-opacity: 1;
   --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
-  background-color: rgba(52,53,65,var(--tw-bg-opacity));
-  border-color: rgba(86,88,105,var(--tw-border-opacity));
-  color: rgba(217,217,227,var(--tw-text-opacity))
+  background-color: rgba(52, 53, 65, var(--tw-bg-opacity));
+  border-color: rgba(86, 88, 105, var(--tw-border-opacity));
+  color: rgba(217, 217, 227, var(--tw-text-opacity));
 }
 
 .btn-primary {
@@ -312,7 +314,6 @@ pre.code-container {
 .closeSidebar {
   animation: closeSidebar 0.2s forwards;
 }
-
 
 @keyframes fadeIn {
   0% {

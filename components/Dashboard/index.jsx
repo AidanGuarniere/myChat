@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { deleteChats } from "../../utils/chatUtils";
-import resetError from "../../hooks/useResetError";
 import ChatActions from "./ChatActions";
 import UserActions from "./UserActions";
 
@@ -52,10 +51,10 @@ function Dashboard({
 
   return (
     <>
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[289px] md:flex-col bg-gray-1000 dark z-50">
+      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[289px] max-w-xs md:flex-col bg-gray-1000 dark z-50">
         <div className="flex md:w-full h-full min-h-0 flex-col">
           <div className="scrollbar-trigger flex md:w-full h-full w-full flex-1 items-start border-white/20">
-            <nav className="flex md:w-full h-full flex-1 flex-col space-y-1 p-2">
+            <nav className="flex md:w-full h-full flex-1 flex-col space-y-1 p-[.55rem] text-[.975rem] font-normal">
               <ChatActions
                 session={session}
                 chats={chats}
@@ -75,10 +74,10 @@ function Dashboard({
           </div>
         </div>
       </div>
-      <div className="md:hidden w-full flex justify-between items-center bg-gray-800 text-gray-200 p-2.5">
+      <div className="md:hidden w-full flex items-center bg-gray-800 text-gray-200 p-[.625rem] border-b border-white/20 ">
         <button
           onClick={toggleSidebar}
-          className="inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
+          className="absolute inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
         >
           <svg
             stroke="currentColor"
@@ -87,9 +86,7 @@ function Dashboard({
             viewBox="0 0 24 24"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-8 w-8"
-            height="1em"
-            width="1em"
+            className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
           >
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -97,8 +94,8 @@ function Dashboard({
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <h1 className="text-base font-normal whitespace-nowrap overflow-hidden relative mx-8 w-screen text-center">
-          {chatTitle && chatTitle}
+        <h1 className="text-base whitespace-nowrap overflow-hidden relative w-full text-center ">
+          {chatTitle ? chatTitle : "New chat"}
           <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"></div>
         </h1>
       </div>
@@ -114,7 +111,7 @@ function Dashboard({
         ></div>
 
         <aside
-          className={`fixed top-0 left-0 bottom-0 w-[82%] bg-gray-1000 dark z-50 p-2 overflow-y-auto ${
+          className={`fixed top-0 left-0 bottom-0 w-[82%] max-w-xs bg-gray-1000 dark z-50 p-2 overflow-y-auto ${
             closeSidebar ? "openSidebar" : "closeSidebar"
           }`}
         >
@@ -127,6 +124,7 @@ function Dashboard({
             handleDeleteChats={handleDeleteChats}
           />{" "}
           <UserActions
+            session={session}
             chats={chats}
             setError={setError}
             handleDeleteChats={handleDeleteChats}
@@ -135,7 +133,7 @@ function Dashboard({
         <div
           className={`${
             closeSidebar ? "absolute" : "hidden"
-          } top-0 right-4 pt-2 opacity-100`}
+          } top-0 left-80 pt-2 opacity-100`}
         >
           <button
             type="button"
@@ -146,11 +144,11 @@ function Dashboard({
             <svg
               stroke="currentColor"
               fill="none"
-              strokeWidth="1.5"
+              strokeWidth="1.25"
               viewBox="0 0 24 24"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-6 w-6 text-white"
+              className="h-4 w-4 text-white"
               height="1em"
               width="1em"
               xmlns="http://www.w3.org/2000/svg"

@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import dbConnect from "../../../utils/dbConnect";
+import {dbConnect} from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
 import bcrypt from "bcrypt";
 
@@ -20,7 +20,6 @@ async function validateUser(username, password) {
   const user = await User.findOne({ username });
 
   if (user && (await comparePasswords(password, user.password))) {
-    // Decrypt the API key before returning the user object
     return user;
   }
 
@@ -28,14 +27,15 @@ async function validateUser(username, password) {
 }
 
 const clientPromise = (async () => {
-  const connection = await dbConnect();
+  const mongooseInstance = await dbConnect();
   let tries = 0;
-  while (!connection?.s?.client && tries < 10) {
+  while (!mongooseInstance?.connection?.client && tries < 10) {
     await new Promise((resolve) => setTimeout(resolve, 100));
     tries++;
   }
-  return connection.s.client;
+  return mongooseInstance.connection.client;
 })();
+
 
 const authOptions = {
   providers: [

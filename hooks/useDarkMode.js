@@ -15,11 +15,11 @@ const useDarkMode = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("darkMode", isDarkMode);
   }, [isDarkMode]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
+    localStorage.setItem("darkMode", !isDarkMode);
   };
 
   return { isDarkMode, toggleDarkMode };

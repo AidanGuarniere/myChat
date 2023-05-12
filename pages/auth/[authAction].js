@@ -35,15 +35,12 @@ const AuthForm = () => {
 
   // Render the appropriate form based on the action
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-200">
-      <h1 className="text-3xl mb-4 font-bold absolute top-[25%]">
-        Welcome to myGPT
-      </h1>
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 text-center p-3">
       <form
         onSubmit={handleSubmit}
-        className="absolute top-[32.5%] bg-gray-100 p-6 w-5/6 md:w-1/2 xl:w-1/3 mx-auto rounded-lg"
+        className="z-10 bg-gray-100 bg-opacity-90 px-6 py-4 w-5/6 md:w-1/2 xl:w-1/3 mx-auto rounded-xl border border-gray-300 shadow-lg space-y-4"
       >
-        <h1 className="text-dark text-center text-2xl mb-4">
+        <h1 className="text-2xl font-bold text-gray-800">
           {isLogin ? "Login" : "Sign Up"}
         </h1>
         <input
@@ -65,7 +62,7 @@ const AuthForm = () => {
         {!isLogin && (
           <input
             type="text"
-            placeholder="Please enter your OpenAI API Key"
+            placeholder="OpenAI API Key"
             value={openAIAPIKey}
             onChange={(event) => setOpenAIAPIKey(event.target.value)}
             required
@@ -74,38 +71,34 @@ const AuthForm = () => {
         )}
         <button
           type="submit"
-          className="w-full p-2 rounded-md text-white btn-primary focus:border focus:border-green-200 focus:outline-none "
+          className="w-full p-2 rounded-md text-white btn-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-colors duration-200 shadow-md"
         >
           {isLogin ? "Login" : "Sign Up"}
         </button>
+        <div className="text-sm text-gray-500">
+          {isLogin ? (
+            <span>
+              If you don't already have an account,{" "}
+              <a
+                href="/auth/signup"
+                className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
+              >
+                sign up
+              </a>
+            </span>
+          ) : (
+            <span>
+              If you already have an account,{" "}
+              <a
+                href="/auth/login"
+                className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
+              >
+                login
+              </a>
+            </span>
+          )}
+        </div>
       </form>
-      <div
-        className={`relative ${
-          isLogin ? "top-[16.6%] md:top-[25%]" : "top-[22.5%] md:top-[35%]"
-        } w-[85%] mx-auto text-center text-dark text-xl`}
-      >
-        {isLogin ? (
-          <span>
-            If you don't already have an account,{" "}
-            <a
-              href="/auth/signup"
-              className="underline text-green-200 hover:text-blue-800"
-            >
-              sign up
-            </a>
-          </span>
-        ) : (
-          <span>
-            If you already have an account,{" "}
-            <a
-              href="/auth/login"
-              className="underline text-green-200 hover:text-blue-800"
-            >
-              login
-            </a>
-          </span>
-        )}
-      </div>
     </div>
   );
 };

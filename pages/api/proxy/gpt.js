@@ -1,5 +1,5 @@
+import { dbConnect, dbDisconnect } from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
-import dbConnect from "../../../utils/dbConnect";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import { decrypt } from "../../../utils/crypto";
@@ -23,7 +23,10 @@ const fetchDataFromAPI = async (messages, apiKey) => {
   }
 };
 
-dbConnect();
+const handleRequest = async (user, messages) => {
+  const decryptedApiKey = await decrypt(user.apiKey);
+  return fetchDataFromAPI(messages, decryptedApiKey);
+};
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -31,21 +34,24 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
+  await dbConnect();
+
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const user = await User.findById(session.user.id);
-  const decryptedApiKey = await decrypt(user.apiKey);
-
-  const { messages } = req.body;
   try {
-    const completion = await fetchDataFromAPI(messages, decryptedApiKey);
+    const user = await User.findById(session.user.id);
+    const { messages } = req.body;
+    const completion = await handleRequest(user, messages);
     res.status(200).json({ completion });
   } catch (error) {
     const statusCode = error.status || 500;
     res.status(statusCode).json({ error: error.message });
-  }
+  } 
+  // finally {
+  //   await dbDisconnect();
+  // }
 }
