@@ -21,7 +21,6 @@
     "ioredis": "^5.3.2",
     "lowlight": "^2.8.1",
     "mongoose": "^7.0.1",
-    "nanoid": "^4.0.2",
     "next": "13.1.1",
     "next-auth": "^4.21.1",
     "openai": "^3.2.1",
@@ -37,8 +36,7 @@
     "remark-parse": "^10.0.1",
     "remark-react": "^9.0.1",
     "remark-rehype": "^10.1.0",
-    "unified": "^10.1.2",
-    "uuidv4": "^6.2.13"
+    "unified": "^10.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
