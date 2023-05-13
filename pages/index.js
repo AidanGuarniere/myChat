@@ -21,6 +21,11 @@ export default function Home() {
       router.push("/auth");
     } else if (session && status === "authenticated") {
       const handleFetchChatTitles = async () => {
+        // let i = 0;
+        // while (i < 15) {
+        //   await fetchChatTitles();
+        //   i++;
+        // }
         try {
           const chatTitles = await fetchChatTitles();
           if (chatTitles.length !== chats.length) {
@@ -67,11 +72,11 @@ export default function Home() {
   }, [selectedChat, shouldFetchChatContent]);
 
   useEffect(() => {
-    if(error){
-      setError(null)
+    if (error) {
+      setError(null);
     }
-  }, [chats, selectedChat])
-  
+  }, [chats, selectedChat]);
+
   return (
     <>
       <Head>

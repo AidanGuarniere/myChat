@@ -1,0 +1,32 @@
+#1: I will provide you with context on a software development task. If you understand the context, proceed to #2
+context:
+  goal: "Current application behavior vs expected application behavior and relevant context"
+  code:
+    fileName1:
+      description: "file/code description"
+      codeSnippet: | 
+      "code snippet" 
+  packageJson: {}
+additionalInfo: "Additional relevant context"
+
+#2: Please utilize the YAML template below to build an action plan based on the context provided in #1. 
+Plan should include a step-by-step outline for the proposed code solution, detailing the logical flow and structure of the implementation. 
+This plan should be presented in a clear and concise manner, enabling me to review and approve/reject the proposed approach before actually coding.
+YAML Template:
+projectContext:
+  applicationDetails: "Relevant description of the code provided in context"
+  goal: "What is the user trying to do?"
+  dependencies: {}
+  desiredContext: "Request(s) for the user to provide additional info, if any"
+tasks:
+  - id: 1
+    type: "Task type"
+    name: ""
+    requirements:
+      - id: 1
+        description: "Requirement description"
+    constraints:
+      - id: 1
+        description: "Constraint description"
+    reasoning: "Explanation of how this task addresses the problem, including console messages if relevant"
+solution: "Explanation of the entire action p;an, how it meets the user's goals, how it uses best practices in the given context, and why this is the optimal solution"

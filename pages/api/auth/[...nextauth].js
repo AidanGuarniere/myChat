@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import {dbConnect} from "../../../utils/dbConnect";
+import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
 import bcrypt from "bcrypt";
 

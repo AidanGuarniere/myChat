@@ -1,8 +1,14 @@
-import { dbConnect, dbDisconnect } from "../../../utils/dbConnect.js";
+import { dbConnect } from "../../../utils/dbConnect.js";
 import User from "../../../models/UserSchema";
+import rateLimiter from "../../../utils/rateLimiter";
 
 async function handlePostRequest(req, res) {
   const { username, password, openAIAPIKey } = req.body;
+  try {
+    await rateLimiter(req, res);
+  } catch (err) {
+    return res.status(429).json({ error: "Too many requests" });
+  }
 
   const existingUser = await User.findOne({ username });
   if (existingUser) {
@@ -37,10 +43,8 @@ export default async function handler(req, res) {
 
   try {
     const result = await handlePostRequest(req, res);
-    // await dbDisconnect();
     return result;
   } catch (error) {
-    // await dbDisconnect();
     return res.status(400).json({ error });
   }
 }

@@ -14,8 +14,8 @@ function ChatActions({
   return (
     <>
       <NewChatButton setSelectedChat={setSelectedChat} />
-      <div className="w-full flex-col flex-1 overflow-y-auto border-b border-white/20 -mr-2 h-1/2">
-        <div className="flex flex-col gap-2 text-gray-100 my-2 font-normal">
+      <div className="w-full flex-col flex-1 border-b border-white/20 -mr-2 h-1/2  overflow-y-scroll">
+        <div className="flex flex-col gap-2 text-gray-100 my-2 font-normal ">
         {[...chats].reverse().map((chat, index) => (
             <ChatItem
               key={`${chat._id}${index}`}
