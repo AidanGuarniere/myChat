@@ -1,7 +1,10 @@
-import { dbConnect, dbDisconnect } from "../../../utils/dbConnect";
+import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
+import rateLimiter from "../../../utils/rateLimiter";
+
+
 async function handleGetRequest(req, res, userId) {
   const user = await User.findById(userId);
   if (!user) {
@@ -39,6 +42,13 @@ async function handleDeleteRequest(req, res, userId) {
 
 export default async function handler(req, res) {
   const { method } = req;
+  
+  try {
+    await rateLimiter(req, res);
+  } catch (err) {
+    return res.status(429).json({ error: "Too many requests" });
+  }
+
   await dbConnect();
 
   const session = await getServerSession(req, res, authOptions);
@@ -65,7 +75,4 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-  // finally {
-  //   await dbDisconnect();
-  // }
 }

@@ -29,6 +29,7 @@ function Dashboard({
 
   const toggleSidebar = () => {
     setCloseSidebar(!closeSidebar);
+    console.log(closeSidebar)
   };
 
   useEffect(() => {
@@ -46,6 +47,8 @@ function Dashboard({
       const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
       const selectedChatTitle = { ...chats[chatIndex] };
       setChatTitle(selectedChatTitle.title);
+    } else {
+      setChatTitle("New chat")
     }
   }, [selectedChat]);
 
@@ -77,7 +80,7 @@ function Dashboard({
       <div className="md:hidden w-full flex items-center bg-gray-800 text-gray-200 p-[.625rem] border-b border-white/20 ">
         <button
           onClick={toggleSidebar}
-          className="absolute inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
+          className=" inline-flex items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white"
         >
           <svg
             stroke="currentColor"
@@ -94,7 +97,7 @@ function Dashboard({
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <h1 className="text-base whitespace-nowrap overflow-hidden relative w-full text-center ">
+        <h1 className="text-base whitespace-nowrap overflow-hidden relative text-center px-4 w-[calc(100%-3rem)]">
           {chatTitle ? chatTitle : "New chat"}
           <div className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"></div>
         </h1>

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-async function dbConnect() {
+const dbConnect = async () => {
   if (mongoose.connection.readyState !== 0) {
     return mongoose;
   }
@@ -9,12 +9,6 @@ async function dbConnect() {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-}
+};
 
-async function dbDisconnect() {
-  if (mongoose.connection.readyState !== 0) {
-    return mongoose.disconnect();
-  }
-}
-
-module.exports = { dbConnect, dbDisconnect };
+export default dbConnect;

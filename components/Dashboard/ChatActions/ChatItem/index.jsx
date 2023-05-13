@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ChatItemIcon from "./ChatItemIcon";
 import TitleInput from "./TitleInput";
 import EditDeleteButtons from "./EditDeleteButtons";
@@ -16,6 +16,12 @@ export default function ChatItem({
   const isSelectedChat = selectedChat === chat._id;
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [titleInputValue, setTitleInputValue] = useState("");
+  const [chatTitle, setChatTitle] = useState("");
+
+  useEffect(() => {
+    const chatTitleValue = chat.title.split(" ").slice(0, 7).join(" ").substring(0, 25);
+    setChatTitle(chatTitleValue)
+  }, [chat]);
 
   const inputRef = useRef(null);
 
@@ -43,13 +49,13 @@ export default function ChatItem({
           ) : (
             <>
               <p className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800" />
-              {chat.title}
+              {chatTitle}
             </>
           )
         ) : (
           <>
             <p className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-1000 group-hover:from-[#2A2B32]" />
-            {chat.title}
+            {chatTitle}
           </>
         )}
       </span>

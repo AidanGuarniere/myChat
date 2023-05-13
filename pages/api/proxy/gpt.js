@@ -1,9 +1,10 @@
-import { dbConnect, dbDisconnect } from "../../../utils/dbConnect";
+import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/UserSchema";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import { decrypt } from "../../../utils/crypto";
 import { Configuration, OpenAIApi } from "openai";
+import rateLimiter from "../../../utils/rateLimiter";
 
 const fetchDataFromAPI = async (messages, apiKey) => {
   const configuration = new Configuration({
@@ -29,9 +30,16 @@ const handleRequest = async (user, messages) => {
 };
 
 export default async function handler(req, res) {
+  
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+  
+  try {
+    await rateLimiter(req, res);
+  } catch (err) {
+    return res.status(429).json({ error: "Too many requests" });
   }
 
   await dbConnect();
@@ -51,7 +59,4 @@ export default async function handler(req, res) {
     const statusCode = error.status || 500;
     res.status(statusCode).json({ error: error.message });
   } 
-  // finally {
-  //   await dbDisconnect();
-  // }
 }
