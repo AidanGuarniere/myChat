@@ -21,11 +21,6 @@ export default function Home() {
       router.push("/auth");
     } else if (session && status === "authenticated") {
       const handleFetchChatTitles = async () => {
-        // let i = 0;
-        // while (i < 15) {
-        //   await fetchChatTitles();
-        //   i++;
-        // }
         try {
           const chatTitles = await fetchChatTitles();
           if (chatTitles.length !== chats.length) {

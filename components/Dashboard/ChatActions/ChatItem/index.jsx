@@ -19,7 +19,7 @@ export default function ChatItem({
   const [chatTitle, setChatTitle] = useState("");
 
   useEffect(() => {
-    const chatTitleValue = chat.title.split(" ").slice(0, 7).join(" ").substring(0, 25);
+    const chatTitleValue = chat.title.substring(0, 26);
     setChatTitle(chatTitleValue)
   }, [chat]);
 
