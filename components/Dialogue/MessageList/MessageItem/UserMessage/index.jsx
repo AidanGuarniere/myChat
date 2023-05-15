@@ -62,7 +62,7 @@ function UserMessage({
     setEditedMessage("");
   };
   return (
-    <div className="w-full min-h-[20px] flex flex-col items-start gap-4 text-gray-800">
+    <div className="w-full min-h-[20px] flex flex-col items-start gap-4 text-gray-800 text-[1.1rem]">
       {editMessageId === message["_id"] ? (
         <div className="w-full">
           <textarea
