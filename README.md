@@ -1,4 +1,4 @@
-# MyGPT
+# MyGPT: A ChatGPT Clone
 
 MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI.
 
@@ -7,8 +7,8 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
 - [Prerequisites](#prerequisites)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
+- [Setup](#setup)
 - [Usage](#usage)
-- [Encryption Setup](#encryption-setup)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
 - [License](#license)
@@ -31,6 +31,30 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
 - [Mongoose](https://mongoosejs.com/) - An Object Data Modeling (ODM) library for MongoDB and Node.js
 - [Redis](https://redis.io/) - An in-memory data structure store, used as a database, cache, and message broker
 - [Crypto](https://nodejs.org/api/crypto.html) - A built-in Node.js module for handling cryptographic operations
+
+## Setup
+
+### MongoDB Setup
+
+We use MongoDB for storing user information and session data. You can set up a MongoDB instance in several ways:
+
+- Download and install MongoDB directly on your local machine.
+- Use a Docker container to run MongoDB.
+- Use a managed MongoDB service, like [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), which offers a free tier.
+
+Once you have a running MongoDB instance, you'll need to obtain the connection string. If you're using MongoDB Atlas, you can find the connection string in your cluster's connection settings.
+
+Add the MongoDB connection string to your `.env.local` file like so:
+
+### Redis Setup
+
+We use Redis for rate limiting in our API routes. You can set up a Redis instance in several ways, including:
+
+- Download and install Redis directly on your local machine (not recommended for Windows users).
+- Use a Docker container to run Redis.
+- Use a managed Redis service, like [RedisLabs](https://redislabs.com/), which offers a free tier.
+
+Once you have a running Redis instance, you'll need to obtain the connection string. If you're using RedisLabs, you can find the connection string in your database's configuration page.
 
 ## Installation
 
@@ -72,30 +96,7 @@ MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. I
 
 Replace `http://localhost:3000` with whatever port your application is running on, `yourURI` with your MongoDB connection string, `yourSecret` with a secure random string, `your32HexDigitString` with a 32-digit hexadecimal string for AES-128 encryption, and `yourRedisConnectionString` with your Redis connection string.
 
-## Setup
-
-### MongoDB Setup
-
-We use MongoDB for storing user information and session data. You can set up a MongoDB instance in several ways:
-
-- Download and install MongoDB directly on your local machine.
-- Use a Docker container to run MongoDB.
-- Use a managed MongoDB service, like [MongoDB Atlas](https://www.mongodb.com/cloud/atlas), which offers a free tier.
-
-Once you have a running MongoDB instance, you'll need to obtain the connection string. If you're using MongoDB Atlas, you can find the connection string in your cluster's connection settings.
-
-Add the MongoDB connection string to your `.env.local` file like so:
-
-### Redis Setup
-
-We use Redis for rate limiting in our API routes. You can set up a Redis instance in several ways, including:
-
-- Download and install Redis directly on your local machine (not recommended for Windows users).
-- Use a Docker container to run Redis.
-- Use a managed Redis service, like [RedisLabs](https://redislabs.com/), which offers a free tier.
-
-Once you have a running Redis instance, you'll need to obtain the connection string. If you're using RedisLabs, you can find the connection string in your database's configuration page.
-
+...
 
 ## Usage
 
@@ -173,9 +174,6 @@ We welcome contributions! To contribute, please follow these steps:
 4. Commit your changes: `git commit -am 'Add some feature'`
 5. Push to the branch: `git push origin feature/my-new-feature`
 6. Submit a pull request
-
-## Notes
-- avoided imitating the login/signup pages to mitigate potential confusion or security issues.
 
 ## License
 
