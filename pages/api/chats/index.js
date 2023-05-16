@@ -35,20 +35,19 @@ async function handleDeleteRequest(res) {
 
 export default async function handler(req, res) {
   const { method } = req;
-  try {
-    await rateLimiter(req, res);
-  } catch (err) {
-    return res.status(429).json({ error: "Too many requests" });
-  }
 
   await dbConnect();
 
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    return res.status(401).json({ error: "Unauthorized" });
   }
   const userId = session.user.id;
+  try {
+    await rateLimiter(userId);
+  } catch (err) {
+    return res.status(429).json({ error: "Too many requests" });
+  }
 
   try {
     switch (method) {

@@ -30,26 +30,22 @@ const handleRequest = async (user, messages) => {
 };
 
 export default async function handler(req, res) {
-  
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-  
-  try {
-    await rateLimiter(req, res);
-  } catch (err) {
-    return res.status(429).json({ error: "Too many requests" });
-  }
 
   await dbConnect();
-
   const session = await getServerSession(req, res, authOptions);
-
   if (!session) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-
+  const userId = session.user.id;
+  try {
+    await rateLimiter(userId);
+  } catch (err) {
+    return res.status(429).json({ error: "Too many requests" });
+  }
   try {
     const user = await User.findById(session.user.id);
     const { messages } = req.body;
@@ -58,5 +54,5 @@ export default async function handler(req, res) {
   } catch (error) {
     const statusCode = error.status || 500;
     res.status(statusCode).json({ error: error.message });
-  } 
+  }
 }
