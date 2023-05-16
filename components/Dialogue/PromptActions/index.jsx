@@ -168,12 +168,6 @@ function PromptActions({
         handleSubmit={handleSubmit}
         loading={loading}
       />
-      <div className="h-20 sm:h-12 w-4/5 flex justify-center items-start sm:items-center mx-auto">
-        <span className="text-[.625rem] sm:text-[.75rem] text-gray-600 dark:text-gray-300 text-center">
-          MyGPT is not affiliated with OpenAI. MyGPT is an open source project
-          modeled after ChatGPT. MyGPT may produce inaccurate information.
-        </span>
-      </div>
     </div>
   );
 }

@@ -62,7 +62,7 @@ function UserMessage({
     setEditedMessage("");
   };
   return (
-    <div className="w-full min-h-[20px] flex flex-col items-start gap-4 text-gray-800 text-[1.1rem]">
+    <div className="w-full min-h-[20px] flex flex-col items-start gap-4 text-gray-800">
       {editMessageId === message["_id"] ? (
         <div className="w-full">
           <textarea
@@ -89,31 +89,36 @@ function UserMessage({
         </div>
       ) : (
         <div className="relative w-full">
-          <p className="dark:text-gray-100 whitespace-pre-wrap px-[1.6rem] md:px-0">{message.content}</p>
-          {selectedMessageId === message["_id"] && (
-            <div className="flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible">
-              <button
-                className="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400 md:invisible md:group-hover:visible"
-                onClick={() => handleEditToggle(message["_id"])}
+          <p className="text-lg dark:text-gray-100 whitespace-pre-wrap px-[1.6rem] md:px-0">
+            {message.content}
+          </p>
+          <div
+            className={`${
+              selectedMessageId !== message["_id"] && "md:hidden"
+            }flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible`}
+          >
+            <button
+              className="p-1 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-300 disabled:dark:hover:text-gray-400 
+              md:invisible md:group-hover:visible"
+              onClick={() => handleEditToggle(message["_id"])}
+            >
+              <svg
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-[1.125rem] w-[1.125rem]"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  stroke="currentColor"
-                  fill="none"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                </svg>
-              </button>
-            </div>
-          )}
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </button>
+          </div>
         </div>
       )}
     </div>

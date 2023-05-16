@@ -14,7 +14,7 @@ function CopyButton({ text, copyMessage }) {
     }, 3000);
   }, [copied === true]);
   return (
-    <div className="absolute bottom-0 md:top-0 right-0 rounded text-gray-400 hover:text-gray-300 hover:bg-gray-700">
+    <div className="absolute bottom-0 md:top-0 right-0 h-[1.65rem] rounded text-gray-400 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-300 ">
       <button
         className="md:gap-3 lg:gap-1 lg:mb-0 p-1 "
         onClick={() => {
@@ -30,7 +30,7 @@ function CopyButton({ text, copyMessage }) {
               viewBox="0 0 24 24"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-[1.1rem] w-[1.1rem]"
+              className="h-[1.125rem] w-[1.125rem]"
               xmlns="http://www.w3.org/2000/svg"
             >
               <polyline points="20 6 9 17 4 12"></polyline>
@@ -46,7 +46,7 @@ function CopyButton({ text, copyMessage }) {
               viewBox="0 0 24 24"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-[1.1rem] w-[1.1rem]"
+              className="h-[1.125rem] w-[1.125rem]"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>

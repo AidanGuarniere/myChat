@@ -9,7 +9,7 @@ function ErrorDisplay({ error, setError }) {
     <div className="flex justify-center w-full dark:bg-gray-800">
       <div className="text-base md:max-w-xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
         <div className="flex w-full">
-          <div className="py-4 px-3 border text-gray-600 rounded-md text-lg dark:text-gray-100 border-red-500 bg-red-500/10 w-5/6 text-center mx-auto">
+          <div className="py-4 px-3 border text-gray-600 rounded-md text-base dark:text-gray-100 border-red-500 bg-red-500/10 w-5/6 text-center mx-auto">
             <span className="text-2xl">
               Error code: <span className=" font-bold">{error.code}</span>
             </span>

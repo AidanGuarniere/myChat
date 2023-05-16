@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { fetchChatTitles } from "../utils/chatUtils";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [chats, setChats] = useState([]);
@@ -110,6 +111,7 @@ export default function Home() {
             </div>
           )}
         </main>
+        <Footer />
       </div>
     </>
   );
