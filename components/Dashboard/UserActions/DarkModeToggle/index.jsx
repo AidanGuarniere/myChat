@@ -6,7 +6,7 @@ function DarkModeToggle() {
 
   return (
     <button
-      className="flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+      className="w-full flex p-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer"
       onClick={toggleDarkMode}
     >
       {isDarkMode ? (

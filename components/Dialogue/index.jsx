@@ -56,7 +56,7 @@ function Dialogue({
           <ErrorDisplay error={error} />
         ) : selectedChat !== null && chats[selectedChatIndex]?.messages ? (
           <div
-            className=" overflow-y-scroll p-0 w-full h-full "
+            className=" overflow-y-scroll p-0 w-full h-full"
             ref={chatRef}
             key={selectedChat}
             onScroll={() => {

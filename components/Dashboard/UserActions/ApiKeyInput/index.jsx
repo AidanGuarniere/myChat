@@ -52,7 +52,7 @@ function ApiKeyInput({ session, update, setError }) {
           setShowApiKeyInput(true);
         }
       }}
-      className="text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 text-white text-sm hover:bg-gray-500/10 transition-colors duration-200"
+      className="text-left flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 text-white hover:bg-gray-500/10 transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

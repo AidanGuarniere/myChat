@@ -12,11 +12,11 @@ function ChatActions({
   handleDeleteChats,
 }) {
   return (
-    <>
+    <> 
       <NewChatButton setSelectedChat={setSelectedChat} />
-      <div className="w-full flex-col flex-1 border-b border-white/20 -mr-2 h-1/2  overflow-y-scroll">
-        <div className="flex flex-col gap-2 text-gray-100 my-2 font-normal ">
-        {[...chats].reverse().map((chat, index) => (
+      <div className="w-full h-full overflow-y-scroll pl-2 md:pl-[.55rem]">
+        <div className="w-full h-full flex flex-col gap-2 text-gray-100 font-normal">
+          {[...chats].reverse().map((chat, index) => (
             <ChatItem
               key={`${chat._id}${index}`}
               session={session}

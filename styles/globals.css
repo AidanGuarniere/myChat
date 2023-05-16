@@ -147,15 +147,6 @@ a {
   background-color: rgba(236, 236, 241, 1);
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  --tw-bg-opacity: 1;
-  background-color: rgba(86, 88, 105, 1);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgba(172, 172, 190, 1);
-}
 
 @media (min-width: 768px) {
   .scrollbar-trigger ::-webkit-scrollbar-thumb {

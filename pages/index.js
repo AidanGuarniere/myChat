@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { fetchChatTitles } from "../utils/chatUtils";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [chats, setChats] = useState([]);
@@ -21,11 +22,6 @@ export default function Home() {
       router.push("/auth");
     } else if (session && status === "authenticated") {
       const handleFetchChatTitles = async () => {
-        // let i = 0;
-        // while (i < 15) {
-        //   await fetchChatTitles();
-        //   i++;
-        // }
         try {
           const chatTitles = await fetchChatTitles();
           if (chatTitles.length !== chats.length) {
@@ -115,6 +111,7 @@ export default function Home() {
             </div>
           )}
         </main>
+        <Footer />
       </div>
     </>
   );

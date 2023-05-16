@@ -19,7 +19,7 @@ export default function ChatItem({
   const [chatTitle, setChatTitle] = useState("");
 
   useEffect(() => {
-    const chatTitleValue = chat.title.split(" ").slice(0, 7).join(" ").substring(0, 25);
+    const chatTitleValue = chat.title.substring(0, 20);
     setChatTitle(chatTitleValue)
   }, [chat]);
 
@@ -30,7 +30,7 @@ export default function ChatItem({
       className={`text-left flex p-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 ${
         selectedChat === chat._id
           ? "bg-gray-800"
-          : "bg-gray-1000 hover:bg-[rgba(52,53,65,.5)]"
+          : "bg-gray-900 hover:bg-[rgba(52,53,65,.5)]"
       } group animate-flash `}
       key={index}
       onClick={() => {
@@ -54,7 +54,7 @@ export default function ChatItem({
           )
         ) : (
           <>
-            <p className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-1000 group-hover:from-[#2A2B32]" />
+            <p className="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-900 group-hover:from-[#2A2B32]" />
             {chatTitle}
           </>
         )}

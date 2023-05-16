@@ -1,4 +1,4 @@
-import { dbConnect } from "../../../utils/dbConnect.js";
+import dbConnect  from "../../../utils/dbConnect.js";
 import User from "../../../models/UserSchema";
 import rateLimiter from "../../../utils/rateLimiter";
 

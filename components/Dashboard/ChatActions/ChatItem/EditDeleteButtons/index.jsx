@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { updateChat } from "../../../../../utils/chatUtils";
+import ConfirmAction from "../../../ConfirmAction";
+import TitleInput from "../TitleInput";
 
 export default function EditDeleteButtons({
   session,
@@ -14,12 +16,15 @@ export default function EditDeleteButtons({
   setShowTitleInput,
   handleDeleteChats,
 }) {
+  const [showDelete, setShowDelete] = useState(false);
+
   const hideTitleInput = () => {
     setTitleInputValue("");
     setShowTitleInput(false);
   };
 
   const handleDocumentClick = (e) => {
+    e.stopPropagation();
     const isEditButton = e.target.id === "show-title-input";
     const isSubmitButton = e.target.id === "submit-title-edit";
 
@@ -63,59 +68,41 @@ export default function EditDeleteButtons({
       document.removeEventListener("click", handleDocumentClick);
     };
   }, [showTitleInput]);
+
   return (
-    <div
-      className="absolute flex right-1 z-10 text-gray-300 visible"
-      onClick={(e) => e.stopPropagation()}
-    >
+    <>
       {showTitleInput ? (
-        <>
-          <button
-            id="submit-title-edit"
-            className="p-1 hover:text-white"
-            onClick={() => {
-              if (chat.title !== titleInputValue) {
-                handleEditChatTitle(selectedChat, titleInputValue);
-              } else {
-                setShowTitleInput(false);
-              }
-            }}
-          >
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </button>
-          <button className="p-1 hover:text-white" onClick={hideTitleInput}>
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </>
+        <ConfirmAction
+          confirmAction={(e) => {
+            e.stopPropagation();
+
+            if (chat.title !== titleInputValue) {
+              handleEditChatTitle(selectedChat, titleInputValue);
+            } else {
+              setShowTitleInput(false);
+            }
+          }}
+          denyAction={(e) => {
+            e.stopPropagation();
+            hideTitleInput();
+          }}
+        />
+      ) : showDelete ? (
+        <ConfirmAction
+          confirmAction={(e) => {
+            e.stopPropagation();
+            handleDeleteChats(selectedChat);
+          }}
+          denyAction={(e) => {
+            e.stopPropagation();
+            setShowDelete(false);
+          }}
+        />
       ) : (
-        <>
+        <div
+          className="absolute flex right-1 z-10 text-gray-300 visible"
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             id="show-title-input"
             className="p-1 hover:text-white"
@@ -132,7 +119,7 @@ export default function EditDeleteButtons({
               viewBox="0 0 24 24"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-4 w-4"
+              className="h-[1.125rem] w-[1.125rem]"
               height="1em"
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +132,7 @@ export default function EditDeleteButtons({
             className="p-1 hover:text-white"
             onClick={(e) => {
               e.stopPropagation();
-              handleDeleteChats(selectedChat);
+              setShowDelete(true);
             }}
           >
             <svg
@@ -155,7 +142,7 @@ export default function EditDeleteButtons({
               viewBox="0 0 24 24"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-4 w-4"
+              className="h-[1.125rem] w-[1.125rem]"
               height="1em"
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
@@ -166,8 +153,8 @@ export default function EditDeleteButtons({
               <line x1="14" y1="11" x2="14" y2="17"></line>
             </svg>
           </button>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }

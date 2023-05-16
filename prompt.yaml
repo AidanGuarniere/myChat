@@ -1,9 +1,61 @@
 #1: I will provide you with context on a software development task. If you understand the context, proceed to #2
 context:
-  goal: "Current application behavior vs expected application behavior and relevant context"
-  code:
-    fileName1:
-      description: "file/code description"
+goal: |
+  I want to use tailwind.css to style the position of my Dashboard elements so that
+  1) New chat button remains at the top of Dashboard even when scrolled
+  2) UserActions remain at the bottom of Dashboard
+  3) the array of ChatItems in ChatActions can be scrolled through
+  4) NewChatButton, ChatItem, and all UserActions components all maintain the same width even with vertical scrollbar present
+  so basically, I want to be able to scroll through my ChatItems in the dashboard without moving the NewChatButton or UserActions
+
+  Currently, the entire Dashboard scrolls when overflowed. I only want the list of ChatItems to be scrolled. I do not simply apply an overflow-y-scroll to the div containing these ChatItems because that would change their width relative to say NewChatButton
+code:
+    Dashboard:
+      description: "HOC for dashboard UI"
+      codeSnippet: | 
+      "code snippet" 
+    ChatActions:
+      description: "Contains ChatItems and NewChatButton"
+      codeSnippet: | 
+      "code snippet" 
+    NewChatButton:
+      codeSnippet: | 
+      "import React from "react";
+
+function NewChatButton({ setSelectedChat }) {
+  return (
+    // <div className="absolute top-0 left-0 z-10 w-full h-1/10 bg-gray-900 p-[.55rem]">
+      <button
+        className="dashboard-text w-full flex md:mb-0 p-[.775rem] items-center gap-3 rounded-[.425rem] hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer flex-shrink-0 border border-white/20"
+        onClick={() => {
+          setSelectedChat(null);
+        }}
+        // disabled={loading}
+      >
+        <svg
+          stroke="currentColor"
+          fill="none"
+          strokeWidth="2.5"
+          viewBox="0 0 24 24"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4"
+          height="1em"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        New chat
+      </button>
+    // </div>
+  );
+}
+
+export default NewChatButton;
+" 
+    UserActions:
       codeSnippet: | 
       "code snippet" 
   packageJson: {}
