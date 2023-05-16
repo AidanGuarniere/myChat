@@ -1,64 +1,202 @@
 #1: I will provide you with context on a software development task. If you understand the context, proceed to #2
 context:
-goal: |
-  I want to use tailwind.css to style the position of my Dashboard elements so that
-  1) New chat button remains at the top of Dashboard even when scrolled
-  2) UserActions remain at the bottom of Dashboard
-  3) the array of ChatItems in ChatActions can be scrolled through
-  4) NewChatButton, ChatItem, and all UserActions components all maintain the same width even with vertical scrollbar present
-  so basically, I want to be able to scroll through my ChatItems in the dashboard without moving the NewChatButton or UserActions
-
-  Currently, the entire Dashboard scrolls when overflowed. I only want the list of ChatItems to be scrolled. I do not simply apply an overflow-y-scroll to the div containing these ChatItems because that would change their width relative to say NewChatButton
+  goal: I am currently implementing rate-limiting through Redis by monitoring requests coming from the same Ip address. However, I have a MongoDB with authenticated users, and all my routes are session authenticated, so I want to imlement rate limiting based on requests coming from the same user id, rather than via IP
 code:
-    Dashboard:
-      description: "HOC for dashboard UI"
+    utils/rateLimiter.js:
+      description: "current Redis rate limiting logic"
       codeSnippet: | 
-      "code snippet" 
-    ChatActions:
-      description: "Contains ChatItems and NewChatButton"
-      codeSnippet: | 
-      "code snippet" 
-    NewChatButton:
-      codeSnippet: | 
-      "import React from "react";
+        import Redis from "ioredis";
 
-function NewChatButton({ setSelectedChat }) {
-  return (
-    // <div className="absolute top-0 left-0 z-10 w-full h-1/10 bg-gray-900 p-[.55rem]">
-      <button
-        className="dashboard-text w-full flex md:mb-0 p-[.775rem] items-center gap-3 rounded-[.425rem] hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer flex-shrink-0 border border-white/20"
-        onClick={() => {
-          setSelectedChat(null);
-        }}
-        // disabled={loading}
-      >
-        <svg
-          stroke="currentColor"
-          fill="none"
-          strokeWidth="2.5"
-          viewBox="0 0 24 24"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-4 w-4"
-          height="1em"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        New chat
-      </button>
-    // </div>
-  );
+        let redis;
+
+        if (!redis) {
+          redis = new Redis(process.env.REDIS_URL);
+        }
+
+        const WINDOW_TIME = 60;
+        const MAX_REQUESTS = 50;
+
+        export default async function rateLimiter(req, res) {
+          const userIp = req.headers["x-real-ip"] || req.connection.remoteAddress;
+
+          const newCount = await redis.incr(userIp);
+          if (newCount === 1) {
+            await redis.expire(userIp, WINDOW_TIME);
+          }
+
+          if (newCount > MAX_REQUESTS) {
+            throw new Error("Too many requests");
+          }
+        }
+    api/auth/[...nextAuth].js:
+      description: "nextAuth authentication and session logic"
+      codeSnippet: | 
+        import NextAuth from "next-auth";
+        import CredentialsProvider from "next-auth/providers/credentials";
+        import GoogleProvider from "next-auth/providers/google";
+        import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+        import dbConnect from "../../../utils/dbConnect";
+        import User from "../../../models/UserSchema";
+        import bcrypt from "bcrypt";
+
+        const events = {
+          error: async (message, object) => {
+            console.error("NextAuth error:", message, object);
+          },
+        };
+
+        async function comparePasswords(password, hashedPassword) {
+          return await bcrypt.compare(password, hashedPassword);
+        }
+
+        async function validateUser(username, password) {
+          const user = await User.findOne({ username });
+
+          if (user && (await comparePasswords(password, user.password))) {
+            return user;
+          }
+
+          return null;
+        }
+
+        const clientPromise = (async () => {
+          const mongooseInstance = await dbConnect();
+          let tries = 0;
+          while (!mongooseInstance?.connection?.client && tries < 10) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            tries++;
+          }
+          return mongooseInstance.connection.client;
+        })();
+
+
+        const authOptions = {
+          providers: [
+            // GoogleProvider({
+            //   clientId: process.env.GOOGLE_CLIENT_ID,
+            //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            //   authorization: {
+            //     params: {
+            //       prompt: "consent",
+            //       access_type: "offline",
+            //       response_type: "code",
+            //     },
+            //   },
+            // }),
+            CredentialsProvider({
+              name: "Credentials",
+              credentials: {
+                username: { label: "Username", type: "text" },
+                password: { label: "Password", type: "password" },
+              },
+              async authorize(credentials) {
+                const user = await validateUser(
+                  credentials.username,
+                  credentials.password
+                );
+
+                if (user) {
+                  const formattedUser = {
+                    id: user._id.toString(),
+                    username: user.username,
+                  };
+                  return Promise.resolve(formattedUser);
+                } else {
+                  return Promise.reject(new Error("Invalid username or password."));
+                }
+              },
+            }),
+          ],
+          events,
+          errors: {
+            async session() {
+              return new Error("An error occurred while retrieving the session.");
+            },
+            async jwt() {
+              return new Error("An error occurred while handling JWT.");
+            },
+          },
+          adapter: MongoDBAdapter(clientPromise),
+
+          session: {
+            strategy: "jwt",
+          },
+          callbacks: {
+            async signIn({ account, profile }) {
+              // if (account.provider === "google") {
+              //   return profile.email_verified;
+              // }
+              return true;
+            },
+            async jwt({ token, trigger, user, session }) {
+              if (user) {
+                token.user = {
+                  id: user.id,
+                  username: user.username,
+                };
+              }
+              return token;
+            },
+            async session({ session, token }) {
+              session.user = token.user;
+              return Promise.resolve(session);
+            },
+          },
+          pages: {
+            error: "/auth/error",
+          },
+        };
+        export default NextAuth(authOptions);
+
+        export { authOptions };
+
+  packageJson: {
+  "name": "chatgpt-ui-template",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next-auth/mongodb-adapter": "^1.1.1",
+    "@next/font": "13.1.1",
+    "@tailwindcss/typography": "^0.5.9",
+    "axios": "^1.2.2",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "eslint": "8.31.0",
+    "eslint-config-next": "13.1.1",
+    "highlight.js": "^11.7.0",
+    "ioredis": "^5.3.2",
+    "lowlight": "^2.8.1",
+    "mongoose": "^7.0.1",
+    "next": "13.1.1",
+    "next-auth": "^4.21.1",
+    "openai": "^3.2.1",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "react-lowlight": "^3.0.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "rehype": "^12.0.1",
+    "rehype-raw": "^6.1.1",
+    "rehype-react": "^7.1.2",
+    "rehype-sanitize": "^5.0.1",
+    "remark": "^14.0.2",
+    "remark-parse": "^10.0.1",
+    "remark-react": "^9.0.1",
+    "remark-rehype": "^10.1.0",
+    "unified": "^10.1.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.6"
+  }
 }
 
-export default NewChatButton;
-" 
-    UserActions:
-      codeSnippet: | 
-      "code snippet" 
-  packageJson: {}
 additionalInfo: "Additional relevant context"
 
 #2: Please utilize the YAML template below to build an action plan based on the context provided in #1. 

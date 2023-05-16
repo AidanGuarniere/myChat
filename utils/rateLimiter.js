@@ -1,20 +1,25 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
-const redis = new Redis(process.env.REDIS_URL); // replace with your Redis connection string
+let redis;
 
-const WINDOW_TIME = 60; // window time frame in seconds
-const MAX_REQUESTS = 50; // maximum requests per user per window time frame
+if (!redis) {
+  redis = new Redis(process.env.REDIS_URL);
+}
 
-export default async function rateLimiter(req, res) {
-  const userIp = req.headers['x-real-ip'] || req.connection.remoteAddress;
+const WINDOW_TIME = 60;
+const MAX_REQUESTS = 50;
 
-  // increment the count for the user's IP address and set the expiration to the window time
-  const newCount = await redis.incr(userIp);
+export default async function rateLimiter(userId) {
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const newCount = await redis.incr(userId);
   if (newCount === 1) {
-    await redis.expire(userIp, WINDOW_TIME);
+    await redis.expire(userId, WINDOW_TIME);
   }
 
   if (newCount > MAX_REQUESTS) {
-    throw new Error('Too many requests');
+    throw new Error("Too many requests");
   }
 }

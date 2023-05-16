@@ -48,12 +48,6 @@ export default async function handler(req, res) {
   const { method } = req;
   const { id: selectedChatId } = req.query;
 
-  try {
-    await rateLimiter(req, res);
-  } catch (err) {
-    return res.status(429).json({ error: "Too many requests" });
-  }
-
   await dbConnect();
 
   const session = await getServerSession(req, res, authOptions);
@@ -61,6 +55,11 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Unauthorized" });
   }
   const userId = session.user.id;
+  try {
+    await rateLimiter(userId);
+  } catch (err) {
+    return res.status(429).json({ error: "Too many requests" });
+  }
   try {
     switch (method) {
       case "GET":
