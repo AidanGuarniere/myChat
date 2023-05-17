@@ -147,7 +147,7 @@ function PromptActions({
   };
 
   return (
-    <div className="md:pl-[289px] absolute bottom-0 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent">
+    <div className="md:pl-[289px] absolute bottom-12 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}

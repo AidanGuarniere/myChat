@@ -6,7 +6,7 @@ const Auth = () => {
   useRedirectIfAuthenticated();
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 text-center p-3">
+    <div className="relative flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 text-center p-3 overflow-hidden">
       <div className="h-4/5 flex flex-col items-center justify-center z-10 bg-gray-100 bg-opacity-90 p-6 rounded-xl border border-gray-300 shadow-lg w-5/6 sm:w-3/5 space-y-4">
         <h1 className="text-4xl font-bold text-gray-800">Welcome to MyGPT</h1>
         <h2 className="text-3xl font-semibold text-gray-700">
