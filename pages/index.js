@@ -95,7 +95,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="w-screen h-screen mx-auto overflow-hidden bg-white p-0">
+      <div className="w-screen h-screen max-h-screen mx-auto overflow-hidden bg-white p-0">
         <Dashboard
           session={session}
           chats={chats}
@@ -108,7 +108,7 @@ export default function Home() {
         />
         <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
           {status === "authenticated" && (
-            <div className="flex overflow-x-hidden items-bottom w-full">
+            <div className="flex overflow-x-hidden items-bottom w-full h-full">
               <Dialogue
                 session={session}
                 userText={userText}

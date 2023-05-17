@@ -50,6 +50,7 @@ const AuthForm = () => {
           value={username}
           onChange={(event) => setUsername(event.target.value)}
           required
+          pattern="/^[a-zA-Z0-9_]+$/"
           className="w-full p-2 mb-4 rounded-md text-gray-900 placeholder-gray-500 focus:border focus:border-green-200 focus:outline-none"
         />
         <input
@@ -57,6 +58,8 @@ const AuthForm = () => {
           placeholder="Password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{}|;':&quot;,./?\\-])[A-Za-z\d!@#$%^&*()_+[\]|;':&quot;,./<>?\\-]{8,}$"
+          minLength={8}
           required
           className="w-full p-2 mb-4 rounded-md text-gray-900 placeholder-gray-500 focus:border focus:border-green-200 focus:outline-none"
         />
@@ -67,6 +70,7 @@ const AuthForm = () => {
             value={openAIAPIKey}
             onChange={(event) => setOpenAIAPIKey(event.target.value)}
             required
+            pattern="/^sk-[\w]+$/"
             className="w-full p-2 mb-4 rounded-md text-gray-900 placeholder-gray-500 focus:border focus:border-green-200 focus:outline-none"
           />
         )}
