@@ -1,6 +1,6 @@
 # MyGPT: A ChatGPT Clone
 
-MyGPT is an open-source clone of ChatGPT built using Next.js and Tailwind CSS. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI.
+MyGPT is an open-source website modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI.
 
 ## Table of Contents
 
