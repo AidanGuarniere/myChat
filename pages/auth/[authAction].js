@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { handleSignUp, handleLogin } from "../../utils/authUtils";
 import useRedirectIfAuthenticated from "../../hooks/useRedirectIfAuthenticated";
+import Link from "next/link";
 
 const AuthForm = () => {
   const router = useRouter();
@@ -78,23 +79,23 @@ const AuthForm = () => {
         <div className="text-sm text-gray-500">
           {isLogin ? (
             <span>
-              If you don't already have an account,{" "}
-              <a
+              If you don&apos;t already have an account,
+              <Link
                 href="/auth/signup"
                 className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
               >
                 sign up
-              </a>
+              </Link>
             </span>
           ) : (
             <span>
-              If you already have an account,{" "}
-              <a
+              If you already have an account,
+              <Link
                 href="/auth/login"
                 className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
               >
                 login
-              </a>
+              </Link>
             </span>
           )}
         </div>

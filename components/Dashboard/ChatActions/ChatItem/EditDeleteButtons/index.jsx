@@ -23,16 +23,6 @@ export default function EditDeleteButtons({
     setShowTitleInput(false);
   };
 
-  const handleDocumentClick = (e) => {
-    e.stopPropagation();
-    const isEditButton = e.target.id === "show-title-input";
-    const isSubmitButton = e.target.id === "submit-title-edit";
-
-    if (!isEditButton && !isSubmitButton) {
-      hideTitleInput();
-    }
-  };
-
   const handleEditChatTitle = async (id, title) => {
     if (id && title) {
       try {
@@ -57,6 +47,16 @@ export default function EditDeleteButtons({
   };
 
   useEffect(() => {
+    const handleDocumentClick = (e) => {
+      e.stopPropagation();
+      const isEditButton = e.target.id === "show-title-input";
+      const isSubmitButton = e.target.id === "submit-title-edit";
+  
+      if (!isEditButton && !isSubmitButton) {
+        setTitleInputValue("");
+        setShowTitleInput(false);      }
+    };
+  
     if (showTitleInput && inputRef.current) {
       inputRef.current.focus();
       document.addEventListener("click", handleDocumentClick);
@@ -67,7 +67,7 @@ export default function EditDeleteButtons({
     return () => {
       document.removeEventListener("click", handleDocumentClick);
     };
-  }, [showTitleInput]);
+  }, [inputRef, showTitleInput, setTitleInputValue, setShowTitleInput]);
 
   return (
     <>

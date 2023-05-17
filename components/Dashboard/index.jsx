@@ -46,11 +46,13 @@ function Dashboard({
     if (selectedChat) {
       const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
       const selectedChatTitle = { ...chats[chatIndex] };
-      setChatTitle(selectedChatTitle.title);
+      if (selectedChatTitle !== chatTitle) {
+        setChatTitle(selectedChatTitle.title);
+      }
     } else {
       setChatTitle("New chat");
     }
-  }, [selectedChat]);
+  }, [chats, chatTitle, selectedChat]);
 
   return (
     <>

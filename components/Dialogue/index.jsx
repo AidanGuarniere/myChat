@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import ErrorDisplay from "../ErrorDisplay";
 import PromptActions from "./PromptActions";
 import ChatScrollButton from "./ChatScrollButton";
@@ -25,6 +25,12 @@ function Dialogue({
     (chat) => chat._id === selectedChat
   );
 
+  useLayoutEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [chats]);
+
   useEffect(() => {
     if (selectedChatLoading === false && selectedChat !== null) {
       const currentChat =
@@ -34,7 +40,7 @@ function Dialogue({
         (prevSelectedChat !== selectedChat ||
           currentChat.messages.length !== prevMessageCount)
       ) {
-        // bad solution for attempted scroll before message render
+        // mid solution for attempted scroll before message render
         setTimeout(() => {
           chatRef.current.scrollTo({
             top: chatRef.current.scrollHeight,
@@ -47,7 +53,13 @@ function Dialogue({
       }
     }
     setPrevSelectedChat(selectedChat);
-  }, [chats, selectedChat, selectedChatLoading]);
+  }, [
+    chats,
+    selectedChat,
+    selectedChatLoading,
+    prevMessageCount,
+    prevSelectedChat,
+  ]);
 
   return (
     <div className="md:pl-[289px] w-full h-screen p-0 m-0 overflow-x-hidden bg-white dark:bg-gray-800">
