@@ -9,10 +9,12 @@ function CopyButton({ text, copyMessage }) {
   };
 
   useEffect(() => {
-    setInterval(() => {
-      setCopied(false);
-    }, 3000);
-  }, [copied === true]);
+    if (copied === true) {
+      setInterval(() => {
+        setCopied(false);
+      }, 3000);
+    }
+  }, [copied]);
   return (
     <div className="absolute bottom-0 md:top-0 right-0 h-[1.65rem] rounded text-gray-400 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-300 ">
       <button

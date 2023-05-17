@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Head from "next/head";
 import Dashboard from "../components/Dashboard";
 import Dialogue from "../components/Dialogue";
@@ -16,6 +16,26 @@ export default function Home() {
   const [selectedChatLoading, setSelectedChatLoading] = useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
+  const errorRef = useRef();
+  const chatsRef = useRef();
+
+  useEffect(() => {
+    if (errorRef.current !== error) {
+      errorRef.current = error;
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (errorRef.current) {
+      setError(null);
+    }
+  }, [chats, selectedChat]);
+
+  useEffect(() => {
+    if (chatsRef.length !== chats.length) {
+      chatsRef.length = chats.length;
+    }
+  }, [chats]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -24,7 +44,7 @@ export default function Home() {
       const handleFetchChatTitles = async () => {
         try {
           const chatTitles = await fetchChatTitles();
-          if (chatTitles.length !== chats.length) {
+          if (chatTitles.length !== chatsRef.length) {
             setChats(chatTitles);
           }
         } catch (error) {
@@ -34,12 +54,12 @@ export default function Home() {
 
       handleFetchChatTitles();
     }
-  }, [status, router, chats.length]);
+  }, [session, status, router, chatsRef]);
 
   const shouldFetchChatContent = useMemo(() => {
     const chat = chats.find((chat) => chat._id === selectedChat);
     return !chat || (chat && !chat.messages);
-  }, [selectedChat]);
+  }, [chats, selectedChat]);
 
   useEffect(() => {
     if (selectedChat !== null && shouldFetchChatContent) {
@@ -65,13 +85,7 @@ export default function Home() {
 
       fetchSelectedChat();
     }
-  }, [selectedChat, shouldFetchChatContent]);
-
-  useEffect(() => {
-    if (error) {
-      setError(null);
-    }
-  }, [chats, selectedChat]);
+  }, [chats, selectedChat, shouldFetchChatContent]);
 
   return (
     <>

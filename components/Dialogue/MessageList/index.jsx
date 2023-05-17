@@ -11,7 +11,7 @@ function MessageList({ chats, selectedChat, session, setChats }) {
     if (messages !== currentMessages) {
       setMessages(currentMessages);
     }
-  }, [selectedChat, chats]);
+  }, [selectedChat, chats, messages]);
 
   return (
     <>

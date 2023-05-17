@@ -18,28 +18,18 @@ function PromptActions({
   const [showRegen, setShowRegen] = useState(false);
 
   useEffect(() => {
-    // show regen if last user message recieved no response
     if (selectedChat) {
       const selectedIndex = chats.findIndex(
         (chat) => chat._id === selectedChat
       );
       const chat = { ...chats[selectedIndex] };
-      // if last message in array is a user message
-      if (
-        chat &&
-        chat.messages[chat.messages.length - 1].role === "user" &&
-        chat.messages.length % 2 === 0
-      ) {
+      if (chat && chat.messages) {
         setShowRegen(true);
       }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (showRegen === true) {
+    } else {
       setShowRegen(false);
     }
-  }, [selectedChat]);
+  }, [selectedChat, chats]);
 
   const createMessageData = async (e) => {
     let messageHistory = [];
@@ -105,6 +95,7 @@ function PromptActions({
     e.preventDefault();
     if (userText.length >= 1) {
       setLoading(true);
+      setShowRegen(false);
       setError(null);
       try {
         // create Chat based on user prompt
@@ -138,7 +129,7 @@ function PromptActions({
         const messageData = updatedChat.messages
           .slice(0, -1)
           .map((message) => ({
-            role: message.role, 
+            role: message.role,
             content: message.content,
           }));
         const gptResponse = await sendMessageHistoryToGPT(messageData);
