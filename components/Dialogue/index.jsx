@@ -62,7 +62,7 @@ function Dialogue({
   ]);
 
   return (
-    <div className="md:pl-[289px] w-full h-screen p-0 m-0 overflow-x-hidden bg-white dark:bg-gray-800">
+    <div className="md:pl-[289px] w-full h-full p-0 m-0 overflow-hidden bg-white dark:bg-gray-800">
       <div className="flex chat w-full h-full">
         {error ? (
           <ErrorDisplay error={error} />
