@@ -118,7 +118,6 @@ a {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
-
 ::-webkit-scrollbar {
   height: 1rem;
   width: 0.5rem;
@@ -136,13 +135,19 @@ a {
 
 ::-webkit-scrollbar-thumb {
   --tw-border-opacity: 1;
-  background-color: rgba(217, 217, 227, 0.8);
-  border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+  background-color: transparent; /* Make it transparent normally */
+  border-color: transparent; /* Make border transparent normally */
   border-radius: 9999px;
   border-width: 1px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+/* When dashboard is hovered over, change the color of the scrollbar */
+.dashboard:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(217, 217, 227, 0.8);
+  border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+}
+
+.dashboard:hover::-webkit-scrollbar-thumb:hover {
   --tw-bg-opacity: 1;
   background-color: rgba(236, 236, 241, 1);
 }
