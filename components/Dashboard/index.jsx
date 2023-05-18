@@ -29,7 +29,6 @@ function Dashboard({
 
   const toggleSidebar = () => {
     setCloseSidebar(!closeSidebar);
-    console.log(closeSidebar);
   };
 
   useEffect(() => {

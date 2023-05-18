@@ -36,6 +36,7 @@ module.exports = {
       height: {
         "85%": "85%",
         "15%": "15%",
+        screen: "calc(var(--vh, 1vh) * 100)",
       },
       width: {
         "50vw": "50vw",
