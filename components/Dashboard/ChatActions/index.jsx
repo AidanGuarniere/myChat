@@ -14,7 +14,7 @@ function ChatActions({
   return (
     <>
       <NewChatButton setSelectedChat={setSelectedChat} />
-      <div className="dashboard w-full h-full overflow-y-scroll pl-2 md:pl-[.55rem]">
+      <div className="dashboard w-full h-full overflow-y-scroll px-2 hover:pl-2 md:pl-[.55rem]">
         <div className="w-full h-full flex flex-col gap-2 text-gray-100 font-normal">
           {[...chats].reverse().map((chat, index) => (
             <ChatItem
