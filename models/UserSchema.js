@@ -18,12 +18,6 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 8,
     maxlength: 60,
-    validate: {
-      validator: (password) =>
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{}|;':",./?\\-])[A-Za-z\d!@#$%^&*()_+[\]|;':",./<>?\\-]{8,}$/.test(
-          password
-        ),
-    },
   },
   apiKey: {
     type: String,

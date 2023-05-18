@@ -14,7 +14,6 @@ export async function handleSignUp(username, password, openAIAPIKey) {
 
       body: JSON.stringify({ username, password, openAIAPIKey }),
     });
-
     if (response.ok) {
       const data = await response.json();
       // Sign the user in after successful signup
@@ -26,11 +25,11 @@ export async function handleSignUp(username, password, openAIAPIKey) {
       });
 
       if (!signInResult.ok) {
-        console.error("Sign in failed:", signInResult.error);
+        console.error("B Sign in failed:", signInResult.error);
       }
     } else {
       const errorData = await response.json();
-      console.error("Signup failed:", errorData.error);
+      console.error("A Signup failed:", errorData.error);
     }
   } catch (error) {
     console.error("An error occurred during signup:", error);
