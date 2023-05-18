@@ -55,7 +55,7 @@ function Dashboard({
 
   return (
     <>
-      <div className="dashboard hidden md:fixed md:inset-y-0 md:flex md:w-[289px] max-w-xs md:flex-col bg-gray-900 dark z-50">
+      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[289px] max-w-xs md:flex-col bg-gray-900 dark z-50">
         <div className="flex w-full h-full min-h-0 flex-col">
           <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
             <nav className="flex w-full h-full flex-1 flex-col space-y-1 text-base font-normal ">
@@ -115,7 +115,7 @@ function Dashboard({
         ></div>
 
         <aside
-          className={`dashboard fixed top-0 left-0 bottom-0 w-[82%] max-w-xs bg-gray-900 dark z-50 ${
+          className={`fixed top-0 left-0 bottom-0 w-[82%] max-w-xs bg-gray-900 dark z-50 ${
             closeSidebar ? "openSidebar" : "closeSidebar"
           }`}
         >
