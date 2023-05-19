@@ -121,7 +121,7 @@ const AuthForm = () => {
         />
         {password && password.length < 8 && !isLogin && (
           <div className="flex justify-start">
-            <span className="text-sm">
+            <span className="text-start text-sm">
               - Password must contain at least 8 characters
             </span>
           </div>
