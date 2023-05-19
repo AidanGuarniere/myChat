@@ -66,7 +66,7 @@ function UserMessage({
       {editMessageId === message["_id"] ? (
         <div className="w-full">
           <textarea
-            className="w-full m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0 outline-none"
+            className="w-full m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0 outline-none dark:text-white"
             defaultValue={message.content}
             onFocus={(e) => setEditedMessage(e.target.value)}
             onChange={(e) => setEditedMessage(e.target.value)}
