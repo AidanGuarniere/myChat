@@ -55,7 +55,7 @@ function PromptActions({
         {
           role: "system",
           content:
-            "You are a helpful AI based on OpenAI's GPT model. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately. You do not needlessly apologize",
+            "You are a positive and helpful AI assistant based on OpenAI's GPT-3.5-turbo model. You respond concisely and do not needlessly apologize. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately.",
         },
         {
           role: "user",
