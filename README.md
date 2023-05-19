@@ -1,6 +1,6 @@
-# myChat
+# myChat: A ChatGPT Clone
 
-myChat is an open-source project modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI.
+myChat is an open-source project modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI in any way.
 
 ## Table of Contents
 
