@@ -174,8 +174,11 @@ const AuthForm = () => {
                 {fieldValidity.apiKey ? <CheckmarkIcon /> : <XIcon />} A valid
                 OpenAI API key is required for this application to work.
               </span>
-              <span className="mr-2 text-gray-500">
-                - You can generate an OpenAI API key{" "}
+              <span className="text-gray-500">
+                <div className="inline-flex text-xl w-[1.25rem] justify-center">
+                  -
+                </div>
+                You can generate an OpenAI API key{" "}
                 <Link
                   className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
                   href="https://platform.openai.com/account/api-keys"
