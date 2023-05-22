@@ -175,7 +175,7 @@ const AuthForm = () => {
                 OpenAI API key is required for this application to work.
               </span>
               <span className="text-gray-500">
-                <div className="inline-flex text-xl w-[1.25rem] justify-center mr-1">
+                <div className="inline-flex text-xl w-[1.25rem] justify-center">
                   -
                 </div>
                 You can generate an OpenAI API key{" "}
