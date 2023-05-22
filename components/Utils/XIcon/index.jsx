@@ -9,7 +9,7 @@ export default function XIcon() {
       viewBox="0 0 24 24"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-[1.125rem] w-[1.125rem] inline pr-2"
+      className="h-[1.125rem] w-[1.125rem] inline"
       height="1em"
       width="1em"
       xmlns="http://www.w3.org/2000/svg"
