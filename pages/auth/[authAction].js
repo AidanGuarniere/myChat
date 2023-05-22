@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { handleSignUp, handleLogin } from "../../utils/authUtils";
 import useRedirectIfAuthenticated from "../../hooks/useRedirectIfAuthenticated";
+import CheckmarkIcon from "../../components/Utils/CheckmarkIcon";
+import XIcon from "../../components/Utils/XIcon";
+
 import Link from "next/link";
 
 const AuthForm = () => {
@@ -11,7 +14,8 @@ const AuthForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [openAIAPIKey, setOpenAIAPIKey] = useState("");
-
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [apiKeyFocused, setApiKeyFocused] = useState(false);
   const isLogin = authAction === "login";
 
   const handleSubmit = (event) => {
@@ -64,6 +68,14 @@ const AuthForm = () => {
     return results;
   };
 
+  const fieldValidity = useMemo(() => {
+    return checkField({
+      username: isLogin ? "" : username, // we pass an empty string for username in login mode
+      password: isLogin ? "" : password,
+      apiKey: isLogin ? "" : openAIAPIKey, // we pass an empty string for apiKey in login mode
+    });
+  }, [username, password, openAIAPIKey, isLogin]);
+
   const toggleSubmitButton = () => {
     let disabled;
     if (isLogin) {
@@ -112,6 +124,8 @@ const AuthForm = () => {
           placeholder="Password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          onFocus={() => setPasswordFocused(true)}
+          onBlur={() => setPasswordFocused(false)}
           pattern="^[A-Za-z\d!@#$%^&*_+|;':,.?-]{8,}$"
           minLength={8}
           required
@@ -119,19 +133,26 @@ const AuthForm = () => {
             !isLogin ? getBorder("password") : "border-green-200"
           }`}
         />
-        {password && password.length < 8 && !isLogin && (
-          <div className="flex justify-start">
-            <span className="text-start text-sm">
-              - Password must contain at least 8 characters
-            </span>
-          </div>
-        )}
+        {(passwordFocused ||
+          (password.length > 0 && !fieldValidity.password)) &&
+          !isLogin && (
+            <div
+              className={`flex items-center pl-2 text-sm ${
+                fieldValidity.password ? "text-green-200" : "text-red-600"
+              }`}
+            >
+              {fieldValidity.password ? <CheckmarkIcon /> : <XIcon />}
+              <span>Password must contain at least 8 characters</span>
+            </div>
+          )}
         {!isLogin && (
           <input
             type="text"
             placeholder="OpenAI API Key"
             value={openAIAPIKey}
             onChange={(event) => setOpenAIAPIKey(event.target.value)}
+            onFocus={() => setApiKeyFocused(true)}
+            onBlur={() => setApiKeyFocused(false)}
             required
             pattern="^sk-[\w]+$"
             className={`w-full p-2 mb-4 rounded-md text-gray-900 placeholder-gray-500 focus:border ${getBorder(
@@ -139,22 +160,33 @@ const AuthForm = () => {
             )} focus:outline-none`}
           />
         )}
-        {openAIAPIKey && !openAIAPIKey.match(/^sk-[\w]+$/) && !isLogin && (
-          <div className="flex justify-start">
-            <span className="text-start text-sm">
-              - A valid OpenAI API key is required for this application to work.{" "}
-              <br />- You can generate one{" "}
-              <Link
-                className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
-                href="https://platform.openai.com/account/api-keys"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                here
-              </Link>
-            </span>
-          </div>
-        )}
+
+        {(apiKeyFocused ||
+          (openAIAPIKey.length > 0 && !fieldValidity.apiKey)) &&
+          !isLogin && (
+            <div
+              className={`flex flex-col items-start pl-2 text-sm ${
+                fieldValidity.apiKey ? "text-green-200" : "text-red-600"
+              }`}
+            >
+              {" "}
+              <span>
+                {fieldValidity.apiKey ? <CheckmarkIcon /> : <XIcon />} A valid
+                OpenAI API key is required for this application to work.
+              </span>
+              <span className="mr-2 text-gray-500">
+                - You can generate an OpenAI API key{" "}
+                <Link
+                  className="underline text-green-200 hover:text-blue-800 transition-colors duration-200"
+                  href="https://platform.openai.com/account/api-keys"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  here
+                </Link>
+              </span>
+            </div>
+          )}
         <button
           type="submit"
           disabled={toggleSubmitButton()}
