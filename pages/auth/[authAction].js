@@ -137,7 +137,7 @@ const AuthForm = () => {
           (password.length > 0 && !fieldValidity.password)) &&
           !isLogin && (
             <div
-              className={`flex items-center pl-2 text-sm ${
+              className={`flex items-center pl-2 text-xs ${
                 fieldValidity.password ? "text-green-200" : "text-red-600"
               }`}
             >
@@ -165,13 +165,13 @@ const AuthForm = () => {
           (openAIAPIKey.length > 0 && !fieldValidity.apiKey)) &&
           !isLogin && (
             <div
-              className={`flex flex-col items-start pl-2 text-sm ${
+              className={`flex flex-col items-start pl-2 text-xs ${
                 fieldValidity.apiKey ? "text-green-200" : "text-red-600"
               }`}
             >
               {" "}
               <span>
-                {fieldValidity.apiKey ? <CheckmarkIcon /> : <XIcon />} A valid
+                {fieldValidity.apiKey ?<CheckmarkIcon />:<XIcon />}A valid
                 OpenAI API key is required for this application to work.
               </span>
               <span className="text-gray-500">
