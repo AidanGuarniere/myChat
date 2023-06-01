@@ -55,10 +55,10 @@ function Dashboard({
 
   return (
     <>
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[289px] max-w-xs md:flex-col bg-gray-900 dark z-50">
+      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-[260px] max-w-xs md:flex-col bg-gray-900 dark z-50">
         <div className="flex w-full h-full min-h-0 flex-col">
           <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
-            <nav className="flex w-full h-full flex-1 flex-col space-y-1 text-base font-normal ">
+            <nav className="flex w-full h-full flex-1 flex-col space-y-1 text-sm font-normal ">
               <ChatActions
                 session={session}
                 chats={chats}

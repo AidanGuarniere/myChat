@@ -66,7 +66,7 @@ function UserMessage({
       {editMessageId === message["_id"] ? (
         <div className="w-full">
           <textarea
-            className="w-full m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0 outline-none"
+            className="w-full m-0 resize-none border-0 bg-transparent p-0 focus:ring-0 focus-visible:ring-0 outline-none dark:text-white"
             defaultValue={message.content}
             onFocus={(e) => setEditedMessage(e.target.value)}
             onChange={(e) => setEditedMessage(e.target.value)}
@@ -88,18 +88,20 @@ function UserMessage({
           </div>
         </div>
       ) : (
-        <div className="relative w-full">
-          <p className="text-lg dark:text-gray-100 whitespace-pre-wrap px-[1.6rem] md:px-0">
-            {message.content}
-          </p>
+        <>
+          <div className="relative w-full">
+            <p className="text-lg dark:text-gray-100 whitespace-pre-wrap px-[1.6rem] md:px-0">
+              {message.content}
+            </p>
+          </div>
           <div
             className={`${
               selectedMessageId !== message["_id"] && "md:hidden"
-            }flex absolute bottom-0 right-0 mb-2 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible`}
+            }flex absolute bottom-0 right-0 gap-2 md:gap-3 lg:gap-1 lg:mb-0 lg:mt-2 lg:pl-2 visible`}
           >
             <button
               className="p-1 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-300 disabled:dark:hover:text-gray-400 
-              md:invisible md:group-hover:visible"
+                    md:invisible md:group-hover:visible"
               onClick={() => handleEditToggle(message["_id"])}
             >
               <svg
@@ -119,7 +121,7 @@ function UserMessage({
               </svg>
             </button>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

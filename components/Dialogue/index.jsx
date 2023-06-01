@@ -3,6 +3,7 @@ import ErrorDisplay from "../ErrorDisplay";
 import PromptActions from "./PromptActions";
 import ChatScrollButton from "./ChatScrollButton";
 import MessageList from "./MessageList";
+import ModelSelect from "./ModelSelect";
 
 function Dialogue({
   session,
@@ -21,6 +22,7 @@ function Dialogue({
   const [scrollHeight, setScrollHeight] = useState();
   const [prevSelectedChat, setPrevSelectedChat] = useState(null);
   const [prevMessageCount, setPrevMessageCount] = useState(0);
+  const [model, setModel] = useState("gpt-3.5-turbo");
   const selectedChatIndex = chats.findIndex(
     (chat) => chat._id === selectedChat
   );
@@ -62,7 +64,7 @@ function Dialogue({
   ]);
 
   return (
-    <div className="md:pl-[289px] w-full h-full p-0 m-0 overflow-hidden bg-white dark:bg-gray-800">
+    <div className="md:pl-[260px] w-full h-full p-0 m-0 overflow-hidden bg-white dark:bg-gray-800">
       <div className="flex chat w-full h-full">
         {error ? (
           <ErrorDisplay error={error} />
@@ -84,11 +86,15 @@ function Dialogue({
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
           </div>
         ) : (
-          <h1 className="text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow ">
-            MyGPT
-          </h1>
+          <div className="flex flex-col gap-2 items-center justify-center flex-grow ">
+            <ModelSelect model={model} setModel={setModel} />
+            <h1 className="text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 ">
+              myChat
+            </h1>
+          </div>
         )}
         <PromptActions
+          model={model}
           session={session}
           setError={setError}
           userText={userText}

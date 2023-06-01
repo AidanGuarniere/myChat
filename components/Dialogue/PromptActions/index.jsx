@@ -8,6 +8,7 @@ function PromptActions({
   session,
   setError,
   userText,
+  model,
   setUserText,
   chats,
   setChats,
@@ -55,7 +56,7 @@ function PromptActions({
         {
           role: "system",
           content:
-            "You are a helpful AI based on OpenAI's GPT model. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately. You do not needlessly apologize",
+            "You are a positive and helpful AI assistant based on OpenAI's GPT-3.5-turbo model. You respond concisely and do not needlessly apologize. You write your code in markdown codeblocks and ask questions when you need more context to complete a task or answer a question accurately.",
         },
         {
           role: "user",
@@ -101,9 +102,10 @@ function PromptActions({
         // create Chat based on user prompt
         const messageData = await createMessageData(e);
         // send Chat message data to GPT API
-        const gptResponse = await sendMessageHistoryToGPT(
-          messageData.messageHistory
-        );
+        const gptResponse = await sendMessageHistoryToGPT({
+          model: model,
+          messageHistory: messageData.messageHistory,
+        });
         // update Chat with GPT response
         await handleGPTResponse(messageData.chatId, gptResponse);
         setLoading(false);
@@ -147,7 +149,7 @@ function PromptActions({
   };
 
   return (
-    <div className="md:pl-[289px] absolute bottom-[5.5rem] md:bottom-12 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent z-10">
+    <div className="md:pl-[260px] absolute bottom-[5.5rem] md:bottom-12 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent z-10">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}

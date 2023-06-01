@@ -17,9 +17,9 @@ function PromptForm({ userText, setUserText, handleSubmit, loading }) {
   };
 
   return (
-    <div className="stretch flex flex-col flex-grow">
+    <div className="stretch flex flex-col flex-grow w-full">
       <form
-        className="flex flex-row gap-3 w-full mx-auto max-w-[96%] md:max-w-md lg:max-w-2xl xl:max-w-[53.275rem]  mt-2 mb-1 sm:pl-3.5 py-2 sm:py-3.5 pr-0 relative border border-black/10 
+        className="flex flex-row gap-3 w-full mx-auto max-w-[96%] md:max-w-md lg:max-w-2xl xl:max-w-3xl mt-2 mb-1 sm:pl-3.5 py-2 sm:py-3.5 pr-0 relative border border-black/10 
                  bg-white rounded-[.4325rem] dark:border-gray-900/50 dark:text-white dark:bg-gray-700 shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)] sm:min-h-[1rem] "
         onSubmit={(e) => {
           handleSubmit(e);

@@ -90,7 +90,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>myGPT</title>
+        <title>myChat</title>
         <meta name="description" content="page description here" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -107,7 +107,7 @@ export default function Home() {
           setSelectedChat={setSelectedChat}
         />
         <main className="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
-          {status === "authenticated" && (
+          {status === "authenticated" ? (
             <div className="flex overflow-x-hidden items-bottom w-full h-full">
               <Dialogue
                 session={session}
@@ -123,6 +123,10 @@ export default function Home() {
                 setSelectedChatLoading={setSelectedChatLoading}
               />
             </div>
+          ) : (
+            <h1 className="md:pl-[260px] text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow ">
+              myChat
+            </h1>
           )}
         </main>
         <Footer />

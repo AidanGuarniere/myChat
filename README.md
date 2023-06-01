@@ -1,6 +1,6 @@
-# MyGPT: A ChatGPT Clone
+# myChat: A ChatGPT Clone
 
-MyGPT is an open-source website modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI.
+myChat is an open-source project modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI in any way.
 
 ## Table of Contents
 
@@ -61,7 +61,7 @@ Once you have a running Redis instance, you'll need to obtain the connection str
 1. Clone this repository:
 
    ```
-   git clone https://github.com/your-username/mygpt.git
+   git clone https://github.com/your-username/myChat.git
    ```
 
    or get started using GitHub's template feature
@@ -69,7 +69,7 @@ Once you have a running Redis instance, you'll need to obtain the connection str
 2. Navigate to the project directory:
 
    ```
-   cd mygpt
+   cd myChat
    ```
 
 3. Install the dependencies:
@@ -120,7 +120,7 @@ Replace `http://localhost:3000` with whatever port your application is running o
 
 ## Deployment
 
-To deploy your MyGPT Clone to Vercel, follow these steps:
+To deploy your myChat Clone to Vercel, follow these steps:
 
 1. Sign up for a [Vercel](https://vercel.com/) account if you haven't already.
 
@@ -139,7 +139,7 @@ To deploy your MyGPT Clone to Vercel, follow these steps:
 4. Navigate to your project directory:
 
    ```
-   cd mygpt
+   cd myChat
    ```
 
 5. Run the following command to deploy your application:
@@ -160,16 +160,16 @@ To deploy your MyGPT Clone to Vercel, follow these steps:
 
 Replace `http://localhost:3000` with whatever port your application is running on, `yourURI` with your MongoDB connection string, `yourSecret` with a secure random string, `your32HexDigitString` with a 32-digit hexadecimal string for AES-128 encryption, and `yourRedisConnectionString` with your Redis connection string.
 
-7. Once the deployment is complete, Vercel will provide you with a live URL to access your MyGPT Clone.
+7. Once the deployment is complete, Vercel will provide you with a live URL to access your myChat Clone.
 
-Remember that every time you make changes to your MyGPT Clone and want to deploy the updated version, you can simply run `vercel --prod` from the project directory.
+Remember that every time you make changes to your myChat Clone and want to deploy the updated version, you can simply run `vercel --prod` from the project directory.
 
 ## Contributing
 
 We welcome contributions! To contribute, please follow these steps:
 
 1. Fork this repository
-2. Clone your fork to your local machine: `git clone https://github.com/your-username/mygpt.git`
+2. Clone your fork to your local machine: `git clone https://github.com/your-username/myChat.git`
 3. Create your feature branch: `git checkout -b feature/my-new-feature` or `git checkout -b fix/my-new-fix`
 4. Commit your changes: `git commit -am 'Add some feature'`
 5. Push to the branch: `git push origin feature/my-new-feature`
