@@ -8,13 +8,13 @@ import axios from "axios";
 const fetchModelsFromAPI = async (apiKey) => {
   const config = {
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    }
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
   };
 
   try {
-    const models = await axios.get('https://api.openai.com/v1/models', config);
+    const models = await axios.get("https://api.openai.com/v1/models", config);
     return models.data;
   } catch (error) {
     console.error(error);

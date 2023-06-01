@@ -77,6 +77,9 @@ function Dialogue({
               setScrollHeight(chatRef.current.scrollTop);
             }}
           >
+            <div className="flex justify-center items-center h-10 w-full border-b border-gray-500/20">
+              <span className="text-gray-500">{model}</span>
+            </div>
             <MessageList
               chats={chats}
               selectedChat={selectedChat}
