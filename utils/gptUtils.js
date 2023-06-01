@@ -4,7 +4,7 @@ import axios from "axios";
 export const sendMessageHistoryToGPT = async ({model, messageHistory}) => {
   try {
     const response = await axios.post("/api/proxy/gpt", {
-      model:model,
+      model,
       messages: messageHistory,
     });
     if (response.status === 200) {

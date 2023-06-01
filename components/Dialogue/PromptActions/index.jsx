@@ -8,7 +8,7 @@ function PromptActions({
   session,
   setError,
   userText,
-  model,
+  selectedModel,
   setUserText,
   chats,
   setChats,
@@ -35,11 +35,13 @@ function PromptActions({
   const createMessageData = async (e) => {
     let messageHistory = [];
     let chatId = selectedChat;
+    let messageModel = selectedModel;
     if (selectedChat) {
       const selectedIndex = chats.findIndex(
         (chat) => chat._id === selectedChat
       );
       const updatedChat = { ...chats[selectedIndex] };
+      messageModel = updatedChat.model;
       updatedChat.messages.push({
         role: "user",
         content: userText,
@@ -66,9 +68,8 @@ function PromptActions({
       const newChatData = {
         userId: session.user.id,
         title: userText,
-        model:model,
+        model: selectedModel,
         messages: firstMessages,
-        model: model,
       };
       const newChat = await createChat(newChatData);
       messageHistory = firstMessages;
@@ -80,7 +81,7 @@ function PromptActions({
     }
     setUserText("");
     e.target.style.height = "auto";
-    return { chatId, messageHistory };
+    return { chatId, messageModel, messageHistory };
   };
 
   const handleGPTResponse = async (chatId, messageData) => {
@@ -105,7 +106,7 @@ function PromptActions({
         const messageData = await createMessageData(e);
         // send Chat message data to GPT API
         const gptResponse = await sendMessageHistoryToGPT({
-          model: model,
+          model: messageData.messageModel,
           messageHistory: messageData.messageHistory,
         });
         // update Chat with GPT response
@@ -136,7 +137,10 @@ function PromptActions({
             role: message.role,
             content: message.content,
           }));
-        const gptResponse = await sendMessageHistoryToGPT(messageData);
+        const gptResponse = await sendMessageHistoryToGPT({
+          model: chats[selectedIndex].model,
+          messageHistory: messageData,
+        });
         messageData.push(gptResponse.choices[0].message);
         updatedChat.messages = messageData;
         await updateChat(selectedChat, updatedChat);

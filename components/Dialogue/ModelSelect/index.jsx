@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const ModelSelect = ({ model, setModel }) => {
+const ModelSelect = ({ selectedModel, setSelectedModel }) => {
   const [hasGPT4, setHasGPT4] = useState(false);
   useEffect(() => {
     // check if user's api key has access to gpt-4 api
@@ -18,8 +18,8 @@ const ModelSelect = ({ model, setModel }) => {
   }, []);
 
   const handleModelSelect = (selection) => {
-    if (model !== selection) {
-      setModel(selection);
+    if (selectedModel !== selection) {
+      setSelectedModel(selection);
     }
   };
 
@@ -33,7 +33,7 @@ const ModelSelect = ({ model, setModel }) => {
       </label>
       <select
         id="model-select"
-        value={model}
+        value={selectedModel}
         onChange={(e) => handleModelSelect(e.target.value)}
         className="shadow appearance-none border rounded w-auto py-2 px-3 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
@@ -42,7 +42,7 @@ const ModelSelect = ({ model, setModel }) => {
         </option>
         {hasGPT4 && (
           <>
-            <option key={"gpt-4"} value={"gpt-4-"}>
+            <option key={"gpt-4"} value={"gpt-4"}>
               {"gpt-4"}
             </option>
             <option key={"gpt-4-0314"} value={"gpt-4-0314"}>

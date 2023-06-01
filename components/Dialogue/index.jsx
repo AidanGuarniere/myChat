@@ -22,10 +22,16 @@ function Dialogue({
   const [scrollHeight, setScrollHeight] = useState();
   const [prevSelectedChat, setPrevSelectedChat] = useState(null);
   const [prevMessageCount, setPrevMessageCount] = useState(0);
-  const [model, setModel] = useState("gpt-3.5-turbo");
+  const [selectedModel, setSelectedModel] = useState("gpt-3.5-turbo");
   const selectedChatIndex = chats.findIndex(
     (chat) => chat._id === selectedChat
   );
+
+  useEffect(() => {
+    if (selectedChat === null) {
+      setSelectedModel("gpt-3.5-turbo");
+    }
+  }, [selectedChat]);
 
   useLayoutEffect(() => {
     if (chatRef.current) {
@@ -78,7 +84,9 @@ function Dialogue({
             }}
           >
             <div className="flex justify-center items-center h-10 w-full border-b border-gray-500/20">
-              <span className="text-gray-500">{model}</span>
+              <span className="text-gray-500">
+                {chats[selectedChatIndex].model}
+              </span>
             </div>
             <MessageList
               chats={chats}
@@ -90,14 +98,17 @@ function Dialogue({
           </div>
         ) : (
           <div className="flex flex-col gap-2 items-center justify-center flex-grow ">
-            <ModelSelect model={model} setModel={setModel} />
+            <ModelSelect
+              selectedModel={selectedModel}
+              setSelectedModel={setSelectedModel}
+            />
             <h1 className="text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 ">
               myChat
             </h1>
           </div>
         )}
         <PromptActions
-          model={model}
+          selectedModel={selectedModel}
           session={session}
           setError={setError}
           userText={userText}
