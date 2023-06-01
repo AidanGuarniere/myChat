@@ -6,15 +6,15 @@ import { decrypt } from "../../../utils/crypto";
 import { Configuration, OpenAIApi } from "openai";
 import rateLimiter from "../../../utils/rateLimiter";
 
-const fetchDataFromAPI = async (messages, apiKey) => {
+const fetchDataFromAPI = async (model, messages, apiKey) => {
   const configuration = new Configuration({
     apiKey,
   });
   const openai = new OpenAIApi(configuration);
-
+console.log(model)
   try {
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: model,
       messages: messages,
     });
     return completion.data;
@@ -24,9 +24,9 @@ const fetchDataFromAPI = async (messages, apiKey) => {
   }
 };
 
-const handleRequest = async (user, messages) => {
+const handleRequest = async (user, model, messages) => {
   const decryptedApiKey = await decrypt(user.apiKey);
-  return fetchDataFromAPI(messages, decryptedApiKey);
+  return fetchDataFromAPI(model, messages, decryptedApiKey);
 };
 
 export default async function handler(req, res) {
@@ -48,8 +48,8 @@ export default async function handler(req, res) {
   }
   try {
     const user = await User.findById(session.user.id);
-    const { messages } = req.body;
-    const completion = await handleRequest(user, messages);
+    const { model, messages } = req.body;
+    const completion = await handleRequest(user, model, messages);
     res.status(200).json({ completion });
   } catch (error) {
     const statusCode = error.status || 500;

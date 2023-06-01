@@ -8,6 +8,7 @@ function PromptActions({
   session,
   setError,
   userText,
+  model,
   setUserText,
   chats,
   setChats,
@@ -101,9 +102,10 @@ function PromptActions({
         // create Chat based on user prompt
         const messageData = await createMessageData(e);
         // send Chat message data to GPT API
-        const gptResponse = await sendMessageHistoryToGPT(
-          messageData.messageHistory
-        );
+        const gptResponse = await sendMessageHistoryToGPT({
+          model: model,
+          messageHistory: messageData.messageHistory,
+        });
         // update Chat with GPT response
         await handleGPTResponse(messageData.chatId, gptResponse);
         setLoading(false);
