@@ -43,7 +43,7 @@ const ModelSelect = ({ selectedModel, setSelectedModel }) => {
         {hasGPT4 && (
           <>
             <option key={"gpt-4"} value={"gpt-4"}>
-              {"gpt-4"}
+            {"gpt-4"}
             </option>
             <option key={"gpt-4-0314"} value={"gpt-4-0314"}>
               {"gpt-4-0314"}
