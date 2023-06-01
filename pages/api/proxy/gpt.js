@@ -11,7 +11,6 @@ const fetchDataFromAPI = async (model, messages, apiKey) => {
     apiKey,
   });
   const openai = new OpenAIApi(configuration);
-console.log(model)
   try {
     const completion = await openai.createChatCompletion({
       model: model,

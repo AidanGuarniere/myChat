@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const ModelSelect = ({ model, setModel }) => {
-  // const [models, setModels] = useState([]);
-
-  // useEffect(() => {
-  //   // Fetch the list of available models on component mount
-  //   axios
-  //     .get("/api/proxy/models")
-  //     .then((response) => {
-  //       console.log(response);
-  //       const modelNames = response.data.models.data.map((model) => model.id);
-  //       setModels(modelNames);
-  //     })
-  //     .catch((err) => console.error(err));
-  // }, []);
+  const [hasGPT4, setHasGPT4] = useState(false);
+  useEffect(() => {
+    // check if user's api key has access to gpt-4 api
+    axios
+      .get("/api/proxy/models")
+      .then((response) => {
+        response.data.models.data.forEach((model) => {
+          if (model.id === "gpt-4") {
+            setHasGPT4(true);
+          }
+        });
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleModelSelect = (selection) => {
     if (model !== selection) {
@@ -39,9 +40,16 @@ const ModelSelect = ({ model, setModel }) => {
         <option key={"gpt-3.5-turbo"} value={"gpt-3.5-turbo"}>
           {"gpt-3.5-turbo"}
         </option>
-        <option key={"gpt-4"} value={"gpt-4"}>
-          {"gpt-4"}
-        </option>
+        {hasGPT4 && (
+          <>
+            <option key={"gpt-4"} value={"gpt-4-"}>
+              {"gpt-4"}
+            </option>
+            <option key={"gpt-4-0314"} value={"gpt-4-0314"}>
+              {"gpt-4-0314"}
+            </option>
+          </>
+        )}
       </select>
     </div>
   );

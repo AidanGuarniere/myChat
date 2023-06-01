@@ -66,6 +66,7 @@ function PromptActions({
       const newChatData = {
         userId: session.user.id,
         title: userText,
+        model:model,
         messages: firstMessages,
       };
       const newChat = await createChat(newChatData);
