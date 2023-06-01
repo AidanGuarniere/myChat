@@ -42,7 +42,7 @@ function Dialogue({
         (prevSelectedChat !== selectedChat ||
           currentChat.messages.length !== prevMessageCount)
       ) {
-        // mid solution for attempted scroll before message render
+        // L solution for attempted scroll before message render
         setTimeout(() => {
           chatRef.current.scrollTo({
             top: chatRef.current.scrollHeight,

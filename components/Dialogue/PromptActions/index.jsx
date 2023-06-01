@@ -67,6 +67,7 @@ function PromptActions({
         userId: session.user.id,
         title: userText,
         messages: firstMessages,
+        model: model,
       };
       const newChat = await createChat(newChatData);
       messageHistory = firstMessages;

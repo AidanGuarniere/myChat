@@ -18,10 +18,11 @@ async function handleGetRequest(req, res, userId, selectedChatId) {
 }
 
 async function handlePutRequest(req, res, userId, selectedChatId) {
-  const { title, messages } = req.body;
+  const { title, messages, model } = req.body;
   const updateData = {};
   if (title) updateData.title = title;
   if (messages) updateData.messages = messages;
+  if (model) updateData.model = model;
 
   const updatedChat = await Chat.findOneAndUpdate(
     { _id: selectedChatId, userId },

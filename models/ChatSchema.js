@@ -5,6 +5,10 @@ const messageSchema = new mongoose.Schema({
     enum: ['system', 'user', 'assistant'],
     required: true,
   },
+  // model: {
+  //   type: String,
+  //   required: true,
+  // },
   content: {
     type: String,
     required: true,
@@ -23,6 +27,10 @@ const chatSchema = new mongoose.Schema({
     required: true,
   },
   title: {
+    type: String,
+    required: true,
+  },
+  model: {
     type: String,
     required: true,
   },

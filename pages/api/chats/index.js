@@ -10,7 +10,7 @@ async function handleGetRequest(req, res, userId) {
 
   // if fields are specified, return only those fields
   if (fields) {
-    const whitelist = ["id", "title"];
+    const whitelist = ["id", "title", "model"];
     const fieldList = fields
       .split(",")
       .filter((field) => whitelist.includes(field));
@@ -23,8 +23,8 @@ async function handleGetRequest(req, res, userId) {
 }
 
 async function handlePostRequest(req, res, userId) {
-  const { title, messages } = req.body;
-  const newChat = await Chat.create({ userId, title, messages });
+  const { title, messages, model } = req.body;
+  const newChat = await Chat.create({ userId, title, messages, model });
   res.status(201).json(newChat);
 }
 
