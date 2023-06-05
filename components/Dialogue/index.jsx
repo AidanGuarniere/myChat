@@ -3,6 +3,7 @@ import ErrorDisplay from "../ErrorDisplay";
 import PromptActions from "./PromptActions";
 import ChatScrollButton from "./ChatScrollButton";
 import MessageList from "./MessageList";
+import ModelSelect from "./ModelSelect";
 
 function Dialogue({
   session,
@@ -21,9 +22,17 @@ function Dialogue({
   const [scrollHeight, setScrollHeight] = useState();
   const [prevSelectedChat, setPrevSelectedChat] = useState(null);
   const [prevMessageCount, setPrevMessageCount] = useState(0);
+  const [selectedModel, setSelectedModel] = useState("gpt-3.5-turbo");
   const selectedChatIndex = chats.findIndex(
+    //chande to .id
     (chat) => chat._id === selectedChat
   );
+
+  useEffect(() => {
+    if (selectedChat === null) {
+      setSelectedModel("gpt-3.5-turbo");
+    }
+  }, [selectedChat]);
 
   useLayoutEffect(() => {
     if (chatRef.current) {
@@ -34,13 +43,14 @@ function Dialogue({
   useEffect(() => {
     if (selectedChatLoading === false && selectedChat !== null) {
       const currentChat =
+        //chande to .id
         chats[chats.findIndex((chat) => chat._id === selectedChat)];
       if (
         chatRef.current &&
         (prevSelectedChat !== selectedChat ||
           currentChat.messages.length !== prevMessageCount)
       ) {
-        // mid solution for attempted scroll before message render
+        // L solution for attempted scroll before message render
         setTimeout(() => {
           chatRef.current.scrollTo({
             top: chatRef.current.scrollHeight,
@@ -75,6 +85,13 @@ function Dialogue({
               setScrollHeight(chatRef.current.scrollTop);
             }}
           >
+            <div className="flex justify-center items-center h-10 w-full border-b border-gray-500/20">
+              <span className="text-gray-500">
+                {/* change to selectedChat.model */}
+                {chats[selectedChatIndex].model}
+              </span>
+            </div>
+            {/* change to selectedChat, setSelectedChat*/}
             <MessageList
               chats={chats}
               selectedChat={selectedChat}
@@ -84,11 +101,18 @@ function Dialogue({
             <ChatScrollButton chatRef={chatRef} scrollHeight={scrollHeight} />
           </div>
         ) : (
-          <h1 className="text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center flex-grow ">
-            myChat
-          </h1>
+          <div className="flex flex-col gap-2 items-center justify-center flex-grow ">
+            <ModelSelect
+              selectedModel={selectedModel}
+              setSelectedModel={setSelectedModel}
+            />
+            <h1 className="text-4xl font-bold text-center dark:bg-gray-800 text-gray-300 dark:text-gray-600 ml-auto mr-auto mb-10 sm:mb-16 ">
+              myChat
+            </h1>
+          </div>
         )}
         <PromptActions
+          selectedModel={selectedModel}
           session={session}
           setError={setError}
           userText={userText}

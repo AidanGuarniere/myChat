@@ -43,6 +43,7 @@ function Dashboard({
 
   useEffect(() => {
     if (selectedChat) {
+      //change to .id
       const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
       const selectedChatTitle = { ...chats[chatIndex] };
       if (selectedChatTitle !== chatTitle) {

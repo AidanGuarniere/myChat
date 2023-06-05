@@ -1,6 +1,6 @@
 # myChat: A ChatGPT Clone
 
-myChat is an open-source project modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs. This project is NOT directly affiliated with OpenAI in any way.
+myChat is an open-source project modeled after ChatGPT. It provides a user-friendly interface for interacting with GPT-like LLMs via the OpenAI API. This project is NOT directly affiliated with OpenAI in any way.
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ myChat is an open-source project modeled after ChatGPT. It provides a user-frien
 - [Redis](https://redis.io/) - An in-memory data structure store, used as a database, cache, and message broker
 - [Crypto](https://nodejs.org/api/crypto.html) - A built-in Node.js module for handling cryptographic operations
 
-## Setup
+## Setup 
 
 ### MongoDB Setup
 

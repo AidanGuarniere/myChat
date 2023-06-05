@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MessageItem from "./MessageItem";
 
 function MessageList({ chats, selectedChat, session, setChats }) {
+  //replace with selectedChat state
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     const selectedChatIndex = chats.findIndex(
@@ -15,6 +16,8 @@ function MessageList({ chats, selectedChat, session, setChats }) {
 
   return (
     <>
+      {/* change to setSelectedChat*/}
+
       {messages.map((message, index) =>
         message.role === "system" ? null : (
           <MessageItem

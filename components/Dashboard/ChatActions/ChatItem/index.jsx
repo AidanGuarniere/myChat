@@ -13,6 +13,7 @@ export default function ChatItem({
   setError,
   handleDeleteChats,
 }) {
+  //change to .id
   const isSelectedChat = selectedChat === chat._id;
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [titleInputValue, setTitleInputValue] = useState("");
@@ -20,7 +21,7 @@ export default function ChatItem({
 
   useEffect(() => {
     const chatTitleValue = chat.title.substring(0, 20);
-    setChatTitle(chatTitleValue)
+    setChatTitle(chatTitleValue);
   }, [chat]);
 
   const inputRef = useRef(null);
@@ -33,6 +34,7 @@ export default function ChatItem({
           : "bg-gray-900 hover:bg-[rgba(52,53,65,.5)]"
       } group animate-flash `}
       key={index}
+      // fetch chat content on click
       onClick={() => {
         setSelectedChat(chat._id);
       }}

@@ -20,7 +20,6 @@ const AuthForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     if (isLogin) {
       handleLogin(username, password, openAIAPIKey);
     } else {
@@ -221,6 +220,7 @@ const AuthForm = () => {
               </span>
             </>
           )}
+          <span>Or use as a guest</span>
         </div>
       </form>
     </div>
