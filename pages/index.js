@@ -72,6 +72,7 @@ export default function Home() {
             const selectedIndex = updatedChats.findIndex(
               (chat) => chat._id === selectedChat
             );
+            console.log(selectedIndex)
             updatedChats[selectedIndex] = response.data;
             setChats(updatedChats);
           }

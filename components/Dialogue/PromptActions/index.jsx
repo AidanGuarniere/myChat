@@ -20,6 +20,7 @@ function PromptActions({
 
   useEffect(() => {
     if (selectedChat) {
+      //  change to selectedChat.messages
       const selectedIndex = chats.findIndex(
         (chat) => chat._id === selectedChat
       );
@@ -34,18 +35,23 @@ function PromptActions({
 
   const createMessageData = async (e) => {
     let messageHistory = [];
+    //  change to selectedChat.id
     let chatId = selectedChat;
+    //  change to selectedChat.model
     let messageModel = selectedModel;
     if (selectedChat) {
+      //change to selectedChat
       const selectedIndex = chats.findIndex(
         (chat) => chat._id === selectedChat
       );
+      //change to selectedChat
       const updatedChat = { ...chats[selectedIndex] };
       messageModel = updatedChat.model;
       updatedChat.messages.push({
         role: "user",
         content: userText,
       });
+      //  change to setSelectedChat(updatedChat), filter extra message properties
       let updatedChats = [...chats];
       updatedChats[selectedIndex] = updatedChat;
       setChats(updatedChats);
@@ -72,15 +78,19 @@ function PromptActions({
         messages: firstMessages,
       };
       const newChat = await createChat(newChatData);
+      //setSelectedChat(newChat)
       messageHistory = firstMessages;
       chatId = newChat._id;
+      // only add id and title to chats
       setChats((prevChats) =>
         prevChats.length ? [...prevChats, newChat] : [newChat]
       );
+      //remove
       setSelectedChat(chatId);
     }
     setUserText("");
     e.target.style.height = "auto";
+    console.log(messageModel);
     return { chatId, messageModel, messageHistory };
   };
 
@@ -90,6 +100,7 @@ function PromptActions({
       messages: messageData,
     };
     const updatedChat = await updateChat(chatId, updatedChatData);
+    //updated selectedChat.messages with gpt response
     setChats((prevChats) =>
       prevChats.map((chat) => (chat._id === chatId ? updatedChat : chat))
     );
@@ -144,6 +155,7 @@ function PromptActions({
         messageData.push(gptResponse.choices[0].message);
         updatedChat.messages = messageData;
         await updateChat(selectedChat, updatedChat);
+        //change to update selectedChat
         const updatedChats = await fetchChats();
         setChats(updatedChats);
         setLoading(false);
@@ -155,7 +167,7 @@ function PromptActions({
   };
 
   return (
-    <div className="md:pl-[260px] absolute bottom-[5.5rem] md:bottom-12 left-0 w-full md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient py-2  md:pt-8 border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent z-10">
+    <div className="md:pl-[260px] absolute bottom-0 left-0 w-full pt-8 pb-24 md:pb-12 bg-vert-light-gradient dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradientborder-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent">
       <RegenResponseButton
         handleRegen={handleRegen}
         loading={loading}

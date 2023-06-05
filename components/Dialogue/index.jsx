@@ -24,6 +24,7 @@ function Dialogue({
   const [prevMessageCount, setPrevMessageCount] = useState(0);
   const [selectedModel, setSelectedModel] = useState("gpt-3.5-turbo");
   const selectedChatIndex = chats.findIndex(
+    //chande to .id
     (chat) => chat._id === selectedChat
   );
 
@@ -42,6 +43,7 @@ function Dialogue({
   useEffect(() => {
     if (selectedChatLoading === false && selectedChat !== null) {
       const currentChat =
+        //chande to .id
         chats[chats.findIndex((chat) => chat._id === selectedChat)];
       if (
         chatRef.current &&
@@ -85,9 +87,11 @@ function Dialogue({
           >
             <div className="flex justify-center items-center h-10 w-full border-b border-gray-500/20">
               <span className="text-gray-500">
+                {/* change to selectedChat.model */}
                 {chats[selectedChatIndex].model}
               </span>
             </div>
+            {/* change to selectedChat, setSelectedChat*/}
             <MessageList
               chats={chats}
               selectedChat={selectedChat}

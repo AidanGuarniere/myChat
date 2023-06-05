@@ -22,11 +22,13 @@ function UserMessage({
   };
 
   const handleMessageEdit = async () => {
+    // remove
     const chatIndex = chats.findIndex((chat) => chat._id === selectedChat);
+    //  change to selectedChat
     const messageIndex = chats[chatIndex].messages.findIndex(
       (msg) => msg._id === editMessageId
     );
-
+    //  change to selectedChat
     const updatedMessageHistory = chats[chatIndex].messages.slice(
       0,
       messageIndex
@@ -45,12 +47,15 @@ function UserMessage({
     );
     const gptResponse = await sendMessageHistoryToGPT(messageHistoryForGPT);
     const updatedChatData = {
+      //  change to selectedChat
       ...chats[chatIndex],
       messages: gptResponse,
     };
+    // setSelectedChat(updatedChatData)
     await updateChat(selectedChat, updatedChatData);
-
+    //remove
     const updatedChats = await fetchChats();
+    //  remove
     setChats(updatedChats);
 
     setEditMessageId(null);

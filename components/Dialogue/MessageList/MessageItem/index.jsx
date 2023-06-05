@@ -21,7 +21,9 @@ function MessageItem({ message, chats, selectedChat, session, setChats }) {
   return (
     <div
       className={`group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 ${
-        message.role === "user" ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-[#444654]"
+        message.role === "user"
+          ? "bg-white dark:bg-gray-800"
+          : "bg-gray-50 dark:bg-[#444654]"
       }`}
       onMouseEnter={handleMessageSelect}
       onClick={handleMessageSelect}
@@ -36,6 +38,8 @@ function MessageItem({ message, chats, selectedChat, session, setChats }) {
           {message.role === "assistant" ? (
             <AssistantMessage message={message.content} />
           ) : (
+            // {/* change to selectedChat, setSelectedChat*/}
+
             <UserMessage
               message={message}
               selectedMessageId={selectedMessageId}

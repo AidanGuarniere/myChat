@@ -35,7 +35,7 @@ const ModelSelect = ({ selectedModel, setSelectedModel }) => {
         id="model-select"
         value={selectedModel}
         onChange={(e) => handleModelSelect(e.target.value)}
-        className="shadow appearance-none border rounded w-auto py-2 px-3 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className=" shadow appearance-none border rounded w-auto py-2 px-3 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
         <option key={"gpt-3.5-turbo"} value={"gpt-3.5-turbo"}>
           {"gpt-3.5-turbo"}
@@ -43,7 +43,7 @@ const ModelSelect = ({ selectedModel, setSelectedModel }) => {
         {hasGPT4 && (
           <>
             <option key={"gpt-4"} value={"gpt-4"}>
-            {"gpt-4"}
+              {"gpt-4"}
             </option>
             <option key={"gpt-4-0314"} value={"gpt-4-0314"}>
               {"gpt-4-0314"}
